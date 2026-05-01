@@ -22,7 +22,6 @@ const LoginModal = () => {
     <Dialog open={useAppSelector((state) => state.ui.loginModal.isOpen)} onOpenChange={(open) => dispatch(setLoginModalOpen({ isOpen: open }))}>
      
       <DialogContent>
-        <DialogDescription>
           <Tabs
             onValueChange={(e) => {
               dispatch(
@@ -73,7 +72,6 @@ const LoginModal = () => {
               </div>
             </TabsContent>
           </Tabs>
-        </DialogDescription>
       </DialogContent>
     </Dialog>
   );

@@ -15,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Plus } from "lucide-react";
 
 const AllBrands = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,7 +37,7 @@ const AllBrands = () => {
         </div>
 
         <Button onClick={() => setIsOpen(true)}>
-          + Add Brand
+          <Plus /> Add Brand
         </Button>
       </div>
 
