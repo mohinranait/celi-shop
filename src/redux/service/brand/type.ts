@@ -1,10 +1,17 @@
 
-export interface IBrand {
-  _id: string;
+// Base brand
+export interface IBrandBase {
   name: string;
   slug: string;
   description?: string;
   status: boolean;
+  logo?: string;
+  banner?: string;
+  priority: string;
+}
+
+export interface IBrand extends IBrandBase {
+  _id: string;
   createdAt: string;
   updatedAt: string;
 }

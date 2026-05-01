@@ -45,49 +45,49 @@ const AllBrands = () => {
       <Card className="p-0 rounded-md">
         <CardContent className="p-0">
 
-         <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="">Name</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Crated</TableHead>
-              <TableHead className="text-right">Action</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {
-              brands?.map((brand) =>  <TableRow key={brand._id}>
-              <TableCell className="font-medium">{brand.name}</TableCell>
-              <TableCell> 
-                <Badge
-                  className={
-                    brand.status
-                      ? "bg-green-500/10 text-green-600"
-                      : "bg-red-500/10 text-red-600"
-                  }
-                >
-                  {brand.status ? "Active" : "Inactive"}
-                </Badge>
-              </TableCell>
-              <TableCell> {new Date(brand.createdAt).toLocaleDateString()}</TableCell>
-              <TableCell className="text-right">
-                 <div className="flex justify-end items-center gap-2">
-                  <Switch checked={brand.status} />
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="">Name</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Crated</TableHead>
+                <TableHead className="text-right">Action</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {
+                brands?.map((brand) => <TableRow key={brand._id}>
+                  <TableCell className="font-medium">{brand.name}</TableCell>
+                  <TableCell>
+                    <Badge
+                      className={
+                        brand.status
+                          ? "bg-green-500/10 text-green-600"
+                          : "bg-red-500/10 text-red-600"
+                      }
+                    >
+                      {brand.status ? "Active" : "Inactive"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell> {new Date(brand.createdAt).toLocaleDateString()}</TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex justify-end items-center gap-2">
+                      <Switch checked={brand.status} />
 
-                  <Button size="sm" variant="outline">
-                    Edit
-                  </Button>
+                      <Button size="sm" variant="outline">
+                        Edit
+                      </Button>
 
-                  <Button size="sm" variant="destructive">
-                    Delete
-                  </Button>
-                </div>
-              </TableCell>
-            </TableRow> )
-            }
-          
-          </TableBody>
-        </Table>
+                      <Button size="sm" variant="destructive">
+                        Delete
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>)
+              }
+
+            </TableBody>
+          </Table>
 
         </CardContent>
       </Card>

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET, NODE_ENV } from "@/lib/envSecret";
-import { loginSchema } from "@/validations/auth.schema";
+import { loginSchema } from "@/components/validations/auth.schema";
 import User from "@/models/user.model";
 import connectDB from "@/lib/db";
 

@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { useAppDispatch } from "@/hooks/hooks";
 import { setLoginModalTab } from "@/redux/features/uiSlice";
 import { useRegisterMutation } from "@/redux/service/auth";
-import { registerSchema, TRegisterInputs } from "@/validations/auth.schema";
+import { registerSchema, TRegisterInputs } from "@/components/validations/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";

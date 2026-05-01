@@ -1,15 +1,10 @@
+import { IBrandBase } from "@/redux/service/brand/type";
 import mongoose, { Schema, Model, Document } from "mongoose";
 
 // =======================
 // TypeScript interface
 // =======================
-export interface IBrand extends Document {
-  name: string;
-  slug: string;
-  description: string;
-  logo: string;
-  status: boolean;
-  priority?: number;
+export interface IBrand extends IBrandBase, Document {
   isDelete: boolean;
 }
 
@@ -24,10 +19,14 @@ const brandSchema = new Schema<IBrand>(
     logo: {
       type: String,
     },
+    banner: {
+      type: String,
+    },
     status: {
       type: Boolean,
       default: true
     },
+    priority: Number,
     isDelete: {
       type: Boolean,
       default : false,

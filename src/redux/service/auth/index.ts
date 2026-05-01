@@ -1,4 +1,4 @@
-import { TLoginInputs, TRegisterInputs } from "@/validations/auth.schema";
+import { TLoginInputs, TRegisterInputs } from "@/components/validations/auth.schema";
 import { baseApi } from "..";
 import { AutResponse } from "./type";
 

@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { loginSchema, TLoginInputs } from "@/validations/auth.schema";
+import { loginSchema, TLoginInputs } from "@/components/validations/auth.schema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLoginMutation } from "@/redux/service/auth";
