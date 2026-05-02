@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -16,7 +16,15 @@ import { Bandage, Loader, Plus, X } from "lucide-react";
 import Image from "next/image";
 import { ICategory } from "@/redux/service/categories/type";
 import { categorySchema, TCategoryFormData } from "@/components/validations/categories";
-import { useCreateCategoryMutation, useUpdateCategoryMutation } from "@/redux/service/categories";
+import { useCreateCategoryMutation, useGetCategoriesQuery, useLazyGetCategoriesQuery, useUpdateCategoryMutation } from "@/redux/service/categories";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 type Props = {
   isOpen: boolean;
@@ -31,7 +39,8 @@ export default function CategoryForm({
 
   const [mediaOpen, setMediaOpen] = useState(false);
   const [activeField, setActiveField] = useState<"thumbnail" | "banner" | null>(null);
-
+  const {data} = useGetCategoriesQuery(`page=1&limit=1000`);
+  const categories = data?.data;
   const [createCategory, { isLoading: createLoading }] = useCreateCategoryMutation();
   const [updateCategory, { isLoading: updateLoading }] = useUpdateCategoryMutation()
 
@@ -130,6 +139,9 @@ export default function CategoryForm({
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-4"
       >
+
+
+      
         {/* Name */}
         <div className="space-y-1">
           <Label>Category Name <span className="text-red-500">*</span> </Label>
@@ -146,6 +158,69 @@ export default function CategoryForm({
           <Label>Slug <span className="text-red-500">*</span></Label>
           <Input {...form.register("slug")} />
         </div>
+
+
+ <div className="grid gap-2">
+        <label
+          htmlFor="parent_id"
+          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
+          Parent
+        </label>
+
+        <Select
+          onValueChange={(value) => form.setValue("parentId", value)}
+          {...form.register("parentId")}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Parent not select" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value={`${null}`} className="cursor-pointer">
+              No Parent
+            </SelectItem>
+            {categories
+              ?.filter((par) => par.parentId == null)
+              ?.map((cat) => (
+                <React.Fragment key={cat._id}>
+                  <SelectItem value={`${cat._id}`} className="cursor-pointer ">
+                    <div className="flex items-center gap-2">
+                      <Image
+                        src={cat?.thumbnail || "/default.png"}
+                        width={14}
+                        height={14}
+                        alt="Category"
+                      />{" "}
+                      {cat?.name}
+                    </div>
+                  </SelectItem>
+                  {categories
+                    ?.filter((p) => p?.parentId === cat._id)
+                    ?.map((child) => (
+                      <SelectItem
+                        key={child._id}
+                        value={`${child._id}`}
+                        className="cursor-pointer"
+                      >
+                        <div className="flex items-center gap-2">
+                          -
+                          <Image
+                            src={child?.thumbnail || "/default.png"}
+                            width={14}
+                            height={14}
+                            alt="Category"
+                          />{" "}
+                          {child?.name}
+                        </div>
+                      </SelectItem>
+                    ))}
+                </React.Fragment>
+              ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+
 
         {/* Description */}
         <div className="space-y-1">

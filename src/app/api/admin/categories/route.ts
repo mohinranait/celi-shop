@@ -74,7 +74,7 @@ export async function GET(req: NextRequest) {
     // =========================
     // DB QUERY
     // =========================
-    const categories = await Category.find(query).populate('parentId')
+    const categories = await Category.find(query)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);

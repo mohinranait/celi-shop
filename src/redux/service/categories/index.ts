@@ -51,4 +51,4 @@ export const categoryApi = baseApi.injectEndpoints({
 })
 
 
-export const {useGetCategoriesQuery, useCreateCategoryMutation, useUpdateCategoryMutation, useSoftDeleteCategoryMutation, useDeleteCategoryMutation  } = categoryApi;
+export const {useGetCategoriesQuery, useLazyGetCategoriesQuery, useCreateCategoryMutation, useUpdateCategoryMutation, useSoftDeleteCategoryMutation, useDeleteCategoryMutation  } = categoryApi;
