@@ -1,7 +1,8 @@
 
 import { TBrandInput } from "@/components/validations/brands";
 import {  baseApi } from "..";
-import { IBrand, IBrandResponse, ISoftDelete } from "./type";
+import { IBrand, IBrandResponse } from "./type";
+import { ISoftDelete } from "@/global";
 
 export const brandApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

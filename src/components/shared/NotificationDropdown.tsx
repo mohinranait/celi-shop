@@ -172,11 +172,11 @@ export default function NotificationDropdown() {
         <Button
           variant="ghost"
           size="icon"
-          className="size-10 bg-transparent  text-black relative"
+          className="size-10  relative"
         >
           <Bell className="size-6" />
           {unreadCount > 0 && (
-            <Badge className="absolute -top-2 -right-1 bg-primary text-white text-xs h-5 w-5 rounded-full flex items-center justify-center p-0">
+            <Badge className="absolute -top-2 -right-1 bg-primary text-xs h-5 w-5 rounded-full flex items-center justify-center p-0">
               {unreadCount > 99 ? "99+" : unreadCount}
             </Badge>
           )}
@@ -215,9 +215,9 @@ export default function NotificationDropdown() {
         <ScrollArea className="h-96">
           {notifications.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-8 text-center">
-              <Bell className="h-12 w-12 text-gray-300 mb-3" />
-              <p className="text-gray-500 font-medium">No notifications</p>
-              <p className="text-gray-400 text-sm">You are all caught up!</p>
+              <Bell className="h-12 w-12  mb-3" />
+              <p className=" font-medium">No notifications</p>
+              <p className=" text-sm">You are all caught up!</p>
             </div>
           ) : (
             <div className="divide-y">
@@ -242,7 +242,7 @@ export default function NotificationDropdown() {
                           </AvatarFallback>
                         </Avatar>
                       ) : (
-                        <div className="h-8 w-8 rounded-full bg-white border flex items-center justify-center">
+                        <div className="h-8 w-8 rounded-full  border flex items-center justify-center">
                           {getNotificationIcon(notification.type)}
                         </div>
                       )}

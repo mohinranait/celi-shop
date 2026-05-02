@@ -41,7 +41,7 @@ const AppSidebar = ({ setOpen, state }: PropTypes) => {
   return (
     <Sidebar
       collapsible="icon"
-      className="h-screen bg-white p-0 border-r border-border shadow-transparent shadow-sm"
+      className="h-screen  p-0 border-r border-border shadow-transparent shadow-sm"
     >
       <SidebarHeader className=" ">
         <SidebarMenu>
@@ -56,7 +56,7 @@ const AppSidebar = ({ setOpen, state }: PropTypes) => {
                 className="text-2xl flex  items-center font-bold"
               >
                 {"</>"}
-                Shikder <span className="text-primary"></span>
+                CELISHOP <span className="text-primary"></span>
               </Link>
             )}
           </SidebarMenuItem>

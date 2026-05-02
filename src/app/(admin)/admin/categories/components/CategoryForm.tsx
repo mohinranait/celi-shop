@@ -10,39 +10,39 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { GlobalModal } from "@/components/shared/GlobalModal";
-import { useCreateBrandMutation, useUpdateBrandMutation } from "@/redux/service/brand";
-import { brandSchema, TBrandInput } from "@/components/validations/brands";
 import { toast } from "sonner";
 import MediaModal from "../../media/components/MediaModal";
 import { Bandage, Loader, Plus, X } from "lucide-react";
 import Image from "next/image";
-import { IBrand } from "@/redux/service/brand/type";
+import { ICategory } from "@/redux/service/categories/type";
+import { categorySchema, TCategoryFormData } from "@/components/validations/categories";
+import { useCreateCategoryMutation, useUpdateCategoryMutation } from "@/redux/service/categories";
 
 type Props = {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
-  previousData?: IBrand;
+  previousData?: ICategory;
 }
-export default function BrandForm({
+export default function CategoryForm({
   isOpen,
   setIsOpen,
   previousData
 }: Props) {
 
   const [mediaOpen, setMediaOpen] = useState(false);
-  const [activeField, setActiveField] = useState<"logo" | "banner" | null>(null);
+  const [activeField, setActiveField] = useState<"thumbnail" | "banner" | null>(null);
 
-  const [createBrand, { isLoading: createLoading }] = useCreateBrandMutation();
-  const [updateBrand, { isLoading: updateLoading }] = useUpdateBrandMutation()
+  const [createCategory, { isLoading: createLoading }] = useCreateCategoryMutation();
+  const [updateCategory, { isLoading: updateLoading }] = useUpdateCategoryMutation()
 
-  const form = useForm<TBrandInput>({
-    resolver: zodResolver(brandSchema),
+  const form = useForm<TCategoryFormData>({
+    resolver: zodResolver(categorySchema),
     defaultValues: {},
   });
 
   const { control } = form;
   const name = form.watch("name");
-  const logo = form.watch('logo')
+  const thumbnail = form.watch('thumbnail')
   const banner = form.watch('banner')
 
   //  auto slug (fixed with useEffect)
@@ -55,22 +55,22 @@ export default function BrandForm({
 
 
   //  submit handler
-  const onSubmit = async (data: TBrandInput) => {
+  const onSubmit = async (data: TCategoryFormData) => {
 
     try {
       if (previousData?._id) {
-        await updateBrand({ payload: data, id: previousData?._id }).unwrap();
+        await updateCategory({ payload: data, id: previousData?._id }).unwrap();
       } else {
 
-        await createBrand(data).unwrap();
+        await createCategory(data).unwrap();
       }
 
       toast.success("Successfully");
       form.reset();
       setIsOpen(false);
     } catch (error) {
-      console.error("Failed to create brand:", error);
-      toast.error("Failed to create brand.");
+      console.error("Failed to create category:", error);
+      toast.error("Failed to create category.");
     }
   };
 
@@ -84,7 +84,7 @@ export default function BrandForm({
         slug: previousData.slug || "",
         status: previousData.status ?? true,
         description: previousData.description || "",
-        logo: previousData.logo || "",
+        thumbnail: previousData?.thumbnail || "",
         banner: previousData.banner || "",
       });
     } else {
@@ -93,7 +93,7 @@ export default function BrandForm({
         slug: "",
         status: true,
         description: "",
-        logo: "",
+        thumbnail: "",
         banner: "",
       });
     }
@@ -103,10 +103,9 @@ export default function BrandForm({
     <GlobalModal
       open={isOpen}
       onOpenChange={setIsOpen}
-      title={previousData ? "Update Brand information" : "Create Brand"}
-      description="Fill the form below to create a new brand"
+      title={previousData ? "Update Category information" : "Create Category"}
+      description="Fill the form below to create a new category"
       icon={<Bandage />}
-      maxHeight="max-w-5xl"
       className="min-w-2xl"
       footer={
         <div className="flex justify-end gap-2 w-full">
@@ -121,7 +120,7 @@ export default function BrandForm({
               <Loader className="animate-spin" />
             }
             {
-              !!previousData ? "Update Brand" : "Create Brand"
+              !!previousData ? "Update Category" : "Create Category"
             }
           </Button>
         </div>
@@ -133,7 +132,7 @@ export default function BrandForm({
       >
         {/* Name */}
         <div className="space-y-1">
-          <Label>Brand Name <span className="text-red-500">*</span> </Label>
+          <Label>Category Name <span className="text-red-500">*</span> </Label>
           <Input {...form.register("name")} />
           {form.formState.errors.name && (
             <p className="text-red-500 text-sm">
@@ -155,71 +154,73 @@ export default function BrandForm({
         </div>
 
 
-        <div className="space-y-1">
-          <Label>Logo (Optional)</Label>
-          <div className="flex gap-3">
+        <div className="grid grid-cols-2 gap-1">
+          <div className="space-y-1">
+            <Label>Thumbnail (Optional)</Label>
+            <div className="flex gap-3">
 
-            {
-              logo && <span
+              {
+                thumbnail && <span
+                  className="w-24 h-24 rounded-md border-2 border-dashed  
+              flex flex-col items-center justify-center gap-1 
+                transition-all relative"
+                >
+                  <Image width={100} height={100} alt="Image" src={thumbnail} />
+                  <button className="text-[10px] w-5 h-5 rounded-full flex items-center justify-center border text-gray-500 absolute top-1 right-1"><X size={14} /></button>
+                </span>
+              }
+
+
+              <Button
+                type="button"
+                variant={'outline'}
+                onClick={() => {
+                  setMediaOpen(true);
+                  setActiveField('thumbnail')
+                }}
                 className="w-24 h-24 rounded-md border-2 border-dashed  
-             flex flex-col items-center justify-center gap-1 
-              transition-all relative"
+              flex flex-col items-center justify-center gap-1 
+                transition-all"
               >
-                <Image width={100} height={100} alt="Image" src={logo} />
-                <button className="text-[10px] w-5 h-5 rounded-full flex items-center justify-center border text-gray-500 absolute top-1 right-1"><X size={14} /></button>
-              </span>
-            }
+                <Plus className="w-5 h-5 text-gray-500" />
+                <span className="text-[10px] text-gray-500">Upload</span>
+              </Button>
 
-
-            <Button
-              type="button"
-              variant={'outline'}
-              onClick={() => {
-                setMediaOpen(true);
-                setActiveField('logo')
-              }}
-              className="w-24 h-24 rounded-md border-2 border-dashed  
-             flex flex-col items-center justify-center gap-1 
-              transition-all"
-            >
-              <Plus className="w-5 h-5 text-gray-500" />
-              <span className="text-[10px] text-gray-500">Upload</span>
-            </Button>
-
+            </div>
           </div>
-        </div>
 
-        <div className="space-y-1">
-          <Label>Banner (Optional)</Label>
-          <div className="flex gap-3">
+          <div className="space-y-1">
+            <Label>Banner (Optional)</Label>
+            <div className="flex gap-3">
 
-            {
-              banner && <span
+              {
+                banner && <span
+                  className="w-24 h-24 rounded-md border-2 border-dashed  
+              flex flex-col items-center justify-center gap-1 
+                transition-all relative"
+                >
+                  <Image width={100} height={100} alt="Image" src={banner} />
+                  <button className="text-[10px] w-5 h-5 rounded-full flex items-center justify-center border text-gray-500 absolute top-1 right-1"><X size={14} /></button>
+                </span>
+              }
+
+
+              <Button
+                type="button"
+                variant={'outline'}
+                onClick={() => {
+                  setMediaOpen(true);
+                  setActiveField('banner')
+                }}
                 className="w-24 h-24 rounded-md border-2 border-dashed  
-             flex flex-col items-center justify-center gap-1 
-              transition-all relative"
+              flex flex-col items-center justify-center gap-1 
+                transition-all"
               >
-                <Image width={100} height={100} alt="Image" src={banner} />
-                <button className="text-[10px] w-5 h-5 rounded-full flex items-center justify-center border text-gray-500 absolute top-1 right-1"><X size={14} /></button>
-              </span>
-            }
+                <Plus className="w-5 h-5 text-gray-500" />
+                <span className="text-[10px] text-gray-500">Upload</span>
+              </Button>
 
-
-            <Button
-              type="button"
-              variant={'outline'}
-              onClick={() => {
-                setMediaOpen(true);
-                setActiveField('banner')
-              }}
-              className="w-24 h-24 rounded-md border-2 border-dashed  
-             flex flex-col items-center justify-center gap-1 
-              transition-all"
-            >
-              <Plus className="w-5 h-5 text-gray-500" />
-              <span className="text-[10px] text-gray-500">Upload</span>
-            </Button>
-
+            </div>
           </div>
         </div>
 
@@ -244,8 +245,8 @@ export default function BrandForm({
         open={mediaOpen}
         setOpen={setMediaOpen}
         onSelect={(url) => {
-          if (activeField === "logo") {
-            form.setValue('logo', url[0])
+          if (activeField === "thumbnail") {
+            form.setValue('thumbnail', url[0])
           };
           if (activeField === "banner") {
             form.setValue('banner', url[0])

@@ -1,14 +1,14 @@
 import GetDateFormate from "@/components/shared/GetDateFormate";
 import { Badge } from "@/components/ui/badge";
 import CellAction from "./CellAction";
-import { IBrand } from "@/redux/service/brand/type";
 import { ColumnDef } from "@tanstack/react-table";
-import { Image as LucidImage } from "lucide-react";
 import Image from "next/image";
+import { ICategory } from "@/redux/service/categories/type";
+import { LucideImage } from "lucide-react";
 
 
 const tableColumns = ({ type = 'active' }: { type: "active" | "deleted" }) => {
-  const columns: ColumnDef<IBrand>[] = [
+  const columns: ColumnDef<ICategory>[] = [
     {
       accessorKey: "name",
       header: "Name",
@@ -17,9 +17,9 @@ const tableColumns = ({ type = 'active' }: { type: "active" | "deleted" }) => {
         return <div className="flex items-center gap-1">
           <div>
             {
-              brandData?.logo ?
-                <Image width={64} height={64} alt="Brand" src={brandData?.logo} className="rounded-md w-10 h-10 " /> :
-                <div className="bg-accent w-10 h-10 rounded-md flex items-center justify-center text-foreground"><LucidImage size={16} /></div>
+              brandData?.thumbnail ?
+                <Image width={64} height={64} alt="Brand" src={brandData?.thumbnail} className="rounded-md w-10 h-10 " /> :
+                <div className="bg-accent w-10 h-10 rounded-md flex items-center justify-center text-foreground"><LucideImage size={16} /></div>
             }
           </div>
           <p>{brandData?.name}</p>
@@ -53,10 +53,11 @@ const tableColumns = ({ type = 'active' }: { type: "active" | "deleted" }) => {
       id: "actions",
       header: () => <div className="text-right">Actions</div>,
       enableSorting: false,
-      cell: ({ row }) => <CellAction data={row.original} type={type} />,
+      cell: ({ row }) => <CellAction data={row.original}  type={type} />,
     },
   ];
   return columns;
 }
 
 export default tableColumns;
+

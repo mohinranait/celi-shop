@@ -1,7 +1,9 @@
-import { brandSchema } from "@/components/validations/brands";
+
+import { categorySchema } from "@/components/validations/categories";
 import connectDB from "@/lib/db";
-import Brand from "@/models/brand.model";
+import { Category } from "@/models/categories";
 import { NextRequest, NextResponse } from "next/server";
+
 
 
 export async function GET(req: NextRequest) {
@@ -23,7 +25,7 @@ export async function GET(req: NextRequest) {
     // =========================
     // BUILD QUERY
     // =========================
-    const query:  {
+    const query: {
       name?: string;
       slug?: string;
        createdAt?: {
@@ -72,19 +74,19 @@ export async function GET(req: NextRequest) {
     // =========================
     // DB QUERY
     // =========================
-    const brands = await Brand.find(query)
+    const categories = await Category.find(query).populate('parentId')
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
-    const total = await Brand.countDocuments(query);
+    const total = await Category.countDocuments(query);
 
     // =========================
     // RESPONSE
     // =========================
     return NextResponse.json({
       success: true,
-      data: brands,
+      data: categories,
       meta: {
         total,
         page,
@@ -94,11 +96,12 @@ export async function GET(req: NextRequest) {
     });
   } catch (error) {
     return NextResponse.json(
-      { success: false, message: "Error fetching brands" },
+      { success: false, message: "Error fetching categories" },
       { status: 500 }
     );
   }
 }
+
 
 
 export async function POST(req: NextRequest) {
@@ -109,7 +112,7 @@ export async function POST(req: NextRequest) {
 
 
     // validate input
-    const parsed = brandSchema.safeParse(body);
+    const parsed = categorySchema.safeParse(body);
 
     if (!parsed.success) {
       return NextResponse.json(
@@ -125,7 +128,7 @@ export async function POST(req: NextRequest) {
     const { slug } = parsed.data;
 
     // check duplicate slug
-    const existing = await Brand.findOne({ slug });
+    const existing = await Category.findOne({ slug });
 
     if (existing) {
       return NextResponse.json(
@@ -137,21 +140,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // create brand
-    const brand = await Brand.create({
+    // create category
+    const category = await Category.create({
      ...body
     });
 
     return NextResponse.json(
       {
         success: true,
-        message: "Brand created successfully",
-        data: brand,
+        message: "Category created successfully",
+        data: category,
       },
       { status: 201 }
     );
   } catch (error) {
-    console.error("Brand API Error:", error);
+    console.error("Category API Error:", error);
 
     return NextResponse.json(
       {

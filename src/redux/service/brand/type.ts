@@ -1,3 +1,4 @@
+import { IMetaPagination } from "@/global";
 
 // Base brand
 export interface IBrandBase {
@@ -13,9 +14,7 @@ export interface IBrandBase {
 
 
 
-export interface ISoftDelete {
-  isDelete: boolean;
-}
+
 
 export interface IBrand extends IBrandBase {
   _id: string;
@@ -27,4 +26,5 @@ export interface IBrandResponse {
   success: boolean;
   data: IBrand[];
   message?: string;
+  meta: IMetaPagination;
 }

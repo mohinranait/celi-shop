@@ -32,7 +32,7 @@ export function GlobalModal({
   icon,
   children,
   footer,
-  maxHeight = "80vh",
+  maxHeight = "70vh",
   className,
 }: ReusableModalProps) {
   return (
@@ -59,7 +59,7 @@ export function GlobalModal({
 
         {/* Body (Scrollable) */}
         <div
-          className="p-4 overflow-y-auto"
+          className="p-4 max-h-[70vh] overflow-y-auto"
           style={{ maxHeight }}
         >
           {children}

@@ -5,6 +5,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { ProfileDropdown } from "./ProfileDropdown";
 import NotificationDropdown from "./NotificationDropdown";
+import ThemeButton from "./ThemeButton";
 
 interface HeaderProps {
   fixed?: boolean;
@@ -40,7 +41,7 @@ export const Navbar = ({
     >
       <header
         className={cn(
-          "flex w-full justify-between bg-white h-16 items-center gap-3 p-4 sm:gap-4",
+          "flex w-full justify-between bg-background h-16 items-center gap-3 p-4 sm:gap-4",
           fixed && "header-fixed peer/header fixed z-50 w-[inherit]",
           offset > 10 && fixed ? "shadow-sm" : "shadow-none",
           className
@@ -49,11 +50,12 @@ export const Navbar = ({
       >
         <SidebarTrigger
           variant="outline"
-          className="scale-125 text-black sm:scale-100"
+          className="scale-125  sm:scale-100"
         />
 
         <div className=" justify-between items-center space-x-4">
           <div className="flex items-center space-x-4">
+            <ThemeButton />
             <NotificationDropdown />
             <ProfileDropdown />
           </div>

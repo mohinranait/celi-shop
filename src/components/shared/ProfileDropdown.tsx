@@ -21,7 +21,7 @@ export function ProfileDropdown() {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
-        <div className="relative flex items-center cursor-pointer gap-2 h-auto  text-black bg-transparent hover:bg-transparent rounded-full">
+        <div className="relative flex items-center cursor-pointer gap-2 h-auto   bg-transparent hover:bg-transparent rounded-full">
           <Avatar className="h-9 w-9">
             <AvatarImage src="/avatar.jpg" alt="@shadcn" />
             <AvatarFallback>

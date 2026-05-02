@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "sonner";
 import ReduxProvider from "@/providers/ReduxProvider";
 import { cn } from "@/lib/utils";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const roboto = Roboto({subsets:['latin'],variable:'--font-sans'})
 
@@ -31,10 +32,13 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <ReduxProvider>
+          <ThemeProvider>
+
           <TooltipProvider>
             <Toaster />
             {children}
           </TooltipProvider>
+          </ThemeProvider>
         </ReduxProvider>
       </body>
     </html>

@@ -6,15 +6,13 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise< { id: string }> }
 ) {
   try {
     await connectDB();
 
     const body = await req.json();
-     const { id } =  params;
-    console.log({body, id});
-    
+     const { id } = await  params;
 
     //  validate input
     const parsed = brandSchema.safeParse(body);
@@ -90,3 +88,53 @@ export async function PATCH(
     );
   }
 }
+
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    await connectDB();
+
+   
+     const { id } =  params;
+  
+
+    //  check brand exists
+    const brand = await Brand.findByIdAndDelete(id);
+
+    if (!brand) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Brand not found",
+        },
+        { status: 404 }
+      );
+    }
+
+  
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Brand updated successfully",
+        data: brand,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Update Brand Error:", error);
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Internal Server Error",
+      },
+      { status: 500 }
+    );
+  }
+}
+
+

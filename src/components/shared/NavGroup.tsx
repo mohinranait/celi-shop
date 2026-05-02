@@ -88,7 +88,7 @@ const SidebarMenuLink = ({
         asChild
         isActive={checkIsActive(pathname, item)}
         tooltip={item.title}
-        className="cursor-pointer data-[active=true]:bg-primary data-[active=true]:text-white"
+        className="cursor-pointer data-[active=true]:bg-primary data-[active=true]:text-accent"
       >
         <Link href={item?.url || "#"} onClick={() => setOpenMobile(false)}>
           {item.icon && <item.icon />}
