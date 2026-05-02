@@ -1,7 +1,7 @@
 
 import { TBrandInput } from "@/components/validations/brands";
 import {  baseApi } from "..";
-import { IBrand, IBrandResponse } from "./type";
+import { IBrand, IBrandResponse, ISoftDelete } from "./type";
 
 export const brandApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -21,17 +21,26 @@ export const brandApi = baseApi.injectEndpoints({
     }),
 
 
-    updateBrand: builder.mutation({
-      query: ({ id, ...updatedBrand }) => ({
+    updateBrand: builder.mutation<IBrand, {id:string,payload:TBrandInput}>({
+      query: ({ id, payload }) => ({
         url: `/admin/brands/${id}`,
         method: 'PATCH',
-        body: updatedBrand,
+        body: payload,
+      }),
+      invalidatesTags: ['Brands'],
+    }),
+
+    softDeleteBrand: builder.mutation<IBrand, {id:string,payload:ISoftDelete}>({
+      query: ({ id, payload }) => ({
+        url: `/admin/brands/${id}/soft`,
+        method: 'PATCH',
+        body: payload,
       }),
       invalidatesTags: ['Brands'],
     }),
 
 
-    deleteBrand: builder.mutation({
+    deleteBrand: builder.mutation<IBrand, string>({
       query: (id) => ({
         url: `/admin/brands/${id}`,
         method: 'DELETE',
@@ -42,4 +51,4 @@ export const brandApi = baseApi.injectEndpoints({
 })
 
 
-export const {useGetBrandsQuery, useCreateBrandMutation, useUpdateBrandMutation, useDeleteBrandMutation} = brandApi;
+export const {useGetBrandsQuery, useCreateBrandMutation, useUpdateBrandMutation, useSoftDeleteBrandMutation, useDeleteBrandMutation} = brandApi;

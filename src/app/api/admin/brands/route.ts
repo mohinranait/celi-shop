@@ -9,7 +9,7 @@ export async function GET() {
   try {
     await connectDB();
 
-    const brands = await Brand.find().sort({ createdAt: -1 });
+    const brands = await Brand.find({isDelete:false}).sort({ createdAt: -1 });
 
     return NextResponse.json({
       success: true,

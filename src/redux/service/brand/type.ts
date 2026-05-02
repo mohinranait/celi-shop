@@ -8,6 +8,13 @@ export interface IBrandBase {
   logo?: string;
   banner?: string;
   priority: string;
+  isDelete: boolean;
+}
+
+
+
+export interface ISoftDelete {
+  isDelete: boolean;
 }
 
 export interface IBrand extends IBrandBase {

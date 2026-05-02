@@ -10,60 +10,62 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { GlobalModal } from "@/components/shared/GlobalModal";
-import { useCreateBrandMutation } from "@/redux/service/brand";
+import { useCreateBrandMutation, useUpdateBrandMutation } from "@/redux/service/brand";
 import { brandSchema, TBrandInput } from "@/components/validations/brands";
 import { toast } from "sonner";
 import MediaModal from "../../media/components/MediaModal";
-import ImageSelector from "./ImageSelector";
-import { LucideImage, Image as LucidImage, Plus, X } from "lucide-react";
+import { Bandage, Loader, Plus, X } from "lucide-react";
 import Image from "next/image";
+import { IBrand } from "@/redux/service/brand/type";
 
+type Props = {
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+  previousData?: IBrand;
+}
 export default function BrandForm({
   isOpen,
   setIsOpen,
-}: {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
-}) {
-  // const [logo, setLogo] = useState<string[]>([]);
-  // const [banner, setBanner] = useState<string[]>([]);
+  previousData
+}: Props) {
 
   const [mediaOpen, setMediaOpen] = useState(false);
   const [activeField, setActiveField] = useState<"logo" | "banner" | null>(null);
 
-  const [createBrand] = useCreateBrandMutation();
+  const [createBrand, { isLoading: createLoading }] = useCreateBrandMutation();
+  const [updateBrand, { isLoading: updateLoading }] = useUpdateBrandMutation()
 
   const form = useForm<TBrandInput>({
     resolver: zodResolver(brandSchema),
-    defaultValues: {
-      name: "",
-      slug: "",
-      status: true,
-    },
+    defaultValues: {},
   });
 
   const { control } = form;
   const name = form.watch("name");
   const logo = form.watch('logo')
-   const banner = form.watch('banner')
+  const banner = form.watch('banner')
 
   //  auto slug (fixed with useEffect)
   useEffect(() => {
-    if (name) {
+    if (name && !previousData?._id) {
       const slug = name.toLowerCase().replace(/\s+/g, "-");
       form.setValue("slug", slug);
     }
   }, [name, form]);
 
+
   //  submit handler
   const onSubmit = async (data: TBrandInput) => {
-    console.log({ data });
 
     try {
-      const result = await createBrand(data).unwrap();
-      console.log("Brand created:", result);
+      if (previousData?._id) {
+        await updateBrand({ payload: data, id: previousData?._id }).unwrap();
+      } else {
 
-      toast.success("Brand created successfully!");
+        await createBrand(data).unwrap();
+      }
+
+      toast.success("Successfully");
       form.reset();
       setIsOpen(false);
     } catch (error) {
@@ -72,22 +74,53 @@ export default function BrandForm({
     }
   };
 
+  const isDisable = createLoading || updateLoading;
+
+
+  useEffect(() => {
+    if (previousData) {
+      form.reset({
+        name: previousData.name || "",
+        slug: previousData.slug || "",
+        status: previousData.status ?? true,
+        description: previousData.description || "",
+        logo: previousData.logo || "",
+        banner: previousData.banner || "",
+      });
+    } else {
+      form.reset({
+        name: "",
+        slug: "",
+        status: true,
+        description: "",
+        logo: "",
+        banner: "",
+      });
+    }
+  }, [previousData, form]);
+
   return (
     <GlobalModal
       open={isOpen}
       onOpenChange={setIsOpen}
-      title="Create Brand"
+      title={previousData ? "Update Brand information" : "Create Brand"}
       description="Fill the form below to create a new brand"
-      icon={<span>🚀</span>}
+      icon={<Bandage />}
       footer={
         <div className="flex justify-end gap-2 w-full">
-          <Button variant="outline" onClick={() => setIsOpen(false)}>
+          <Button variant="outline" onClick={() => setIsOpen(false)} disabled={isDisable}>
             Cancel
           </Button>
 
           {/*  trigger form submit */}
-          <Button onClick={form.handleSubmit(onSubmit)}>
-            Create Brand
+          <Button onClick={form.handleSubmit(onSubmit)} disabled={isDisable}>
+            {
+              isDisable &&
+              <Loader className="animate-spin" />
+            }
+            {
+              !!previousData ? "Update Brand" : "Create Brand"
+            }
           </Button>
         </div>
       }
@@ -120,73 +153,73 @@ export default function BrandForm({
         </div>
 
 
-       <div className="space-y-1">
-        <Label>Logo (Optional)</Label>
-         <div className="flex gap-3">
+        <div className="space-y-1">
+          <Label>Logo (Optional)</Label>
+          <div className="flex gap-3">
 
-          {
-            logo && <span
-              className="w-24 h-24 rounded-md border-2 border-dashed  
+            {
+              logo && <span
+                className="w-24 h-24 rounded-md border-2 border-dashed  
              flex flex-col items-center justify-center gap-1 
               transition-all relative"
-            >
-              <Image width={100} height={100} alt="Image" src={logo} />
-              <button className="text-[10px] w-5 h-5 rounded-full flex items-center justify-center border text-gray-500 absolute top-1 right-1"><X size={14} /></button>
-            </span>
-          }
+              >
+                <Image width={100} height={100} alt="Image" src={logo} />
+                <button className="text-[10px] w-5 h-5 rounded-full flex items-center justify-center border text-gray-500 absolute top-1 right-1"><X size={14} /></button>
+              </span>
+            }
 
 
-          <Button
-            type="button"
-            variant={'outline'}
-            onClick={() => {
-              setMediaOpen(true);
-              setActiveField('logo')
-            }}
-            className="w-24 h-24 rounded-md border-2 border-dashed  
+            <Button
+              type="button"
+              variant={'outline'}
+              onClick={() => {
+                setMediaOpen(true);
+                setActiveField('logo')
+              }}
+              className="w-24 h-24 rounded-md border-2 border-dashed  
              flex flex-col items-center justify-center gap-1 
               transition-all"
-          >
-            <Plus className="w-5 h-5 text-gray-500" />
-            <span className="text-[10px] text-gray-500">Upload</span>
-          </Button>
+            >
+              <Plus className="w-5 h-5 text-gray-500" />
+              <span className="text-[10px] text-gray-500">Upload</span>
+            </Button>
 
+          </div>
         </div>
-       </div>
 
         <div className="space-y-1">
-        <Label>Banner (Optional)</Label>
-         <div className="flex gap-3">
+          <Label>Banner (Optional)</Label>
+          <div className="flex gap-3">
 
-          {
-            banner && <span
-              className="w-24 h-24 rounded-md border-2 border-dashed  
+            {
+              banner && <span
+                className="w-24 h-24 rounded-md border-2 border-dashed  
              flex flex-col items-center justify-center gap-1 
               transition-all relative"
-            >
-              <Image width={100} height={100} alt="Image" src={banner} />
-              <button className="text-[10px] w-5 h-5 rounded-full flex items-center justify-center border text-gray-500 absolute top-1 right-1"><X size={14} /></button>
-            </span>
-          }
+              >
+                <Image width={100} height={100} alt="Image" src={banner} />
+                <button className="text-[10px] w-5 h-5 rounded-full flex items-center justify-center border text-gray-500 absolute top-1 right-1"><X size={14} /></button>
+              </span>
+            }
 
 
-          <Button
-            type="button"
-            variant={'outline'}
-            onClick={() => {
-              setMediaOpen(true);
-              setActiveField('banner')
-            }}
-            className="w-24 h-24 rounded-md border-2 border-dashed  
+            <Button
+              type="button"
+              variant={'outline'}
+              onClick={() => {
+                setMediaOpen(true);
+                setActiveField('banner')
+              }}
+              className="w-24 h-24 rounded-md border-2 border-dashed  
              flex flex-col items-center justify-center gap-1 
               transition-all"
-          >
-            <Plus className="w-5 h-5 text-gray-500" />
-            <span className="text-[10px] text-gray-500">Upload</span>
-          </Button>
+            >
+              <Plus className="w-5 h-5 text-gray-500" />
+              <span className="text-[10px] text-gray-500">Upload</span>
+            </Button>
 
+          </div>
         </div>
-       </div>
 
 
         {/* Status */}
