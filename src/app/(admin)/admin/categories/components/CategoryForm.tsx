@@ -16,7 +16,7 @@ import { Bandage, Loader, Plus, X } from "lucide-react";
 import Image from "next/image";
 import { ICategory } from "@/redux/service/categories/type";
 import { categorySchema, TCategoryFormData } from "@/components/validations/categories";
-import { useCreateCategoryMutation, useGetCategoriesQuery, useLazyGetCategoriesQuery, useUpdateCategoryMutation } from "@/redux/service/categories";
+import { useCreateCategoryMutation, useGetCategoriesQuery,  useUpdateCategoryMutation } from "@/redux/service/categories";
 import {
   Select,
   SelectContent,

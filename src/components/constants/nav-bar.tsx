@@ -120,7 +120,7 @@ export const sidebarData: SidebarData = {
             },
             {
               title: "New Product",
-              url: "/admin/products/new",
+              url: "/admin/products/form",
             },
              {
               title: "Categories",
