@@ -130,6 +130,10 @@ export const sidebarData: SidebarData = {
               title: "Brands",
               url: "/admin/brands",
             },
+             {
+              title: "Attributes",
+              url: "/admin/attributes",
+            },
             {
               title: "Comments",
               url: "/admin/comments",
