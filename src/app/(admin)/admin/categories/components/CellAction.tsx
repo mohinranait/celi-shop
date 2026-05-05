@@ -6,26 +6,18 @@ import { Pen, RotateCcw, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+
 import { ICategory } from '@/redux/service/categories/type';
 import CategoryForm from './CategoryForm';
 import { useDeleteCategoryMutation, useSoftDeleteCategoryMutation } from '@/redux/service/categories';
+import DeleteAlert from '@/components/shared/DeleteAlert';
 
 type Props = {
   data: ICategory;
-   type: "active" | "deleted";
+  type: "active" | "deleted";
 };
 
-const CellAction = ({ data,type }: Props) => {
+const CellAction = ({ data, type }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
@@ -34,29 +26,29 @@ const CellAction = ({ data,type }: Props) => {
 
 
 
-   // Soft delete
-    const softDelete = async () => {
-      try {
-        await softDeleteCategory({ id: data._id, payload: { isDelete: true } }).unwrap();
-        toast.success("Successfully");
-        setIsDeleteOpen(false);
-      } catch (error) {
-        console.error(error);
-        toast.error("Failed to delete category");
-      }
-    };
-  
-    // hard delete
-    const hardDelete = async () => {
-      try {
-        await deleteCategory(data?._id).unwrap();
-        toast.success("Deleted successfully");
-        setIsDeleteOpen(false);
-      } catch (error) {
-        console.error(error);
-        toast.error("Failed to delete category");
-      }
-    };
+  // Soft delete
+  const softDelete = async () => {
+    try {
+      await softDeleteCategory({ id: data._id, payload: { isDelete: true } }).unwrap();
+      toast.success("Successfully");
+      setIsDeleteOpen(false);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to delete category");
+    }
+  };
+
+  // hard delete
+  const hardDelete = async () => {
+    try {
+      await deleteCategory(data?._id).unwrap();
+      toast.success("Deleted successfully");
+      setIsDeleteOpen(false);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to delete category");
+    }
+  };
 
 
 
@@ -86,7 +78,7 @@ const CellAction = ({ data,type }: Props) => {
         size="icon"
         variant="outline"
         type="button"
-       onClick={() => handleEditAndRestore()}
+        onClick={() => handleEditAndRestore()}
 
       >
         {
@@ -105,33 +97,12 @@ const CellAction = ({ data,type }: Props) => {
       </Button>
 
       {/* DELETE CONFIRM MODAL (STATE CONTROLLED) */}
-      <AlertDialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              Are you absolutely sure?
-            </AlertDialogTitle>
+      <DeleteAlert isDeleteOpen={isDeleteOpen} setIsDeleteOpen={setIsDeleteOpen} callBack={handleDelete} isLoading={isLoading}
+        text={"This category will be moved to trash. You can restore it later or undo this action anytime."}
+        deleteType={data?.name}
+      />
 
-            <AlertDialogDescription>
-                This category will be moved to trash. You can restore it later or undo this action anytime.
-              <span className="font-semibold"> {data.name}</span>.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
 
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={isLoading}>
-              Cancel
-            </AlertDialogCancel>
-
-            <AlertDialogAction
-              onClick={handleDelete}
-              disabled={isLoading}
-            >
-              {isLoading ? "Deleting..." : "Yes, Delete"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
 
       {/* EDIT MODAL */}
       <CategoryForm

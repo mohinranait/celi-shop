@@ -7,8 +7,9 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Trash2, PlusCircle, RefreshCw } from "lucide-react"
+import { Trash2, PlusCircle, RefreshCw, ArrowLeft } from "lucide-react"
 import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 export interface IAttributeConfig {
   name: string;
   selectedValues: string[];
@@ -42,6 +43,7 @@ const availableAttributes = [
 ];
 
 export default function AdvancedVariationForm() {
+  const router = useRouter()
   const [selectedConfigs, setSelectedConfigs] = useState<IAttributeConfig[]>([]);
 
   const { register, control, handleSubmit, reset } = useForm<IProduct>({
@@ -108,90 +110,106 @@ export default function AdvancedVariationForm() {
 
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="max-w-4xl mx-auto p-6 space-y-8">
-      <Card>
-        <CardContent className="pt-6 space-y-4">
-          <div>
-            <Label>Product Name</Label>
-            <Input {...register("name")} placeholder="Main Product Name" />
-          </div>
+    <div className="max-w-7xl mx-auto  space-y-6">
+      {/* HEADER */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold">Add new product</h1>
+          <p className="text-muted-foreground text-sm">
+            Add  your product information, best information for reach sale
+          </p>
+        </div>
 
-          <div className="border-t pt-4">
-            <div className="flex justify-between items-center mb-4">
-              <Label className="text-lg font-bold">Select Attributes</Label>
-              <Button type="button" variant="secondary" size="sm" onClick={addAttributeRow}>
-                <PlusCircle className="w-4 h-4 mr-2" /> Add Attribute
-              </Button>
+        <Button type="button" onClick={() => router?.back()} >
+          <ArrowLeft /> Go Back
+        </Button>
+      </div>
+
+      <form onSubmit={handleSubmit(onSubmit)} className="max-w-4xl mx-auto p-6 space-y-8">
+        <Card>
+          <CardContent className="pt-6 space-y-4">
+            <div>
+              <Label>Product Name</Label>
+              <Input {...register("name")} placeholder="Main Product Name" />
             </div>
 
-            {/* অ্যাট্রিবিউট সিলেকশন সেকশন */}
-            {selectedConfigs.map((config, idx) => (
-              <div key={idx} className="flex gap-4 mb-3 items-end bg-slate-50 p-3 rounded-md">
-                <div className="flex-1">
-                  <Label>Attribute</Label>
-                  <Select onValueChange={(val) => updateConfig(idx, val, [])}>
-                    <SelectTrigger><SelectValue placeholder="Select Type" /></SelectTrigger>
-                    <SelectContent>
-                      {availableAttributes.map(attr => (
-                        <SelectItem key={attr.id} value={attr.name}>{attr.name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="flex-[2]">
-                  <Label>Values (Comma separated for now)</Label>
-                  <Input
-                    placeholder="Red, Green, Blue"
-                    onChange={(e) => updateConfig(idx, config.name, e.target.value.split(",").map(v => v.trim()))}
-                  />
-                </div>
-
-                <Button variant="destructive" size="icon" onClick={() => setSelectedConfigs(selectedConfigs.filter((_, i) => i !== idx))}>
-                  <Trash2 className="w-4 h-4" />
+            <div className="border-t pt-4">
+              <div className="flex justify-between items-center mb-4">
+                <Label className="text-lg font-bold">Select Attributes</Label>
+                <Button type="button" variant="secondary" size="sm" onClick={addAttributeRow}>
+                  <PlusCircle className="w-4 h-4 mr-2" /> Add Attribute
                 </Button>
               </div>
-            ))}
 
-            {selectedConfigs.length > 0 && (
-              <Button type="button" className="w-full mt-4" variant="outline" onClick={generateVariations}>
-                <RefreshCw className="w-4 h-4 mr-2" /> Generate All Variations
-              </Button>
-            )}
-          </div>
+              {/* অ্যাট্রিবিউট সিলেকশন সেকশন */}
+              {selectedConfigs.map((config, idx) => (
+                <div key={idx} className="flex gap-4 mb-3 items-end bg-slate-50 p-3 rounded-md">
+                  <div className="flex-1">
+                    <Label>Attribute</Label>
+                    <Select onValueChange={(val) => updateConfig(idx, val, [])}>
+                      <SelectTrigger><SelectValue placeholder="Select Type" /></SelectTrigger>
+                      <SelectContent>
+                        {availableAttributes.map(attr => (
+                          <SelectItem key={attr.id} value={attr.name}>{attr.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-          {/* জেনারেটেড ভ্যারিয়েশন লিস্ট */}
-          {fields.length > 0 && (
-            <div className="border-t pt-6 space-y-4">
-              <Label className="text-lg font-bold">Variations List</Label>
-              <div className="grid grid-cols-1 gap-3">
-                {fields.map((field, index) => {
-                  console.log(field);
+                  <div className="flex-[2]">
+                    <Label>Values (Comma separated for now)</Label>
+                    <Input
+                      placeholder="Red, Green, Blue"
+                      onChange={(e) => updateConfig(idx, config.name, e.target.value.split(",").map(v => v.trim()))}
+                    />
+                  </div>
 
-                  return (
-                    <div key={field.id} className="grid grid-cols-12 gap-3 items-center border p-3 rounded-lg shadow-sm">
-                      <div className="col-span-4 font-medium text-sm">{field.name}</div>
-                      <div className="col-span-3">
-                        <Input type="number" placeholder="Price" {...register(`variations.${index}.price` as const)} />
-                      </div>
-                      <div className="col-span-4">
-                        <Input placeholder="SKU" {...register(`variations.${index}.sku` as const)} />
-                      </div>
-                      <div className="col-span-1">
-                        <Button variant="ghost" size="sm" onClick={() => remove(index)}>
-                          <Trash2 className="w-4 h-4 text-red-500" />
-                        </Button>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
+                  <Button variant="destructive" size="icon" onClick={() => setSelectedConfigs(selectedConfigs.filter((_, i) => i !== idx))}>
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              ))}
+
+              {selectedConfigs.length > 0 && (
+                <Button type="button" className="w-full mt-4" variant="outline" onClick={generateVariations}>
+                  <RefreshCw className="w-4 h-4 mr-2" /> Generate All Variations
+                </Button>
+              )}
             </div>
-          )}
-        </CardContent>
-      </Card>
 
-      <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">Publish Product</Button>
-    </form>
+            {/* জেনারেটেড ভ্যারিয়েশন লিস্ট */}
+            {fields.length > 0 && (
+              <div className="border-t pt-6 space-y-4">
+                <Label className="text-lg font-bold">Variations List</Label>
+                <div className="grid grid-cols-1 gap-3">
+                  {fields.map((field, index) => {
+                    console.log(field);
+
+                    return (
+                      <div key={field.id} className="grid grid-cols-12 gap-3 items-center border p-3 rounded-lg shadow-sm">
+                        <div className="col-span-4 font-medium text-sm">{field.name}</div>
+                        <div className="col-span-3">
+                          <Input type="number" placeholder="Price" {...register(`variations.${index}.price` as const)} />
+                        </div>
+                        <div className="col-span-4">
+                          <Input placeholder="SKU" {...register(`variations.${index}.sku` as const)} />
+                        </div>
+                        <div className="col-span-1">
+                          <Button variant="ghost" size="sm" onClick={() => remove(index)}>
+                            <Trash2 className="w-4 h-4 text-red-500" />
+                          </Button>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700">Publish Product</Button>
+      </form>
+    </div>
   )
 }

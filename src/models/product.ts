@@ -21,12 +21,13 @@ const ProductSchema = new mongoose.Schema({
       type: Map,
       of: String
       // { "Color": "Red", "Size": "XL" }
-    }
+    },
+
   }],
 
 
   category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
-  brand: { type: String },
+  brand: { type: mongoose.Schema.Types.ObjectId, ref: 'Brand' },
   isDelete: Boolean,
   status: { 
     type: String, 

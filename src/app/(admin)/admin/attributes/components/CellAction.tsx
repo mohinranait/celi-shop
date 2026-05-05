@@ -20,6 +20,7 @@ import {
 import { IAttribute } from '@/redux/service/attributes/type';
 import AttributeForm from './AttributeForm';
 import { useDeleteAttributeMutation, useSoftDeleteAttributeMutation } from '@/redux/service/attributes';
+import DeleteAlert from '@/components/shared/DeleteAlert';
 
 type Props = {
   data: IAttribute;
@@ -36,10 +37,10 @@ const CellAction = ({ data, type }: Props) => {
 
 
   // Soft delete
-  const softDelete = async () => {
+  const softDelete = async (action: "restore" | "soft" = 'restore') => {
     try {
       await softDeleteAction({ id: data._id, payload: { isDelete: true } }).unwrap();
-      toast.success("Deleted successfully");
+      toast.success(action === 'restore' ? "Restore" : "Delete" + ` successfully`);
       setIsDeleteOpen(false);
     } catch (error) {
       console.error(error);
@@ -64,14 +65,14 @@ const CellAction = ({ data, type }: Props) => {
     if (type === 'active') {
       setIsOpen(true)
     } else {
-      softDelete()
+      softDelete('restore')
     }
   }
 
 
   const handleDelete = () => {
     if (type === 'active') {
-      softDelete()
+      softDelete("soft")
     } else {
       hardDelete()
     }
@@ -105,33 +106,12 @@ const CellAction = ({ data, type }: Props) => {
       </Button>
 
       {/* DELETE CONFIRM MODAL (STATE CONTROLLED) */}
-      <AlertDialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              Are you absolutely sure?
-            </AlertDialogTitle>
+      <DeleteAlert isDeleteOpen={isDeleteOpen} setIsDeleteOpen={setIsDeleteOpen} callBack={handleDelete} isLoading={isLoading}
+        text={"This attribute will be moved to trash. You can restore it later or undo this action anytime."}
+        deleteType={data?.displayName}
+      />
 
-            <AlertDialogDescription>
-              This attribute will be moved to trash. You can restore it later or undo this action anytime.
-              <span className="font-semibold"> {data.displayName}</span>.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
 
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={isLoading}>
-              Cancel
-            </AlertDialogCancel>
-
-            <AlertDialogAction
-              onClick={handleDelete}
-              disabled={isLoading}
-            >
-              {isLoading ? "Deleting..." : "Yes, Delete"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
 
       {/* EDIT MODAL */}
       <AttributeForm

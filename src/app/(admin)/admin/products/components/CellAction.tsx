@@ -7,17 +7,8 @@ import React, { useState } from 'react';
 import { useDeleteBrandMutation, useSoftDeleteBrandMutation } from '@/redux/service/brand';
 import { toast } from 'sonner';
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import { IProduct } from '@/redux/service/products/type';
+import DeleteAlert from '@/components/shared/DeleteAlert';
 
 type Props = {
   data: IProduct;
@@ -34,10 +25,10 @@ const CellAction = ({ data, type }: Props) => {
 
 
   // Soft delete
-  const softDelete = async () => {
+  const softDelete = async (action: "restore"|"soft"='restore') => {
     try {
       await softDeleteBrand({ id: data._id, payload: { isDelete: true } }).unwrap();
-      toast.success("Deleted successfully");
+       toast.success( action === 'restore' ? "Restore" :"Delete" + ` successfully`);
       setIsDeleteOpen(false);
     } catch (error) {
       console.error(error);
@@ -62,7 +53,7 @@ const CellAction = ({ data, type }: Props) => {
     if (type === 'active') {
       setIsOpen(true)
     } else {
-      softDelete()
+      softDelete("restore")
     }
   }
 
@@ -103,33 +94,11 @@ const CellAction = ({ data, type }: Props) => {
       </Button>
 
       {/* DELETE CONFIRM MODAL (STATE CONTROLLED) */}
-      <AlertDialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              Are you absolutely sure?
-            </AlertDialogTitle>
-
-            <AlertDialogDescription>
-              This brand will be moved to trash. You can restore it later or undo this action anytime.
-              <span className="font-semibold"> {data.name}</span>.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={isLoading}>
-              Cancel
-            </AlertDialogCancel>
-
-            <AlertDialogAction
-              onClick={handleDelete}
-              disabled={isLoading}
-            >
-              {isLoading ? "Deleting..." : "Yes, Delete"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <DeleteAlert isDeleteOpen={isDeleteOpen} setIsDeleteOpen={setIsDeleteOpen} callBack={handleDelete} isLoading={isLoading}
+        text={"This product will be moved to trash. You can restore it later or undo this action anytime."}
+        deleteType={data?.name}
+      />
+     
 
      
     </div>
