@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
@@ -12,6 +12,14 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 import { Separator } from "@/components/ui/separator";
 import {
@@ -36,6 +44,7 @@ import {
   Settings2,
   Loader2,
   Sparkles,
+  AlertCircle,
 } from "lucide-react";
 import MediaModal from "../../../media/components/MediaModal";
 import { useGetBrandsQuery } from "@/redux/service/brand";
@@ -44,6 +53,8 @@ import { useCreateProductMutation } from "@/redux/service/products";
 import { productSchema, TProductFormType } from "@/components/validations/product";
 import SectionCard from "./SectionCard";
 import { FormField } from "./FormField";
+import { cn } from "@/lib/utils";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 
 
@@ -103,8 +114,10 @@ export default function AddProductForm() {
     },
   });
 
+
   const { register, control, handleSubmit, watch, setValue, formState: { errors } } = form;
 
+  // const errors = form.formState.errors.variations;
   const { fields, replace, remove } = useFieldArray({
     control,
     name: "variations",
@@ -207,6 +220,67 @@ export default function AddProductForm() {
       setIsSubmitting(false);
     }
   };
+
+
+  const getFieldError = (index: number, field: string) => {
+    return errors.variations?.[index]?.[field as keyof typeof errors.variations[number]];
+  };
+
+  const variations = watch("variations");
+
+  useEffect(() => {
+    variations?.forEach((item, index: number) => {
+      const price = Number(item.price) || 0;
+      const fixed = Number(item.offerPriceFixed);
+      const percent = Number(item.offerPriceParcent);
+
+      // FIXED → PERCENT
+      if (fixed >= 0 && price > 0 && fixed <= price) {
+        const calculatedPercent = ((price - fixed) / price) * 100;
+
+        setValue(
+          `variations.${index}.offerPriceParcent`,
+          Number(calculatedPercent.toFixed(2))
+        );
+      }
+
+      // PERCENT → FIXED
+      if (percent >= 0 && price > 0 && percent <= 100) {
+        const calculatedFixed = price - (price * percent) / 100;
+
+        setValue(
+          `variations.${index}.offerPriceFixed`,
+          Number(calculatedFixed.toFixed(2))
+        );
+      }
+    });
+  }, [variations, setValue]);
+
+
+
+  const updateDiscountFromFixed = useCallback((index: number, discountAmount: number) => {
+    const price = Number(watch(`variations.${index}.price`)) || 0;
+    if (price > 0) {
+      const percent = (discountAmount / price) * 100;
+      setValue(`variations.${index}.offerPriceParcent`, Number(percent.toFixed(2)));
+    }
+  }, [watch, setValue]);
+
+  const updateDiscountFromPercent = useCallback((index: number, percent: number) => {
+    const price = Number(watch(`variations.${index}.price`)) || 0;
+    if (price > 0) {
+      const discountAmount = (price * percent) / 100;
+      setValue(`variations.${index}.offerPriceFixed`, Number(discountAmount.toFixed(2)));
+    }
+  }, [watch, setValue]);
+
+  const updatePercentFromPrice = useCallback((index: number, newPrice: number) => {
+    const fixedDiscount = Number(watch(`variations.${index}.offerPriceFixed`)) || 0;
+    if (newPrice > 0 && fixedDiscount > 0) {
+      const percent = (fixedDiscount / newPrice) * 100;
+      setValue(`variations.${index}.offerPriceParcent`, Number(percent.toFixed(2)));
+    }
+  }, [watch, setValue]);
 
 
   return (
@@ -492,67 +566,209 @@ export default function AddProductForm() {
                 </div>
 
                 {/* Header */}
-                <div className="grid grid-cols-12 gap-2 px-3 py-1.5 bg-slate-100 rounded-lg">
-                  <span className="col-span-4 text-[10px] font-semibold text-slate-500 uppercase tracking-wide">
-                    Variant
-                  </span>
-                  <span className="col-span-3 text-[10px] font-semibold text-slate-500 uppercase tracking-wide">
-                    Price
-                  </span>
-                  <span className="col-span-3 text-[10px] font-semibold text-slate-500 uppercase tracking-wide">
-                    SKU
-                  </span>
-                  <span className="col-span-1 text-[10px] font-semibold text-slate-500 uppercase tracking-wide">
-                    Stock
-                  </span>
-                  <span className="col-span-1" />
-                </div>
+                <div className="border rounded-lg overflow-hidden bg-white">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="bg-slate-50 hover:bg-slate-50">
+                        <TableHead className="w-[20%] font-semibold">Variant Name</TableHead>
+                        <TableHead className="w-[15%] font-semibold">Price</TableHead>
+                        <TableHead className="w-[15%] font-semibold">Discount </TableHead>
+                        <TableHead className="w-[15%] font-semibold">Discount(%) </TableHead>
+                        <TableHead className="w-[15%] font-semibold">SKU</TableHead>
+                        <TableHead className="w-[12%] font-semibold text-center">Stock</TableHead>
+                        <TableHead className="w-[12%] font-semibold text-center">Alert</TableHead>
+                        <TableHead className="w-[11%] text-right font-semibold">Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {fields.length === 0 ? (
+                        <TableRow>
+                          <TableCell colSpan={7} className="text-center py-8">
+                            <div className="text-sm text-muted-foreground">
+                              {` No variations added yet. Click "Add Variation" to get started.`}
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ) : (
+                        fields.map((field, index) => (
+                          <TableRow
+                            key={field.id}
+                            className="hover:bg-slate-50 transition-colors"
+                          >
+                            {/* Variant Name */}
+                            <TableCell>
+                              <div className="flex gap-1 items-center ">
+                                <div>
+                                  <div className="w-8 h-8 rounded-md bg-muted"></div>
+                                </div>
+                                <div className="space-y-1">
+                                  <Input
+                                    placeholder="e.g., Red Size M"
+                                    {...control.register(`variations.${index}.name`)}
+                                    readOnly
+                                    disabled
+                                    className={cn(
+                                      "h-8 text-sm",
+                                      getFieldError(index, "name") && "border-red-500"
+                                    )}
+                                  />
+                                  {getFieldError(index, "name") && (
+                                    <p className="text-xs text-red-500 flex items-center gap-1">
+                                      <AlertCircle size={12} />
+                                      {getFieldError(index, "name")}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                            </TableCell>
 
-                {fields.map((field, index) => (
-                  <div
-                    key={field.id}
-                    className="grid grid-cols-12 gap-2 items-center px-3 py-2.5 border border-slate-200 rounded-lg hover:border-slate-300 transition-colors bg-white"
-                  >
-                    <div className="col-span-4 flex items-center gap-2">
-                      <div className="w-1.5 h-6 rounded-full bg-indigo-400/60" />
-                      <span className="text-xs font-medium text-slate-700 truncate">
-                        {field.name}
-                      </span>
-                    </div>
-                    <div className="col-span-3">
-                      <Input
-                        type="number"
-                        placeholder="0.00"
-                        {...register(`variations.${index}.price`)}
-                        className="h-7 text-xs"
-                      />
-                    </div>
-                    <div className="col-span-3">
-                      <Input
-                        placeholder="SKU-XXXX"
-                        {...register(`variations.${index}.sku`)}
-                        className="h-7 text-xs"
-                      />
-                    </div>
-                    <div className="col-span-1">
-                      <Input
-                        type="number"
-                        placeholder="0"
-                        {...register(`variations.${index}.stock`)}
-                        className="h-7 text-xs"
-                      />
-                    </div>
-                    <div className="col-span-1 flex justify-end">
-                      <button
-                        type="button"
-                        onClick={() => remove(index)}
-                        className="p-1 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded transition"
-                      >
-                        <Trash2 size={13} />
-                      </button>
-                    </div>
-                  </div>
-                ))}
+                            <TableCell>
+                              <Input
+                                type="number"
+                                step="1"
+                                min="0"
+                                {...register(`variations.${index}.price`, {
+                                  onChange: (e) => {
+                                    const val = Number(e.target.value) || 0;
+                                    setValue(`variations.${index}.price`, val);
+                                    updatePercentFromPrice(index, val);
+                                  },
+                                })}
+                              />
+                            </TableCell>
+
+                            <TableCell>
+                              <Input
+                                type="number"
+                                step="1"
+                                min="0"
+                                placeholder="0.00"
+                                {...register(`variations.${index}.offerPriceFixed`, {
+                                  onChange: (e) => {
+                                    const val = Number(e.target.value) || 0;
+                                    setValue(`variations.${index}.offerPriceFixed`, val);
+                                    updateDiscountFromFixed(index, val);
+                                  },
+                                })}
+                                className="h-8 text-sm"
+                              />
+                            </TableCell>
+
+                            {/* Discount Percentage */}
+                            <TableCell>
+                              <Input
+                                type="number"
+                                step="1"
+                                min="0"
+                                max="100"
+                                placeholder="0.00"
+                                {...register(`variations.${index}.offerPriceParcent`, {
+                                  onChange: (e) => {
+                                    let val = Number(e.target.value) || 0;
+                                    if (val > 100) val = 100;
+                                    setValue(`variations.${index}.offerPriceParcent`, val);
+                                    updateDiscountFromPercent(index, val);
+                                  },
+                                })}
+                                className="h-8 text-sm"
+                              />
+                            </TableCell>
+
+
+
+                            {/* SKU */}
+                            <TableCell>
+                              <div className="space-y-1">
+                                <Input
+                                  placeholder="SKU-001"
+                                  {...control.register(`variations.${index}.sku`)}
+                                  className={cn(
+                                    "h-8 text-sm",
+                                    getFieldError(index, "sku") && "border-red-500"
+                                  )}
+                                />
+                                {getFieldError(index, "sku") && (
+                                  <p className="text-xs text-red-500 flex items-center gap-1">
+                                    <AlertCircle size={12} />
+                                    {getFieldError(index, "sku")}
+                                  </p>
+                                )}
+                              </div>
+                            </TableCell>
+
+                            {/* Stock */}
+                            <TableCell>
+                              <div className="space-y-1">
+                                <Input
+                                  type="number"
+                                  inputMode="numeric"
+                                  step="1"
+                                  min="0"
+                                  placeholder="0"
+                                  {...control.register(`variations.${index}.stock`)}
+                                  className={cn(
+                                    "h-8 text-sm text-center",
+                                    getFieldError(index, "stock") && "border-red-500"
+                                  )}
+                                />
+                                {getFieldError(index, "stock") && (
+                                  <p className="text-xs text-red-500 flex items-center gap-1">
+                                    <AlertCircle size={12} />
+                                    {getFieldError(index, "stock")}
+                                  </p>
+                                )}
+                              </div>
+                            </TableCell>
+
+                            {/* Low Stock Alert */}
+                            <TableCell>
+                              <div className="space-y-1">
+                                <Input
+                                  type="number"
+                                  inputMode="numeric"
+                                  step="1"
+                                  min="0"
+                                  placeholder="5"
+                                  {...control.register(`variations.${index}.lowStockAlert`)}
+                                  className={cn(
+                                    "h-8 text-sm text-center",
+                                    getFieldError(index, "lowStockAlert") && "border-red-500"
+                                  )}
+                                />
+                                {getFieldError(index, "lowStockAlert") && (
+                                  <p className="text-xs text-red-500 flex items-center gap-1">
+                                    <AlertCircle size={12} />
+                                    {getFieldError(index, "lowStockAlert")}
+                                  </p>
+                                )}
+                              </div>
+                            </TableCell>
+
+                            {/* Actions */}
+                            <TableCell className="text-right">
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button
+                                      type="button"
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => remove(index)}
+                                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                    >
+                                      <Trash2 size={16} />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>Delete variation</TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      )}
+                    </TableBody>
+                  </Table>
+                </div>
               </div>
             )}
           </SectionCard>

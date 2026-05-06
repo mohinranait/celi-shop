@@ -53,4 +53,4 @@ export const productApi = baseApi.injectEndpoints({
 })
 
 
-export const {useCreateProductMutation, useGetProductsQuery,useUpdateProductMutation} = productApi;
+export const {useCreateProductMutation, useGetProductsQuery,useUpdateProductMutation, useSoftDeleteProductMutation, useDeleteProductMutation} = productApi;

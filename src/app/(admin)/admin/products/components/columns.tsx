@@ -14,16 +14,16 @@ const tableColumns = ({ type = 'active' }: { type: "active" | "deleted" }) => {
       accessorKey: "name",
       header: "Name",
       cell: ({ row }) => {
-        const brandData = row.original;
+        const productData = row.original;
         return <div className="flex items-center gap-1">
           <div>
             {
-              brandData?.logo ?
-                <Image width={64} height={64} alt="Brand" src={brandData?.logo} className="rounded-md w-10 h-10 " /> :
+              productData?.logo ?
+                <Image width={64} height={64} alt="Product" src={productData?.logo} className="rounded-md w-10 h-10 " /> :
                 <div className="bg-accent w-10 h-10 rounded-md flex items-center justify-center text-foreground"><LucidImage size={16} /></div>
             }
           </div>
-          <p>{brandData?.name}</p>
+          <p>{productData?.name}</p>
         </div>
       }
     },

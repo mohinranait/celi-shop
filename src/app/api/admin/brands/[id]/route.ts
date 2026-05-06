@@ -92,13 +92,13 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
 
    
-     const { id } =  params;
+     const { id } = await  params;
   
 
     //  check brand exists

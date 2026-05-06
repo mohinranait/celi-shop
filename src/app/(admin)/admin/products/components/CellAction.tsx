@@ -4,11 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Pen, RotateCcw, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
 
-import { useDeleteBrandMutation, useSoftDeleteBrandMutation } from '@/redux/service/brand';
 import { toast } from 'sonner';
 
 import { IProduct } from '@/redux/service/products/type';
 import DeleteAlert from '@/components/shared/DeleteAlert';
+import { useDeleteProductMutation, useSoftDeleteProductMutation } from '@/redux/service/products';
 
 type Props = {
   data: IProduct;
@@ -20,31 +20,31 @@ const CellAction = ({ data, type }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
-  const [softDeleteBrand, { isLoading }] = useSoftDeleteBrandMutation();
-  const [deleteBrand, { isLoading: deleteLoading }] = useDeleteBrandMutation();
+  const [softDeleteProduct, { isLoading }] = useSoftDeleteProductMutation();
+  const [deleteProduct, { isLoading: deleteLoading }] = useDeleteProductMutation();
 
 
   // Soft delete
   const softDelete = async (action: "restore"|"soft"='restore') => {
     try {
-      await softDeleteBrand({ id: data._id, payload: { isDelete: true } }).unwrap();
+      await softDeleteProduct({ id: data._id, payload: { isDelete: true } }).unwrap();
        toast.success( action === 'restore' ? "Restore" :"Delete" + ` successfully`);
       setIsDeleteOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete brand");
+      toast.error("Failed to delete product");
     }
   };
 
   // hard delete
   const hardDelete = async () => {
     try {
-      await deleteBrand(data?._id).unwrap();
+      await deleteProduct(data?._id).unwrap();
       toast.success("Deleted successfully");
       setIsDeleteOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete brand");
+      toast.error("Failed to delete product");
     }
   };
 

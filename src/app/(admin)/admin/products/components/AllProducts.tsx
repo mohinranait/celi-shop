@@ -12,8 +12,9 @@ const AllProducts = () => {
   const router = useRouter()
   const [filter, setFilter] = useState<"active" | "deleted">("active");
   const [isParams, setIsParams] = useState('')
+   const [pagination, setPagination] = useState({ page: 1, limit: 2 })
   const columns = tableColumns({ type: filter });
-  const { data } = useGetProductsQuery('')
+  const { data } = useGetProductsQuery(`page=${pagination?.page}&limit=${pagination?.limit}&isDelete=${filter === 'active' ? 'false' : "true"}&${isParams}`)
   const products = data?.data || [];
 
 
