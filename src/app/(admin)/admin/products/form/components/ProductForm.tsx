@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -13,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
 import { Separator } from "@/components/ui/separator";
 import {
   Select,
@@ -22,12 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+
 
 import {
   ArrowLeft,
@@ -40,9 +34,6 @@ import {
   Tag,
   Layers,
   Settings2,
-  ChevronDown,
-  ChevronUp,
-  Info,
   Loader2,
   Sparkles,
 } from "lucide-react";
@@ -51,6 +42,8 @@ import { useGetBrandsQuery } from "@/redux/service/brand";
 import { useGetCategoriesQuery } from "@/redux/service/categories";
 import { useCreateProductMutation } from "@/redux/service/products";
 import { productSchema, TProductFormType } from "@/components/validations/product";
+import SectionCard from "./SectionCard";
+import { FormField } from "./FormField";
 
 
 
@@ -63,7 +56,6 @@ const useGetAttributesQuery = () => ({
   ],
   isLoading: false,
 });
-// ---------------------------------------------------------------------------
 
 
 interface IAttributeConfig {
@@ -72,96 +64,7 @@ interface IAttributeConfig {
   selectedValues: string[];
 }
 
-// ---------------------------------------------------------------------------
-// Sub-components
-// ---------------------------------------------------------------------------
 
-function SectionCard({
-  icon,
-  title,
-  description,
-  children,
-  collapsible = false,
-}: {
-  icon: React.ReactNode;
-  title: string;
-  description?: string;
-  children: React.ReactNode;
-  collapsible?: boolean;
-}) {
-  const [open, setOpen] = useState(true);
-  return (
-    <Card className="border border-slate-200 shadow-sm">
-      <CardHeader
-        className={`pb-3 ${collapsible ? "cursor-pointer select-none" : ""}`}
-        onClick={collapsible ? () => setOpen(!open) : undefined}
-      >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-md bg-slate-100 text-slate-600">
-              {icon}
-            </span>
-            <div>
-              <CardTitle className="text-sm font-semibold text-slate-800">
-                {title}
-              </CardTitle>
-              {description && (
-                <p className="text-xs text-slate-500 mt-0.5">{description}</p>
-              )}
-            </div>
-          </div>
-          {collapsible && (
-            <span className="text-slate-400">
-              {open ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-            </span>
-          )}
-        </div>
-      </CardHeader>
-      {open && (
-        <CardContent className="pt-0 space-y-4">{children}</CardContent>
-      )}
-    </Card>
-  );
-}
-
-function FormField({
-  label,
-  required,
-  error,
-  hint,
-  children,
-}: {
-  label: string;
-  required?: boolean;
-  error?: string;
-  hint?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="space-y-1.5">
-      <div className="flex items-center gap-1.5">
-        <Label className="text-xs font-medium text-slate-700">
-          {label}
-          {required && <span className="text-rose-500 ml-0.5">*</span>}
-        </Label>
-        {hint && (
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger>
-                <Info size={12} className="text-slate-400" />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p className="text-xs">{hint}</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        )}
-      </div>
-      {children}
-      {error && <p className="text-xs text-rose-500">{error}</p>}
-    </div>
-  );
-}
 
 // ---------------------------------------------------------------------------
 // Main Component
@@ -230,7 +133,7 @@ export default function AddProductForm() {
   };
 
   const updateAttributeType = (idx: number, attrId: string) => {
-    const attr = attributes.find((a: {_id:string}) => a._id === attrId);
+    const attr = attributes.find((a: { _id: string }) => a._id === attrId);
     const newConfigs = [...selectedConfigs];
     newConfigs[idx] = { attributeId: attrId, name: attr?.name ?? "", selectedValues: [] };
     setSelectedConfigs(newConfigs);
@@ -296,19 +199,8 @@ export default function AddProductForm() {
 
       await createProduct(payload)
 
-
-      // const res = await fetch("/api/admin/products", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(payload),
-      // });
-
-      // if (res.ok) {
-      //   toast.success("Product published successfully!");
-      //   router.back();
-      // } else {
-      //   toast.error("Failed to save product.");
-      // }
+      router.back();
+      toast.success("Product published successfully!");
     } catch {
       toast.error("Something went wrong.");
     } finally {
@@ -342,7 +234,7 @@ export default function AddProductForm() {
         </div>
 
         <div className="flex items-center gap-2">
-          
+
           <Button
             size="sm"
             onClick={handleSubmit(onSubmit)}
@@ -397,7 +289,7 @@ export default function AddProductForm() {
               <Textarea
                 {...register("description")}
                 placeholder="Describe your product..."
-                className="text-sm min-h-[100px] resize-none"
+                className="text-sm min-h-25 resize-none"
               />
             </FormField>
           </SectionCard>
