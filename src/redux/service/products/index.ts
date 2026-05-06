@@ -2,6 +2,7 @@
 import { ISoftDelete } from "@/global";
 import {  baseApi } from "..";
 import { IProduct, IProductListResponse } from "./type";
+import { TProductFormType } from "@/components/validations/product";
 
 
 export const productApi = baseApi.injectEndpoints({
@@ -12,7 +13,7 @@ export const productApi = baseApi.injectEndpoints({
     }),
 
 
-    createProduct: builder.mutation<IProduct, FormData>({
+    createProduct: builder.mutation<IProduct, TProductFormType>({
       query: (payload) => ({
         url: '/admin/products',
         method: 'POST',

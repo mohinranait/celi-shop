@@ -20,5 +20,5 @@ export interface ICategory extends IBaseCategory {
 
 export interface ICategoryListResponse {
   data: ICategory[]
-   meta: IMetaPagination;
+  meta: IMetaPagination;
 }
