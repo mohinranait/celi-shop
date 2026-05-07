@@ -37,8 +37,8 @@ import {
   UseFieldArrayRemove,
   UseFormReturn,
 } from "react-hook-form";
+import MediaModal from "../../../media/components/MediaModal";
 
-import MediaModal from "../../media/components/MediaModal";
 
 type VariationFieldType = FieldArrayWithId<
   TProductFormType,
@@ -133,10 +133,10 @@ const VariantTable = ({
 
   return (
     <>
-      <div className="border rounded-lg overflow-hidden bg-white">
+      <div className="border rounded-lg overflow-hidden ">
         <Table>
           <TableHeader>
-            <TableRow className="bg-slate-50 hover:bg-slate-50">
+            <TableRow className="">
               <TableHead className="w-[22%] font-semibold">
                 Variant
               </TableHead>
@@ -191,11 +191,11 @@ const VariantTable = ({
                 return (
                   <TableRow
                     key={field.id}
-                    className="hover:bg-slate-50 transition-colors"
+                    className=" transition-colors"
                   >
                     {/* Variant Name + Image */}
                     <TableCell>
-                      <div className="flex gap-3 items-start">
+                      <div className="flex gap-3 items-center">
                         {/* Image Upload */}
                         <div className="shrink-0">
                           {variantImage ? (

@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { IProduct } from '@/redux/service/products/type';
 import DeleteAlert from '@/components/shared/DeleteAlert';
 import { useDeleteProductMutation, useSoftDeleteProductMutation } from '@/redux/service/products';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   data: IProduct;
@@ -16,7 +17,7 @@ type Props = {
 };
 
 const CellAction = ({ data, type }: Props) => {
-
+  const router = useRouter()
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
@@ -51,7 +52,8 @@ const CellAction = ({ data, type }: Props) => {
 
   const handleEditAndRestore = () => {
     if (type === 'active') {
-      setIsOpen(true)
+      // setIsOpen(true)
+      router.push(`/admin/products/form?pid=${data?._id}`)
     } else {
       softDelete("restore")
     }

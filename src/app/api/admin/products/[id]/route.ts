@@ -4,9 +4,11 @@ import Product from "@/models/product";
 import { NextRequest, NextResponse } from "next/server";
 
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   await connectDB();
-  const product = await Product.findById(params.id);
+  const {id}  = await params;
+  const product = await Product.findById(id);
   if (!product) return NextResponse.json({ error: "Not Found" }, { status: 404 });
   return NextResponse.json({ data: product });
 }

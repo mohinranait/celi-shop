@@ -1,7 +1,7 @@
 
 import { ISoftDelete } from "@/global";
 import {  baseApi } from "..";
-import { IProduct, IProductListResponse } from "./type";
+import { IProduct, IProductDetailsResponse, IProductListResponse } from "./type";
 import { TProductFormType } from "@/components/validations/product";
 
 
@@ -20,6 +20,14 @@ export const productApi = baseApi.injectEndpoints({
         body: payload,
       }),
       invalidatesTags: ['products'],
+    }),
+
+
+    getProductById : builder.query<IProductDetailsResponse, string>({
+      query: (productId) => ({
+        url: `/admin/products/${productId}`,
+      }),
+      providesTags: ['product'],
     }),
 
 
@@ -53,4 +61,4 @@ export const productApi = baseApi.injectEndpoints({
 })
 
 
-export const {useCreateProductMutation, useGetProductsQuery,useUpdateProductMutation, useSoftDeleteProductMutation, useDeleteProductMutation} = productApi;
+export const {useCreateProductMutation, useGetProductsQuery, useGetProductByIdQuery, useUpdateProductMutation, useSoftDeleteProductMutation, useDeleteProductMutation} = productApi;

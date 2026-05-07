@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -12,14 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+
 
 import { Separator } from "@/components/ui/separator";
 import {
@@ -44,17 +37,17 @@ import {
   Settings2,
   Loader2,
   Sparkles,
-  AlertCircle,
 } from "lucide-react";
 import MediaModal from "../../../media/components/MediaModal";
 import { useGetBrandsQuery } from "@/redux/service/brand";
 import { useGetCategoriesQuery } from "@/redux/service/categories";
-import { useCreateProductMutation } from "@/redux/service/products";
+import { useCreateProductMutation, useGetProductByIdQuery } from "@/redux/service/products";
 import { productSchema, TProductFormType } from "@/components/validations/product";
 import SectionCard from "./SectionCard";
 import { FormField } from "./FormField";
-import { cn } from "@/lib/utils";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+
+import SingleProduct from "./single-product";
+import VariantTable from "./variant-table";
 
 
 
@@ -81,9 +74,20 @@ interface IAttributeConfig {
 // Main Component
 // ---------------------------------------------------------------------------
 export default function AddProductForm() {
+  const searchParams = useSearchParams();
+  const productId = searchParams.get('pid');
+
+
+
   const router = useRouter();
 
-  const [createProduct, { isLoading: createLoading }] = useCreateProductMutation()
+  const [createProduct, { isLoading: createLoading }] = useCreateProductMutation();
+  const { data:getSingleProduct } = useGetProductByIdQuery(productId!, {
+    skip: !productId,
+  });
+  const product = getSingleProduct?.data; 
+  console.log({product});
+  
 
   // RTK Query hooks
   const { data: getBrands, isLoading: brandsLoading } = useGetBrandsQuery(``);
@@ -126,7 +130,6 @@ export default function AddProductForm() {
   // Auto-generate slug
   const watchedName = watch("name");
   const productType = watch("productType");
-  console.log(form.getValues());
 
   useEffect(() => {
     if (watchedName) {
@@ -222,9 +225,7 @@ export default function AddProductForm() {
   };
 
 
-  const getFieldError = (index: number, field: string) => {
-    return errors.variations?.[index]?.[field as keyof typeof errors.variations[number]];
-  };
+
 
   const variations = watch("variations");
 
@@ -257,30 +258,15 @@ export default function AddProductForm() {
   }, [variations, setValue]);
 
 
+  useEffect(() => {
+    if(!product) return;
+    form.reset({
+      ...form.getValues(),
+      ...product,
+    })
+  },[product, form])
 
-  const updateDiscountFromFixed = useCallback((index: number, discountAmount: number) => {
-    const price = Number(watch(`variations.${index}.price`)) || 0;
-    if (price > 0) {
-      const percent = (discountAmount / price) * 100;
-      setValue(`variations.${index}.offerPriceParcent`, Number(percent.toFixed(2)));
-    }
-  }, [watch, setValue]);
 
-  const updateDiscountFromPercent = useCallback((index: number, percent: number) => {
-    const price = Number(watch(`variations.${index}.price`)) || 0;
-    if (price > 0) {
-      const discountAmount = (price * percent) / 100;
-      setValue(`variations.${index}.offerPriceFixed`, Number(discountAmount.toFixed(2)));
-    }
-  }, [watch, setValue]);
-
-  const updatePercentFromPrice = useCallback((index: number, newPrice: number) => {
-    const fixedDiscount = Number(watch(`variations.${index}.offerPriceFixed`)) || 0;
-    if (newPrice > 0 && fixedDiscount > 0) {
-      const percent = (fixedDiscount / newPrice) * 100;
-      setValue(`variations.${index}.offerPriceParcent`, Number(percent.toFixed(2)));
-    }
-  }, [watch, setValue]);
 
 
   return (
@@ -431,16 +417,7 @@ export default function AddProductForm() {
           </div>
 
 
-          {productType === "single" && (
-            <div className="border p-5 rounded-xl space-y-4">
-              <h2 className="font-bold text-lg">Pricing & Stock</h2>
-
-              <Input type="number" placeholder="Price" {...register("price")} />
-              <Input type="number" placeholder="Discount Price" {...register("discountPrice")} />
-              <Input type="number" placeholder="Discount Parcent" {...register("discountParcent")} />
-              <Input type="number" placeholder="Stock" {...register("stock")} />
-            </div>
-          )}
+          {productType === "single" && <SingleProduct form={form} />}
 
           {/* Attributes & Variations */}
           <SectionCard
@@ -540,7 +517,7 @@ export default function AddProductForm() {
               >
                 <Plus size={13} /> Add Attribute
               </Button>
-              {selectedConfigs.length > 0 && (
+              {productType === "variant" && (
                 <Button
                   type="button"
                   size="sm"
@@ -566,209 +543,7 @@ export default function AddProductForm() {
                 </div>
 
                 {/* Header */}
-                <div className="border rounded-lg overflow-hidden bg-white">
-                  <Table>
-                    <TableHeader>
-                      <TableRow className="bg-slate-50 hover:bg-slate-50">
-                        <TableHead className="w-[20%] font-semibold">Variant Name</TableHead>
-                        <TableHead className="w-[15%] font-semibold">Price</TableHead>
-                        <TableHead className="w-[15%] font-semibold">Discount </TableHead>
-                        <TableHead className="w-[15%] font-semibold">Discount(%) </TableHead>
-                        <TableHead className="w-[15%] font-semibold">SKU</TableHead>
-                        <TableHead className="w-[12%] font-semibold text-center">Stock</TableHead>
-                        <TableHead className="w-[12%] font-semibold text-center">Alert</TableHead>
-                        <TableHead className="w-[11%] text-right font-semibold">Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {fields.length === 0 ? (
-                        <TableRow>
-                          <TableCell colSpan={7} className="text-center py-8">
-                            <div className="text-sm text-muted-foreground">
-                              {` No variations added yet. Click "Add Variation" to get started.`}
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ) : (
-                        fields.map((field, index) => (
-                          <TableRow
-                            key={field.id}
-                            className="hover:bg-slate-50 transition-colors"
-                          >
-                            {/* Variant Name */}
-                            <TableCell>
-                              <div className="flex gap-1 items-center ">
-                                <div>
-                                  <div className="w-8 h-8 rounded-md bg-muted"></div>
-                                </div>
-                                <div className="space-y-1">
-                                  <Input
-                                    placeholder="e.g., Red Size M"
-                                    {...control.register(`variations.${index}.name`)}
-                                    readOnly
-                                    disabled
-                                    className={cn(
-                                      "h-8 text-sm",
-                                      getFieldError(index, "name") && "border-red-500"
-                                    )}
-                                  />
-                                  {getFieldError(index, "name") && (
-                                    <p className="text-xs text-red-500 flex items-center gap-1">
-                                      <AlertCircle size={12} />
-                                      {getFieldError(index, "name")}
-                                    </p>
-                                  )}
-                                </div>
-                              </div>
-                            </TableCell>
-
-                            <TableCell>
-                              <Input
-                                type="number"
-                                step="1"
-                                min="0"
-                                {...register(`variations.${index}.price`, {
-                                  onChange: (e) => {
-                                    const val = Number(e.target.value) || 0;
-                                    setValue(`variations.${index}.price`, val);
-                                    updatePercentFromPrice(index, val);
-                                  },
-                                })}
-                              />
-                            </TableCell>
-
-                            <TableCell>
-                              <Input
-                                type="number"
-                                step="1"
-                                min="0"
-                                placeholder="0.00"
-                                {...register(`variations.${index}.offerPriceFixed`, {
-                                  onChange: (e) => {
-                                    const val = Number(e.target.value) || 0;
-                                    setValue(`variations.${index}.offerPriceFixed`, val);
-                                    updateDiscountFromFixed(index, val);
-                                  },
-                                })}
-                                className="h-8 text-sm"
-                              />
-                            </TableCell>
-
-                            {/* Discount Percentage */}
-                            <TableCell>
-                              <Input
-                                type="number"
-                                step="1"
-                                min="0"
-                                max="100"
-                                placeholder="0.00"
-                                {...register(`variations.${index}.offerPriceParcent`, {
-                                  onChange: (e) => {
-                                    let val = Number(e.target.value) || 0;
-                                    if (val > 100) val = 100;
-                                    setValue(`variations.${index}.offerPriceParcent`, val);
-                                    updateDiscountFromPercent(index, val);
-                                  },
-                                })}
-                                className="h-8 text-sm"
-                              />
-                            </TableCell>
-
-
-
-                            {/* SKU */}
-                            <TableCell>
-                              <div className="space-y-1">
-                                <Input
-                                  placeholder="SKU-001"
-                                  {...control.register(`variations.${index}.sku`)}
-                                  className={cn(
-                                    "h-8 text-sm",
-                                    getFieldError(index, "sku") && "border-red-500"
-                                  )}
-                                />
-                                {getFieldError(index, "sku") && (
-                                  <p className="text-xs text-red-500 flex items-center gap-1">
-                                    <AlertCircle size={12} />
-                                    {getFieldError(index, "sku")}
-                                  </p>
-                                )}
-                              </div>
-                            </TableCell>
-
-                            {/* Stock */}
-                            <TableCell>
-                              <div className="space-y-1">
-                                <Input
-                                  type="number"
-                                  inputMode="numeric"
-                                  step="1"
-                                  min="0"
-                                  placeholder="0"
-                                  {...control.register(`variations.${index}.stock`)}
-                                  className={cn(
-                                    "h-8 text-sm text-center",
-                                    getFieldError(index, "stock") && "border-red-500"
-                                  )}
-                                />
-                                {getFieldError(index, "stock") && (
-                                  <p className="text-xs text-red-500 flex items-center gap-1">
-                                    <AlertCircle size={12} />
-                                    {getFieldError(index, "stock")}
-                                  </p>
-                                )}
-                              </div>
-                            </TableCell>
-
-                            {/* Low Stock Alert */}
-                            <TableCell>
-                              <div className="space-y-1">
-                                <Input
-                                  type="number"
-                                  inputMode="numeric"
-                                  step="1"
-                                  min="0"
-                                  placeholder="5"
-                                  {...control.register(`variations.${index}.lowStockAlert`)}
-                                  className={cn(
-                                    "h-8 text-sm text-center",
-                                    getFieldError(index, "lowStockAlert") && "border-red-500"
-                                  )}
-                                />
-                                {getFieldError(index, "lowStockAlert") && (
-                                  <p className="text-xs text-red-500 flex items-center gap-1">
-                                    <AlertCircle size={12} />
-                                    {getFieldError(index, "lowStockAlert")}
-                                  </p>
-                                )}
-                              </div>
-                            </TableCell>
-
-                            {/* Actions */}
-                            <TableCell className="text-right">
-                              <TooltipProvider>
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <Button
-                                      type="button"
-                                      variant="ghost"
-                                      size="sm"
-                                      onClick={() => remove(index)}
-                                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                                    >
-                                      <Trash2 size={16} />
-                                    </Button>
-                                  </TooltipTrigger>
-                                  <TooltipContent>Delete variation</TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
-                            </TableCell>
-                          </TableRow>
-                        ))
-                      )}
-                    </TableBody>
-                  </Table>
-                </div>
+                <VariantTable form={form} remove={remove} fields={fields} />
               </div>
             )}
           </SectionCard>
