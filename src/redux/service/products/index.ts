@@ -31,7 +31,7 @@ export const productApi = baseApi.injectEndpoints({
     }),
 
 
-    updateProduct: builder.mutation<IProduct, {id:string, payload:FormData}>({
+    updateProduct: builder.mutation<IProduct, {id:string, payload:TProductFormType}>({
       query: ({ id, payload }) => ({
         url: `/admin/products/${id}`,
         method: 'PATCH',

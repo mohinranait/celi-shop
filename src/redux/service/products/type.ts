@@ -66,5 +66,5 @@ export interface IProductListResponse {
 
 
 export interface IProductDetailsResponse {
-  data: IProductBase
+  data: IProduct
 }

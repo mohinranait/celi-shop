@@ -16,7 +16,7 @@ export default function SectionCard({
 }) {
   const [open, setOpen] = useState(true);
   return (
-    <Card className="border border-slate-200 shadow-sm">
+    <Card className=" shadow-none">
       <CardHeader
         className={`pb-3 ${collapsible ? "cursor-pointer select-none" : ""}`}
         onClick={collapsible ? () => setOpen(!open) : undefined}
@@ -27,11 +27,11 @@ export default function SectionCard({
               {icon}
             </span>
             <div>
-              <CardTitle className="text-sm font-semibold text-slate-800">
+              <CardTitle className="text-sm font-semibold text-primary">
                 {title}
               </CardTitle>
               {description && (
-                <p className="text-xs text-slate-500 mt-0.5">{description}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
               )}
             </div>
           </div>

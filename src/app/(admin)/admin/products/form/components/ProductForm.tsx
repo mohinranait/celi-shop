@@ -37,29 +37,22 @@ import {
   Settings2,
   Loader2,
   Sparkles,
+  VectorSquare,
 } from "lucide-react";
 import MediaModal from "../../../media/components/MediaModal";
 import { useGetBrandsQuery } from "@/redux/service/brand";
 import { useGetCategoriesQuery } from "@/redux/service/categories";
-import { useCreateProductMutation, useGetProductByIdQuery } from "@/redux/service/products";
+import { useCreateProductMutation, useGetProductByIdQuery, useUpdateProductMutation } from "@/redux/service/products";
 import { productSchema, TProductFormType } from "@/components/validations/product";
 import SectionCard from "./SectionCard";
 import { FormField } from "./FormField";
 
 import SingleProduct from "./single-product";
 import VariantTable from "./variant-table";
+import { useGetAttributesQuery } from "@/redux/service/attributes";
+import { Card } from "@/components/ui/card";
+import { ProductFormSkeleton } from "./skeletion";
 
-
-
-
-const useGetAttributesQuery = () => ({
-  data: [
-    { _id: "a1", name: "Color", values: ["Red", "Green", "Blue", "Black", "White"] },
-    { _id: "a2", name: "Size", values: ["XS", "S", "M", "L", "XL", "XXL"] },
-    { _id: "a3", name: "Material", values: ["Cotton", "Polyester", "Leather", "Wool"] },
-  ],
-  isLoading: false,
-});
 
 
 interface IAttributeConfig {
@@ -82,12 +75,12 @@ export default function AddProductForm() {
   const router = useRouter();
 
   const [createProduct, { isLoading: createLoading }] = useCreateProductMutation();
-  const { data:getSingleProduct } = useGetProductByIdQuery(productId!, {
+  const [updateProduct, { isLoading: updateLoading }] = useUpdateProductMutation()
+  const { data: getSingleProduct, isLoading: productLoading } = useGetProductByIdQuery(productId!, {
     skip: !productId,
   });
-  const product = getSingleProduct?.data; 
-  console.log({product});
-  
+  const product = getSingleProduct?.data;
+
 
   // RTK Query hooks
   const { data: getBrands, isLoading: brandsLoading } = useGetBrandsQuery(``);
@@ -95,17 +88,20 @@ export default function AddProductForm() {
   const { data: getCategories, isLoading: categoriesLoading } =
     useGetCategoriesQuery(``);
   const categories = getCategories?.data;
-  const { data: attributes = [], isLoading: attributesLoading } =
-    useGetAttributesQuery();
+  const { data: getAttributes, isLoading: attributesLoading } =
+    useGetAttributesQuery(``);
+
+  const attributes = getAttributes?.data;
 
   // Local state
   const [mediaOpen, setMediaOpen] = useState(false);
   const [selectedConfigs, setSelectedConfigs] = useState<IAttributeConfig[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [productImages, setProductImages] = useState<string[]>([]);
+  const [tags, setTags] = useState<string>('')
 
   // React Hook Form
-  const form = useForm<TProductFormType & { productType: "single" | "variant" }>({
+  const form = useForm<TProductFormType>({
     resolver: zodResolver(productSchema),
     defaultValues: {
       name: "",
@@ -149,7 +145,7 @@ export default function AddProductForm() {
   };
 
   const updateAttributeType = (idx: number, attrId: string) => {
-    const attr = attributes.find((a: { _id: string }) => a._id === attrId);
+    const attr = attributes?.find((a: { _id: string }) => a._id === attrId);
     const newConfigs = [...selectedConfigs];
     newConfigs[idx] = { attributeId: attrId, name: attr?.name ?? "", selectedValues: [] };
     setSelectedConfigs(newConfigs);
@@ -213,10 +209,16 @@ export default function AddProductForm() {
       console.log({ payload });
 
 
-      await createProduct(payload)
+      if (product) {
+        await updateProduct({ id: product?._id, payload })
+      } else {
+        await createProduct(payload)
+      }
 
-      router.back();
-      toast.success("Product published successfully!");
+
+
+      router.push(`/admin/products/form?pid=${product?._id}`);
+      toast.success("Successfully!");
     } catch {
       toast.error("Something went wrong.");
     } finally {
@@ -257,17 +259,40 @@ export default function AddProductForm() {
     });
   }, [variations, setValue]);
 
+  const currentTags = watch("tags") || [];
 
   useEffect(() => {
-    if(!product) return;
+    if (!product) return;
     form.reset({
       ...form.getValues(),
       ...product,
     })
-  },[product, form])
+
+    setSelectedConfigs(product.selectedAttributes)
+  }, [product, form])
 
 
 
+  const handleValueTags = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" || e.key === "," || e.key === "Tab") {
+      e.preventDefault();
+      const val = tags.trim().replace(",", "");
+      if (val && !currentTags.includes(val)) {
+        setValue("tags", [...currentTags, val], { shouldValidate: true });
+        setTags("");
+      }
+    }
+  };
+
+
+  // Remove value
+  const removeValue = (valToRemove: string) => {
+    setValue("tags", currentTags.filter(v => v !== valToRemove), { shouldValidate: true });
+  };
+
+
+
+  if(productLoading) return <ProductFormSkeleton />
 
   return (
     <div className="min-h-screen ">
@@ -278,16 +303,16 @@ export default function AddProductForm() {
             variant="ghost"
             size="sm"
             onClick={() => router.back()}
-            className="text-slate-500 hover:text-slate-800 gap-1.5 text-xs"
+            className="text-accent-foreground gap-1.5 text-xs"
           >
             <ArrowLeft size={14} /> Back
           </Button>
           <Separator orientation="vertical" className="h-4" />
           <div>
-            <h1 className="text-sm font-semibold text-slate-800 leading-none">
+            <h1 className="text-sm font-semibold text-accent-foreground leading-none">
               Add New Product
             </h1>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-muted-foreground mt-0.5">
               Fill in the details to publish your product
             </p>
           </div>
@@ -296,10 +321,9 @@ export default function AddProductForm() {
         <div className="flex items-center gap-2">
 
           <Button
-            size="sm"
             onClick={handleSubmit(onSubmit)}
             disabled={isSubmitting}
-            className="h-8 text-xs gap-1.5 bg-slate-900 hover:bg-slate-700"
+            className="h-8 text-xs gap-1.5 "
           >
             {isSubmitting ? (
               <Loader2 size={13} className="animate-spin" />
@@ -334,7 +358,7 @@ export default function AddProductForm() {
               hint="Auto-generated from product name. You can edit it."
             >
               <div className="flex items-center">
-                <span className="px-3 h-9 flex items-center border border-r-0 rounded-l-md bg-slate-50 text-xs text-slate-500 border-slate-200">
+                <span className="px-3 h-9 flex items-center border border-r-0 rounded-l-md bg-muted text-xs text-muted-foreground border-border">
                   /products/
                 </span>
                 <Input
@@ -364,7 +388,7 @@ export default function AddProductForm() {
               {productImages.map((url, i) => (
                 <div
                   key={i}
-                  className="relative w-24 h-24 rounded-lg overflow-hidden border border-slate-200 group"
+                  className="relative w-24 h-24 rounded-lg overflow-hidden border border-border group"
                 >
                   <Image src={url} alt="product" fill className="object-cover" />
                   <button
@@ -380,7 +404,7 @@ export default function AddProductForm() {
               <button
                 type="button"
                 onClick={() => setMediaOpen(true)}
-                className="w-24 h-24 rounded-lg border-2 border-dashed border-slate-300 hover:border-slate-400 hover:bg-slate-50 transition-all flex flex-col items-center justify-center gap-1 text-slate-400 hover:text-slate-600"
+                className="w-24 h-24 rounded-lg border-2 border-dashed border-border   transition-all flex flex-col items-center justify-center gap-1 text-accent-foreground "
               >
                 <Plus size={18} />
                 <span className="text-[10px] font-medium">Add Image</span>
@@ -388,7 +412,7 @@ export default function AddProductForm() {
             </div>
 
             {productImages.length === 0 && (
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-muted-foreground">
                 {`No images selected. Click "Add Image" to open the media library.`}
               </p>
             )}
@@ -396,14 +420,17 @@ export default function AddProductForm() {
 
 
 
-          <div className="border p-5 rounded-xl space-y-4">
-            <h2 className="font-bold text-lg">Product Type</h2>
+          <SectionCard
+            icon={<VectorSquare size={15} />}
+            title="Product Type"
+            description="Define product variants like single, variant"
+          >
 
             <Controller
               control={control}
               name="productType"
               render={({ field }) => (
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -414,7 +441,7 @@ export default function AddProductForm() {
                 </Select>
               )}
             />
-          </div>
+          </SectionCard>
 
 
           {productType === "single" && <SingleProduct form={form} />}
@@ -428,28 +455,28 @@ export default function AddProductForm() {
             {/* Attribute rows */}
             <div className="space-y-3">
               {selectedConfigs.map((config, idx) => {
-                const attr = attributes.find((a) => a._id === config.attributeId);
+                const attr = attributes?.find((a) => a._id === config.attributeId);
                 return (
                   <div
                     key={idx}
-                    className="border border-slate-200 rounded-xl p-4 bg-slate-50/50 space-y-3"
+                    className="border border-border rounded-xl p-4 bg-muted space-y-3"
                   >
                     <div className="flex items-center gap-3">
                       <div className="flex-1">
-                        <Label className="text-xs text-slate-600 mb-1.5 block">
+                        <Label className="text-xs text-muted-foreground mb-1.5 block">
                           Attribute Type
                         </Label>
                         <Select
                           value={config.attributeId}
                           onValueChange={(val) => updateAttributeType(idx, val)}
                         >
-                          <SelectTrigger className="h-8 text-xs">
+                          <SelectTrigger className="h-8 ">
                             <SelectValue placeholder="Select attribute..." />
                           </SelectTrigger>
                           <SelectContent>
-                            {attributes.map((a) => (
+                            {attributes?.map((a) => (
                               <SelectItem key={a._id} value={a._id}>
-                                {a.name}
+                                {a.displayName}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -466,7 +493,7 @@ export default function AddProductForm() {
 
                     {attr && (
                       <div>
-                        <Label className="text-xs text-slate-600 mb-2 block">
+                        <Label className="text-xs text-muted-foreground mb-2 block">
                           Select Values
                         </Label>
                         <div className="flex flex-wrap gap-2">
@@ -477,7 +504,7 @@ export default function AddProductForm() {
                                 key={val}
                                 type="button"
                                 onClick={() => toggleAttributeValue(idx, val)}
-                                className={`px-3 py-1 rounded-full text-xs font-medium border transition-all ${active
+                                className={`px-3 py-1 rounded-full  text-xs font-medium border transition-all ${active
                                   ? "bg-slate-900 text-white border-slate-900"
                                   : "bg-white text-slate-600 border-slate-200 hover:border-slate-400"
                                   }`}
@@ -492,7 +519,7 @@ export default function AddProductForm() {
                             {config.selectedValues.map((v) => (
                               <Badge
                                 key={v}
-                                variant="secondary"
+                                variant="outline"
                                 className="text-[10px] h-5"
                               >
                                 {v}
@@ -511,7 +538,7 @@ export default function AddProductForm() {
               <Button
                 type="button"
                 variant="outline"
-                size="sm"
+            
                 onClick={addAttributeRow}
                 className="text-xs gap-1.5 flex-1"
               >
@@ -520,7 +547,7 @@ export default function AddProductForm() {
               {productType === "variant" && (
                 <Button
                   type="button"
-                  size="sm"
+             
                   onClick={generateVariations}
                   className="text-xs gap-1.5 flex-1 bg-indigo-600 hover:bg-indigo-700 text-white"
                 >
@@ -534,10 +561,10 @@ export default function AddProductForm() {
               <div className="mt-2 space-y-2">
                 <Separator />
                 <div className="flex items-center justify-between">
-                  <p className="text-xs font-semibold text-slate-700">
+                  <p className="text-xs font-semibold text-muted-foreground">
                     Variations ({fields.length})
                   </p>
-                  <p className="text-[10px] text-slate-400">
+                  <p className="text-[10px] text-muted-foreground">
                     Set price, SKU, and stock for each
                   </p>
                 </div>
@@ -571,7 +598,7 @@ export default function AddProductForm() {
                     }}
                     disabled={brandsLoading}
                   >
-                    <SelectTrigger className="h-9 text-sm">
+                    <SelectTrigger className="h-9 text-sm w-full">
                       <SelectValue placeholder="Select brand..." />
                     </SelectTrigger>
                     <SelectContent>
@@ -596,7 +623,7 @@ export default function AddProductForm() {
                     onValueChange={field.onChange}
                     disabled={categoriesLoading}
                   >
-                    <SelectTrigger className="h-9 text-sm">
+                    <SelectTrigger className="h-9 text-sm w-full">
                       <SelectValue placeholder="Select category..." />
                     </SelectTrigger>
                     <SelectContent>
@@ -619,16 +646,29 @@ export default function AddProductForm() {
             description="Optional product tags"
             collapsible
           >
+            <div className="flex gap-1 flex-wrap">
+              {currentTags.map((val, index) => (
+                <Badge key={index} variant="secondary" className="flex items-center gap-1 px-2 py-1">
+                  {val}
+                  <span onClick={() => removeValue(val)}>
+                    <X className="w-3 h-3 cursor-pointer hover:text-red-500" />
+                  </span>
+                </Badge>
+              ))}
+            </div>
             <Input
-              placeholder="tag1, tag2, tag3"
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
+              onKeyDown={handleValueTags}
+              placeholder="Seperate with comma"
               className="h-9 text-sm"
             />
             <p className="text-[10px] text-slate-400">Separate tags with commas</p>
           </SectionCard>
 
           {/* Quick Summary */}
-          <div className="rounded-xl border border-slate-200 p-4 bg-white space-y-3">
-            <p className="text-xs font-semibold text-slate-700">Quick Summary</p>
+          <Card className="rounded-xl border border-border p-4 space-y-3">
+            <p className="text-xs font-semibold ">Quick Summary</p>
             <div className="space-y-2">
               {[
                 {
@@ -639,15 +679,14 @@ export default function AddProductForm() {
                 { label: "Images", value: `${productImages.length} uploaded` },
               ].map((item) => (
                 <div key={item.label} className="flex justify-between">
-                  <span className="text-xs text-slate-500">{item.label}</span>
-                  <span className="text-xs font-medium text-slate-700">{item.value}</span>
+                  <span className="text-xs text-muted-foreground">{item.label}</span>
+                  <span className="text-xs font-medium text-muted-foreground">{item.value}</span>
                 </div>
               ))}
             </div>
             <Separator />
             <Button
-              size="sm"
-              className="w-full text-xs gap-1.5 bg-slate-900 hover:bg-slate-700"
+              className="w-full text-xs gap-1.5 "
               onClick={handleSubmit(onSubmit)}
               disabled={isSubmitting}
             >
@@ -659,7 +698,6 @@ export default function AddProductForm() {
               {isSubmitting ? "Publishing..." : "Publish Product"}
             </Button>
             <Button
-              size="sm"
               variant="outline"
               className="w-full text-xs"
               type="button"
@@ -671,7 +709,7 @@ export default function AddProductForm() {
             >
               Save as Draft
             </Button>
-          </div>
+          </Card>
         </div>
       </div>
 

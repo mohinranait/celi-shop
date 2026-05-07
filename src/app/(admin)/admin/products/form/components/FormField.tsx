@@ -18,7 +18,7 @@ export function FormField({
   return (
     <div className="space-y-1.5">
       <div className="flex items-center gap-1.5">
-        <Label className="text-xs font-medium text-slate-700">
+        <Label className="text-xs font-medium text-accent-foreground">
           {label}
           {required && <span className="text-rose-500 ml-0.5">*</span>}
         </Label>

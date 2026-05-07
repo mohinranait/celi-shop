@@ -131,25 +131,200 @@ const VariantTable = ({
     ];
   };
 
+
+  /* ---------------- BULK STATE ---------------- */
+
+  const [bulk, setBulk] = useState({
+    price: "",
+    fixed: "",
+    percent: "",
+    stock: "",
+    alert: "",
+  });
+
+  /* ---------------- HELPERS ---------------- */
+
+  const safeNumber = (v: number | string) => {
+    const n = Number(v);
+    return isNaN(n) ? 0 : n < 0 ? 0 : n;
+  };
+
+  /* ---------------- CALC LOGIC ---------------- */
+
+  const calcPercent = (price: number, fixed: number) => {
+    if (!price) return 0;
+    return Number(((fixed / price) * 100).toFixed(2));
+  };
+
+  const calcFixed = (price: number, percent: number) => {
+    if (!price) return 0;
+    return Number(((price * percent) / 100).toFixed(2));
+  };
+
+
+
+  const handleApplyAll = () => {
+    fields.forEach((_, index) => {
+      const price =
+        bulk.price !== ""
+          ? safeNumber(bulk.price)
+          : watch(`variations.${index}.price`);
+
+      const fixed =
+        bulk.fixed !== ""
+          ? safeNumber(bulk.fixed)
+          : watch(
+            `variations.${index}.offerPriceFixed`
+          ) || 0;
+
+      const percent =
+        bulk.percent !== ""
+          ? safeNumber(bulk.percent)
+          : watch(
+            `variations.${index}.offerPriceParcent`
+          ) || 0;
+
+      const stock =
+        bulk.stock !== ""
+          ? safeNumber(bulk.stock)
+          : watch(`variations.${index}.stock`);
+
+      const alert =
+        bulk.alert !== ""
+          ? safeNumber(bulk.alert)
+          : watch(
+            `variations.${index}.lowStockAlert`
+          );
+
+      // price
+      setValue(`variations.${index}.price`, price);
+
+      // fixed + percent sync
+      if (bulk.fixed !== "") {
+        setValue(
+          `variations.${index}.offerPriceFixed`,
+          fixed
+        );
+        setValue(
+          `variations.${index}.offerPriceParcent`,
+          calcPercent((price || 0), fixed)
+        );
+      }
+
+      if (bulk.percent !== "") {
+        setValue(
+          `variations.${index}.offerPriceParcent`,
+          percent
+        );
+        setValue(
+          `variations.${index}.offerPriceFixed`,
+          calcFixed((price || 0), percent)
+        );
+      }
+
+      // stock
+      setValue(`variations.${index}.stock`, stock);
+
+      // alert
+      setValue(
+        `variations.${index}.lowStockAlert`,
+        alert
+      );
+    });
+  };
+
   return (
-    <>
+    <div>
       <div className="border rounded-lg overflow-hidden ">
+        <div className="grid grid-cols-12 gap-2 p-3 border-b bg-muted/30">
+
+          <div className="col-span-1 flex items-center text-xs font-medium text-muted-foreground">
+            Apply All
+          </div>
+
+          <Input
+            className="col-span-2 h-9"
+            placeholder="Price"
+            type="number"
+            min={0}
+            value={bulk.price}
+            onChange={(e) =>
+              setBulk({ ...bulk, price: e.target.value })
+            }
+          />
+
+          <Input
+            className="col-span-2 h-9"
+            placeholder="Fixed"
+            type="number"
+            min={0}
+            value={bulk.fixed}
+            onChange={(e) =>
+              setBulk({ ...bulk, fixed: e.target.value })
+            }
+          />
+
+          <Input
+            className="col-span-2 h-9"
+            placeholder="%"
+            type="number"
+            min={0}
+            max={100}
+            value={bulk.percent}
+            onChange={(e) =>
+              setBulk({ ...bulk, percent: e.target.value })
+            }
+          />
+
+          <Input
+            className="col-span-2 h-9"
+            placeholder="Stock"
+            type="number"
+            min={0}
+            value={bulk.stock}
+            onChange={(e) =>
+              setBulk({ ...bulk, stock: e.target.value })
+            }
+          />
+
+          <Input
+            className="col-span-2 h-9"
+            placeholder="Alert"
+            type="number"
+            min={0}
+            value={bulk.alert}
+            onChange={(e) =>
+              setBulk({ ...bulk, alert: e.target.value })
+            }
+          />
+
+          <div className="col-span-1 flex justify-end">
+            <Button
+              type="button"
+              onClick={handleApplyAll}
+              className="h-9 w-full"
+            >
+              Apply
+            </Button>
+          </div>
+        </div>
         <Table>
+         
           <TableHeader>
             <TableRow className="">
               <TableHead className="w-[22%] font-semibold">
                 Variant
               </TableHead>
 
-              <TableHead className="w-[15%] font-semibold">
+              <TableHead className="w-[14%] font-semibold">
                 Price
               </TableHead>
 
-              <TableHead className="w-[15%] font-semibold">
+              <TableHead className="w-[13%] font-semibold">
                 Discount
               </TableHead>
 
-              <TableHead className="w-[15%] font-semibold">
+              <TableHead className="w-[10%] font-semibold">
                 Discount(%)
               </TableHead>
 
@@ -165,7 +340,7 @@ const VariantTable = ({
                 Alert
               </TableHead>
 
-              <TableHead className="w-[10%] text-right font-semibold">
+              <TableHead className="w-[5%] text-right font-semibold">
                 Actions
               </TableHead>
             </TableRow>
@@ -215,7 +390,7 @@ const VariantTable = ({
                                     []
                                   )
                                 }
-                                className="absolute top-1 right-1 w-5 h-5 rounded-full bg-white border flex items-center justify-center"
+                                className="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-background border flex items-center justify-center"
                               >
                                 <X size={12} />
                               </button>
@@ -451,7 +626,7 @@ const VariantTable = ({
           }
         }}
       />
-    </>
+    </div>
   );
 };
 

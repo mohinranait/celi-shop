@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { GlobalModal } from "@/components/shared/GlobalModal";
 import { toast } from "sonner";
-import { Badge } from "@/components/ui/badge"; // Shadcn Badge
+import { Badge } from "@/components/ui/badge"; 
 import { Bandage, Loader, X } from "lucide-react";
 
 import { IAttribute } from "@/redux/service/attributes/type";
@@ -27,7 +27,7 @@ export default function AttributeForm({ isOpen, setIsOpen, previousData }: Props
   const [createAttribute, { isLoading: createLoading }] = useCreateAttributeMutation();
   const [updateAttribute, { isLoading: updateLoading }] = useUpdateAttributeMutation();
 
-  // ভ্যালু ইনপুট দেওয়ার জন্য লোকাল স্টেট
+  // local input state
   const [valueInput, setValueInput] = useState("");
 
   const form = useForm<TAttributeInput>({
@@ -44,7 +44,7 @@ export default function AttributeForm({ isOpen, setIsOpen, previousData }: Props
   const { control, watch, setValue, formState: { errors } } = form;
   const currentValues = watch("values") || [];
 
-  // ১. নতুন ভ্যালু অ্যাড করার লজিক (Enter বা Comma চাপলে)
+  // Enter, Comma or tab
   const handleValueAdd = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" || e.key === "," || e.key === "Tab") {
       e.preventDefault();
@@ -56,7 +56,7 @@ export default function AttributeForm({ isOpen, setIsOpen, previousData }: Props
     }
   };
 
-  // ২. ভ্যালু রিমুভ করার লজিক
+  // Remove value
   const removeValue = (valToRemove: string) => {
     setValue("values", currentValues.filter(v => v !== valToRemove), { shouldValidate: true });
   };
@@ -141,7 +141,7 @@ export default function AttributeForm({ isOpen, setIsOpen, previousData }: Props
               </Badge>
             ))}
             <input
-              className="flex-1 bg-transparent outline-none text-sm min-w-[120px]"
+              className="flex-1 bg-transparent outline-none text-sm min-w-30"
               placeholder="Type value and press Enter..."
               value={valueInput}
               onChange={(e) => setValueInput(e.target.value)}
