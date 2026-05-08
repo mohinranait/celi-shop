@@ -1,458 +1,258 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-
-import { TProductFormType } from "@/components/validations/product";
-
-import { cn } from "@/lib/utils";
-
-import {
-  AlertCircle,
-  ImagePlus,
-  Trash2,
-  X,
-} from "lucide-react";
-
-import Image from "next/image";
-
-import { useCallback, useState } from "react";
-
-import {
-  FieldArrayWithId,
-  UseFieldArrayRemove,
-  UseFormReturn,
-} from "react-hook-form";
-
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { GlobalModal } from "@/components/shared/GlobalModal";
+import { useCreateBrandMutation, useUpdateBrandMutation } from "@/redux/service/brand";
+import { brandSchema, TBrandInput } from "@/components/validations/brands";
+import { toast } from "sonner";
 import MediaModal from "../../media/components/MediaModal";
-
-type VariationFieldType = FieldArrayWithId<
-  TProductFormType,
-  "variations",
-  "id"
->;
+import { Bandage, Loader, Plus, X } from "lucide-react";
+import Image from "next/image";
+import { IBrand } from "@/redux/service/brand/type";
 
 type Props = {
-  form: UseFormReturn<TProductFormType>;
-  remove: UseFieldArrayRemove;
-  fields: VariationFieldType[];
-};
-
-const VariantTable = ({
-  form,
-  remove,
-  fields,
-}: Props) => {
-  const {
-    register,
-    watch,
-    setValue,
-    formState: { errors },
-  } = form;
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+  previousData?: IBrand;
+}
+export default function BrandForm({
+  isOpen,
+  setIsOpen,
+  previousData
+}: Props) {
 
   const [mediaOpen, setMediaOpen] = useState(false);
-  const [activeVariantIndex, setActiveVariantIndex] =
-    useState<number | null>(null);
+  const [activeField, setActiveField] = useState<"logo" | "banner" | null>(null);
 
-  const updateDiscountFromFixed = useCallback(
-    (index: number, discountAmount: number) => {
-      const price =
-        Number(watch(`variations.${index}.price`)) || 0;
+  const [createBrand, { isLoading: createLoading }] = useCreateBrandMutation();
+  const [updateBrand, { isLoading: updateLoading }] = useUpdateBrandMutation()
 
-      if (price > 0) {
-        const percent = (discountAmount / price) * 100;
+  const form = useForm<TBrandInput>({
+    resolver: zodResolver(brandSchema),
+    defaultValues: {},
+  });
 
-        setValue(
-          `variations.${index}.offerPriceParcent`,
-          Number(percent.toFixed(2))
-        );
+  const { control } = form;
+  const name = form.watch("name");
+  const logo = form.watch('logo')
+  const banner = form.watch('banner')
+
+  //  auto slug (fixed with useEffect)
+  useEffect(() => {
+    if (name && !previousData?._id) {
+      const slug = name.toLowerCase().replace(/\s+/g, "-");
+      form.setValue("slug", slug);
+    }
+  }, [name, form]);
+
+
+  //  submit handler
+  const onSubmit = async (data: TBrandInput) => {
+
+    try {
+      if (previousData?._id) {
+        await updateBrand({ payload: data, id: previousData?._id }).unwrap();
+      } else {
+
+        await createBrand(data).unwrap();
       }
-    },
-    [watch, setValue]
-  );
 
-  const updateDiscountFromPercent = useCallback(
-    (index: number, percent: number) => {
-      const price =
-        Number(watch(`variations.${index}.price`)) || 0;
-
-      if (price > 0) {
-        const discountAmount = (price * percent) / 100;
-
-        setValue(
-          `variations.${index}.offerPriceFixed`,
-          Number(discountAmount.toFixed(2))
-        );
-      }
-    },
-    [watch, setValue]
-  );
-
-  const updatePercentFromPrice = useCallback(
-    (index: number, newPrice: number) => {
-      const fixedDiscount =
-        Number(
-          watch(`variations.${index}.offerPriceFixed`)
-        ) || 0;
-
-      if (newPrice > 0 && fixedDiscount > 0) {
-        const percent =
-          (fixedDiscount / newPrice) * 100;
-
-        setValue(
-          `variations.${index}.offerPriceParcent`,
-          Number(percent.toFixed(2))
-        );
-      }
-    },
-    [watch, setValue]
-  );
-
-  const getFieldError = (
-    index: number,
-    field: string
-  ) => {
-    return errors.variations?.[index]?.[
-      field as keyof typeof errors.variations[number]
-    ];
+      toast.success("Successfully");
+      form.reset();
+      setIsOpen(false);
+    } catch (error) {
+      console.error("Failed to create brand:", error);
+      toast.error("Failed to create brand.");
+    }
   };
 
+  const isDisable = createLoading || updateLoading;
+
+
+  useEffect(() => {
+    if (previousData) {
+      form.reset({
+        name: previousData.name || "",
+        slug: previousData.slug || "",
+        status: previousData.status ?? true,
+        description: previousData.description || "",
+        logo: previousData.logo || "",
+        banner: previousData.banner || "",
+      });
+    } else {
+      form.reset({
+        name: "",
+        slug: "",
+        status: true,
+        description: "",
+        logo: "",
+        banner: "",
+      });
+    }
+  }, [previousData, form]);
+
   return (
-    <>
-      <div className="border rounded-lg overflow-hidden bg-white">
-        <Table>
-          <TableHeader>
-            <TableRow className="bg-slate-50 hover:bg-slate-50">
-              <TableHead className="w-[22%] font-semibold">
-                Variant
-              </TableHead>
+    <GlobalModal
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      title={previousData ? "Update Brand information" : "Create Brand"}
+      description="Fill the form below to create a new brand"
+      icon={<Bandage />}
+      maxHeight="max-w-5xl"
+      className="min-w-2xl"
+      footer={
+        <div className="flex justify-end gap-2 w-full">
+          <Button variant="outline" onClick={() => setIsOpen(false)} disabled={isDisable}>
+            Cancel
+          </Button>
 
-              <TableHead className="w-[15%] font-semibold">
-                Price
-              </TableHead>
+          {/*  trigger form submit */}
+          <Button onClick={form.handleSubmit(onSubmit)} disabled={isDisable}>
+            {
+              isDisable &&
+              <Loader className="animate-spin" />
+            }
+            {
+              !!previousData ? "Update Brand" : "Create Brand"
+            }
+          </Button>
+        </div>
+      }
+    >
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-4"
+      >
+        {/* Name */}
+        <div className="space-y-1">
+          <Label>Brand Name <span className="text-red-500">*</span> </Label>
+          <Input {...form.register("name")} />
+          {form.formState.errors.name && (
+            <p className="text-red-500 text-sm">
+              {form.formState.errors.name.message}
+            </p>
+          )}
+        </div>
 
-              <TableHead className="w-[15%] font-semibold">
-                Discount
-              </TableHead>
+        {/* Slug */}
+        <div className="space-y-1">
+          <Label>Slug <span className="text-red-500">*</span></Label>
+          <Input {...form.register("slug")} />
+        </div>
 
-              <TableHead className="w-[15%] font-semibold">
-                Discount(%)
-              </TableHead>
+        {/* Description */}
+        <div className="space-y-1">
+          <Label>Description</Label>
+          <Textarea {...form.register("description")} />
+        </div>
 
-              <TableHead className="w-[15%] font-semibold">
-                SKU
-              </TableHead>
 
-              <TableHead className="w-[10%] font-semibold text-center">
-                Stock
-              </TableHead>
+        <div className="space-y-1">
+          <Label>Logo (Optional)</Label>
+          <div className="flex gap-3">
 
-              <TableHead className="w-[10%] font-semibold text-center">
-                Alert
-              </TableHead>
+            {
+              logo && <span
+                className="w-24 h-24 rounded-md border-2 border-dashed  
+             flex flex-col items-center justify-center gap-1 
+              transition-all relative"
+              >
+                <Image width={100} height={100} alt="Image" src={logo} />
+                <button className="text-[10px] w-5 h-5 rounded-full flex items-center justify-center border text-gray-500 absolute top-1 right-1"><X size={14} /></button>
+              </span>
+            }
 
-              <TableHead className="w-[10%] text-right font-semibold">
-                Actions
-              </TableHead>
-            </TableRow>
-          </TableHeader>
 
-          <TableBody>
-            {fields.length === 0 ? (
-              <TableRow>
-                <TableCell
-                  colSpan={8}
-                  className="text-center py-8"
-                >
-                  <div className="text-sm text-muted-foreground">
-                    No variations added yet.
-                  </div>
-                </TableCell>
-              </TableRow>
-            ) : (
-              fields.map((field, index) => {
-                const variantImage =
-                  watch(`variations.${index}.images`)?.[0];
+            <Button
+              type="button"
+              variant={'outline'}
+              onClick={() => {
+                setMediaOpen(true);
+                setActiveField('logo')
+              }}
+              className="w-24 h-24 rounded-md border-2 border-dashed  
+             flex flex-col items-center justify-center gap-1 
+              transition-all"
+            >
+              <Plus className="w-5 h-5 text-gray-500" />
+              <span className="text-[10px] text-gray-500">Upload</span>
+            </Button>
 
-                return (
-                  <TableRow
-                    key={field.id}
-                    className="hover:bg-slate-50 transition-colors"
-                  >
-                    {/* Variant Name + Image */}
-                    <TableCell>
-                      <div className="flex gap-3 items-start">
-                        {/* Image Upload */}
-                        <div className="shrink-0">
-                          {variantImage ? (
-                            <div className="relative w-14 h-14 rounded-md overflow-hidden border">
-                              <Image
-                                src={variantImage}
-                                alt="Variant"
-                                fill
-                                className="object-cover"
-                              />
+          </div>
+        </div>
 
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  setValue(
-                                    `variations.${index}.images`,
-                                    []
-                                  )
-                                }
-                                className="absolute top-1 right-1 w-5 h-5 rounded-full bg-white border flex items-center justify-center"
-                              >
-                                <X size={12} />
-                              </button>
-                            </div>
-                          ) : (
-                            <Button
-                              type="button"
-                              variant="outline"
-                              className="w-14 h-14 border-dashed"
-                              onClick={() => {
-                                setActiveVariantIndex(index);
-                                setMediaOpen(true);
-                              }}
-                            >
-                              <ImagePlus size={18} />
-                            </Button>
-                          )}
-                        </div>
+        <div className="space-y-1">
+          <Label>Banner (Optional)</Label>
+          <div className="flex gap-3">
 
-                        {/* Name */}
-                        <div className="space-y-1 flex-1">
-                          <Input
-                            placeholder="e.g. Red / XL"
-                            {...register(
-                              `variations.${index}.name`
-                            )}
-                            readOnly
-                            disabled
-                            className={cn(
-                              "h-8 text-sm",
-                              getFieldError(
-                                index,
-                                "name"
-                              ) && "border-red-500"
-                            )}
-                          />
+            {
+              banner && <span
+                className="w-24 h-24 rounded-md border-2 border-dashed  
+             flex flex-col items-center justify-center gap-1 
+              transition-all relative"
+              >
+                <Image width={100} height={100} alt="Image" src={banner} />
+                <button className="text-[10px] w-5 h-5 rounded-full flex items-center justify-center border text-gray-500 absolute top-1 right-1"><X size={14} /></button>
+              </span>
+            }
 
-                          {getFieldError(index, "name") && (
-                            <p className="text-xs text-red-500 flex items-center gap-1">
-                              <AlertCircle size={12} />
-                              {
-                                getFieldError(
-                                  index,
-                                  "name"
-                                )
-                              }
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </TableCell>
 
-                    {/* Price */}
-                    <TableCell>
-                      <Input
-                        type="number"
-                        min={0}
-                        step="1"
-                        {...register(
-                          `variations.${index}.price`,
-                          {
-                            onChange: (e) => {
-                              let val =
-                                Number(e.target.value) ||
-                                0;
+            <Button
+              type="button"
+              variant={'outline'}
+              onClick={() => {
+                setMediaOpen(true);
+                setActiveField('banner')
+              }}
+              className="w-24 h-24 rounded-md border-2 border-dashed  
+             flex flex-col items-center justify-center gap-1 
+              transition-all"
+            >
+              <Plus className="w-5 h-5 text-gray-500" />
+              <span className="text-[10px] text-gray-500">Upload</span>
+            </Button>
 
-                              if (val < 0) val = 0;
+          </div>
+        </div>
 
-                              setValue(
-                                `variations.${index}.price`,
-                                val
-                              );
 
-                              updatePercentFromPrice(
-                                index,
-                                val
-                              );
-                            },
-                          }
-                        )}
-                      />
-                    </TableCell>
+        {/* Status */}
+        <Controller
+          control={control}
+          name="status"
+          render={({ field }) => (
+            <div className="flex items-center justify-between border p-3 rounded-lg">
+              <p className="text-sm font-medium">Active Status</p>
+              <Switch
+                checked={field.value}
+                onCheckedChange={field.onChange}
+              />
+            </div>
+          )}
+        />
+      </form>
 
-                    {/* Discount Fixed */}
-                    <TableCell>
-                      <Input
-                        type="number"
-                        min={0}
-                        step="1"
-                        placeholder="0.00"
-                        {...register(
-                          `variations.${index}.offerPriceFixed`,
-                          {
-                            onChange: (e) => {
-                              let val =
-                                Number(e.target.value) ||
-                                0;
-
-                              if (val < 0) val = 0;
-
-                              setValue(
-                                `variations.${index}.offerPriceFixed`,
-                                val
-                              );
-
-                              updateDiscountFromFixed(
-                                index,
-                                val
-                              );
-                            },
-                          }
-                        )}
-                        className="h-8 text-sm"
-                      />
-                    </TableCell>
-
-                    {/* Discount Percent */}
-                    <TableCell>
-                      <Input
-                        type="number"
-                        min={0}
-                        max={100}
-                        step="1"
-                        placeholder="0"
-                        {...register(
-                          `variations.${index}.offerPriceParcent`,
-                          {
-                            onChange: (e) => {
-                              let val =
-                                Number(e.target.value) ||
-                                0;
-
-                              if (val < 0) val = 0;
-
-                              if (val > 100)
-                                val = 100;
-
-                              setValue(
-                                `variations.${index}.offerPriceParcent`,
-                                val
-                              );
-
-                              updateDiscountFromPercent(
-                                index,
-                                val
-                              );
-                            },
-                          }
-                        )}
-                        className="h-8 text-sm"
-                      />
-                    </TableCell>
-
-                    {/* SKU */}
-                    <TableCell>
-                      <Input
-                        placeholder="SKU-001"
-                        {...register(
-                          `variations.${index}.sku`
-                        )}
-                        className="h-8 text-sm"
-                      />
-                    </TableCell>
-
-                    {/* Stock */}
-                    <TableCell>
-                      <Input
-                        type="number"
-                        min={0}
-                        placeholder="0"
-                        {...register(
-                          `variations.${index}.stock`
-                        )}
-                        className="h-8 text-sm text-center"
-                      />
-                    </TableCell>
-
-                    {/* Alert */}
-                    <TableCell>
-                      <Input
-                        type="number"
-                        min={0}
-                        placeholder="5"
-                        {...register(
-                          `variations.${index}.lowStockAlert`
-                        )}
-                        className="h-8 text-sm text-center"
-                      />
-                    </TableCell>
-
-                    {/* Actions */}
-                    <TableCell className="text-right">
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
-                              onClick={() =>
-                                remove(index)
-                              }
-                              className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                            >
-                              <Trash2 size={16} />
-                            </Button>
-                          </TooltipTrigger>
-
-                          <TooltipContent>
-                            Delete variation
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </TableCell>
-                  </TableRow>
-                );
-              })
-            )}
-          </TableBody>
-        </Table>
-      </div>
-
-      {/* Media Modal */}
       <MediaModal
         open={mediaOpen}
         setOpen={setMediaOpen}
-        onSelect={(urls) => {
-          if (activeVariantIndex !== null) {
-            setValue(
-              `variations.${activeVariantIndex}.images`,
-              [urls[0]]
-            );
-          }
+        onSelect={(url) => {
+          if (activeField === "logo") {
+            form.setValue('logo', url[0])
+          };
+          if (activeField === "banner") {
+            form.setValue('banner', url[0])
+          };
+
         }}
       />
-    </>
+    </GlobalModal>
   );
-};
-
-export default VariantTable;
+}

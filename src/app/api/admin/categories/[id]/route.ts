@@ -90,3 +90,51 @@ export async function PATCH(
     );
   }
 }
+
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    await connectDB();
+
+   
+     const { id } = await  params;
+  
+
+    //  check category exists
+    const category = await Category.findByIdAndDelete(id);
+
+    if (!category) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Category not found",
+        },
+        { status: 404 }
+      );
+    }
+
+  
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Category updated successfully",
+        data: category,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Update Category Error:", error);
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Internal Server Error",
+      },
+      { status: 500 }
+    );
+  }
+}

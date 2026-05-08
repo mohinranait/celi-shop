@@ -25,9 +25,13 @@ export interface IProductBase {
   name: string;
   slug: string;
   productType: "variant" | "single",
+  gallery: string[];
   shipping: {
     isFreeShipping: boolean;
   },
+  price?:number,
+  discountPrice?:number,
+  discountParcent?: number;
   seo: {
     keywords: string[]
   },

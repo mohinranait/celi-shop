@@ -9,6 +9,8 @@ export interface IBaseCategory {
   banner?: string; 
   status: boolean;
   priority?: number;
+  level: number;
+  path : string[]
 }
 
 

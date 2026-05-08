@@ -1,1 +1,1 @@
-export const PRODUCT_IMG = 'default.webp'
+export const PRODUCT_IMG = 'default.jpg';

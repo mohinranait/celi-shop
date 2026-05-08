@@ -11,6 +11,7 @@ import { setLoginModalOpen } from "@/redux/features/uiSlice";
 import { useLogoutMutation } from "@/redux/service/auth";
 import { userLogout } from "@/redux/features/authSlice";
 import LoginModal from "./login-modal";
+import NavigationMenus from "./NavigationMenus";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -50,7 +51,7 @@ export default function Header() {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between gap-4 ">
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0">
+          <Link href="/" className="shrink-0">
             <h1 className="text-2xl font-bold text-foreground">CeliShop</h1>
           </Link>
 
@@ -135,30 +136,7 @@ export default function Header() {
           </div>
         </form>
       </div>
-      <div className="bg-primary  py-2">
-        <div className="container mx-auto">
-          <nav className="hidden  md:flex items-center justify-center gap-8">
-            <Link href="/shop" className="text-secondary ">
-              Shop
-            </Link>
-            <Link href="/shop?category=mens" className="text-secondary ">
-              Men
-            </Link>
-            <Link
-              href="/shop?category=womens"
-              className="text-secondary  transition"
-            >
-              Women
-            </Link>
-            <Link
-              href="/shop?category=accessories"
-              className="text-secondary  transition"
-            >
-              Accessories
-            </Link>
-          </nav>
-        </div>
-      </div>
+            <NavigationMenus />
 
       {/* Mobile Menu */}
       {isMenuOpen && (

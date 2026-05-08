@@ -10,6 +10,7 @@ const MyRootLayout = ({children}:Props) => {
   return (
     <main className='min-h-screen bg-background'>
       <Header />
+      {/* <EcommerceHeader /> */}
       {children}
       <Footer />
     </main>

@@ -13,7 +13,7 @@ export const productApi = baseApi.injectEndpoints({
     }),
 
 
-    createProduct: builder.mutation<IProduct, TProductFormType>({
+    createProduct: builder.mutation<{data:IProduct}, TProductFormType>({
       query: (payload) => ({
         url: '/admin/products',
         method: 'POST',
@@ -31,7 +31,7 @@ export const productApi = baseApi.injectEndpoints({
     }),
 
 
-    updateProduct: builder.mutation<IProduct, {id:string, payload:TProductFormType}>({
+    updateProduct: builder.mutation<{data:IProduct}, {id:string, payload:TProductFormType}>({
       query: ({ id, payload }) => ({
         url: `/admin/products/${id}`,
         method: 'PATCH',
@@ -40,7 +40,7 @@ export const productApi = baseApi.injectEndpoints({
       invalidatesTags: ['products'],
     }),
 
-    softDeleteProduct: builder.mutation<IProduct, {id:string,payload:ISoftDelete}>({
+    softDeleteProduct: builder.mutation<{data:IProduct}, {id:string,payload:ISoftDelete}>({
       query: ({ id, payload }) => ({
         url: `/admin/products/${id}/soft`,
         method: 'PATCH',

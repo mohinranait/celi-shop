@@ -7,15 +7,17 @@ import React, { useState } from 'react'
 import tableColumns from './columns';
 import { useGetProductsQuery } from '@/redux/service/products';
 import { useRouter } from 'next/navigation';
+import Pagination from '@/components/shared/Pagination';
 
 const AllProducts = () => {
   const router = useRouter()
   const [filter, setFilter] = useState<"active" | "deleted">("active");
   const [isParams, setIsParams] = useState('')
-   const [pagination, setPagination] = useState({ page: 1, limit: 2 })
+   const [pagination, setPagination] = useState({ page: 1, limit: 20 })
   const columns = tableColumns({ type: filter });
   const { data } = useGetProductsQuery(`page=${pagination?.page}&limit=${pagination?.limit}&isDelete=${filter === 'active' ? 'false' : "true"}&${isParams}`)
   const products = data?.data || [];
+    const meta = data?.meta;
 
 
 
@@ -74,7 +76,7 @@ const AllProducts = () => {
         </CardContent>
       </Card>
 
-      {/* <Pagination
+      <Pagination
             page={meta?.page || 1}
             totalPages={meta?.totalPages || 1}
             onPageChange={(page) =>
@@ -83,7 +85,7 @@ const AllProducts = () => {
                 page,
               }))
             }
-          /> */}
+          />
 
       {/* MODAL */}
       {/* <BrandForm isOpen={isOpen} setIsOpen={setIsOpen} /> */}

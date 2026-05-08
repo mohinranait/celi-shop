@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
 
     const search = searchParams.get("search") || "";
     const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "10");
+    const limit = parseInt(searchParams.get("limit") || "10000");
 
     const status = searchParams.get("status"); // true / false / all
     const isDelete = searchParams.get("isDelete"); // true / false / all
@@ -140,9 +140,29 @@ export async function POST(req: NextRequest) {
       );
     }
 
+
+    // Create path
+    let level = 0;
+    let path : string[] = [];
+
+    if (body.parentId) {
+      const parent = await Category.findById(body.parentId);
+
+      if (!parent) {
+        throw new Error("Parent category not found");
+      }
+
+      level = parent.level + 1;
+
+      path = [...parent.path, parent._id];
+    }
+
+
     // create category
     const category = await Category.create({
-     ...body
+     ...body,
+     level,
+     path,
     });
 
     return NextResponse.json(

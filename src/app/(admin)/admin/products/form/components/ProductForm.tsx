@@ -202,22 +202,25 @@ export default function AddProductForm() {
     try {
       const payload = {
         ...data,
-        images: productImages,
+        gallery: productImages,
         selectedAttributes: selectedConfigs,
       };
 
       console.log({ payload });
 
+      let url = '';
 
       if (product) {
-        await updateProduct({ id: product?._id, payload })
+        const {data} = await updateProduct({ id: product?._id, payload })
+        url = data?.data?._id as string;
       } else {
-        await createProduct(payload)
+       const {data} = await createProduct(payload);
+       url = data?.data?._id as string;
       }
 
 
 
-      router.push(`/admin/products/form?pid=${product?._id}`);
+      router.push(`/admin/products/form?pid=${url}`);
       toast.success("Successfully!");
     } catch {
       toast.error("Something went wrong.");
@@ -269,6 +272,8 @@ export default function AddProductForm() {
     })
 
     setSelectedConfigs(product.selectedAttributes)
+    setProductImages(product?.gallery)
+
   }, [product, form])
 
 

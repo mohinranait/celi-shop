@@ -17,6 +17,18 @@ const CategorySchema = new Schema<IDCategory>({
     type: String,
   },
   description: { type: String },
+  level: {
+    type: Number,
+    default: 0,
+  },
+
+  path: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Category",
+    },
+  ],
+
   status: {
     type: Boolean,
     default: true

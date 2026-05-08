@@ -115,7 +115,7 @@ const ProductSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 
-// 🔍 Indexing (important for performance)
+//  Indexing (important for performance)
 ProductSchema.index({ name: "text", slug: 1 });
 ProductSchema.index({ category: 1 });
 ProductSchema.index({ brand: 1 });
