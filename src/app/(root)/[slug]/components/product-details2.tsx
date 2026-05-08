@@ -8,6 +8,10 @@ import { IProduct } from '@/redux/service/products/type'
 import ImageGallary from './image-gallary'
 import Cartui from './cartui'
 import Breadcrumb from './Breadcrumb'
+import { ICartItem } from '@/redux/service/orders/type'
+import { useAppDispatch, useAppSelector } from '@/hooks/hooks'
+import { addToCart } from '@/redux/features/cartSlice'
+import { CURRENCY } from '@/lib/envSecret'
 
 interface Variation {
   name: string
@@ -19,19 +23,10 @@ interface Variation {
   images?: string[]
 }
 
-export interface CartItem {
-  productId: string
-  productName: string
-  sku: string
-  quantity: number
-  price: number
-  offerPrice: number
-  image: string
-  productType: 'single' | 'variant'
-  selectedVariants?: Record<string, string>
-}
+
 
 export function ProductDetailss({ product }: { product: IProduct }) {
+  const dispatch = useAppDispatch();
   const [quantity, setQuantity] = useState(1)
   const [selectedVariation, setSelectedVariation] = useState<Variation | null>(
     product.productType === 'variant' && product.variations ? product.variations[0] : null
@@ -49,7 +44,7 @@ export function ProductDetailss({ product }: { product: IProduct }) {
   })
 
   const [isWishlisted, setIsWishlisted] = useState(false)
-  const [cart, setCart] = useState<CartItem[]>([])
+  const [cart, setCart] = useState<ICartItem[]>([])
 
   const isVariant = product.productType === 'variant'
   const currentVariation = selectedVariation || (isVariant ? product.variations?.[0] : null)
@@ -110,7 +105,7 @@ export function ProductDetailss({ product }: { product: IProduct }) {
   const handleAddToCart = () => {
     if (product.productType === 'single' && product.selectedAttributes && product.selectedAttributes.length > 0) {
       if (!areAllAttributesSelected()) {
-        console.log('[v0] Please select all attributes before adding to cart')
+        console.log('Please select all attributes before adding to cart')
         return
       }
     }
@@ -129,40 +124,45 @@ export function ProductDetailss({ product }: { product: IProduct }) {
       selectedVariantsObj = { ...selectedAttributes }
     }
 
-    const cartItem: CartItem = {
+    const cartItem: ICartItem = {
       productId: product._id,
       productName: product.name,
+      productSlug: product?.slug,
       sku: sku || 'N/A',
       quantity: quantity,
       price: price,
-      offerPrice: offerPrice,
-      image: images[0],
-      productType: product.productType,
+      salePrice: offerPrice,
+      productImage: images[0],
       selectedVariants: Object.keys(selectedVariantsObj).length > 0 ? selectedVariantsObj : undefined
     }
 
-    const existingItemIndex = cart.findIndex(
-      (item) => 
-        item.sku === cartItem.sku && 
-        item.productId === cartItem.productId && 
-        JSON.stringify(item.selectedVariants) === JSON.stringify(cartItem.selectedVariants)
-    )
 
-    let updatedCart: CartItem[]
-    if (existingItemIndex > -1) {
-      updatedCart = [...cart]
-      updatedCart[existingItemIndex].quantity += quantity
-    } else {
-      updatedCart = [...cart, cartItem]
-    }
+    dispatch(addToCart({cart:cartItem}))
 
-    setCart(updatedCart)
-    console.log('[v0] Item added to cart:', cartItem)
+    // const existingItemIndex = cart.findIndex(
+    //   (item) => 
+    //     item.sku === cartItem.sku && 
+    //     item.productId === cartItem.productId && 
+    //     JSON.stringify(item.selectedVariants) === JSON.stringify(cartItem.selectedVariants)
+    // )
+
+    // let updatedCart: ICartItem[]
+    // if (existingItemIndex > -1) {
+    //   updatedCart = [...cart]
+    //   updatedCart[existingItemIndex].quantity += quantity
+    // } else {
+    //   updatedCart = [...cart, cartItem]
+    // }
+
+    // setCart(updatedCart)
+    console.log('Item added to cart:', cartItem)
   }
+ 
+  
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
-      {cart.length > 0 && <Cartui cart={cart} />}
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-slate-50">
+       <Cartui />
 
       <Breadcrumb name={product?.name} />
 
@@ -218,12 +218,12 @@ export function ProductDetailss({ product }: { product: IProduct }) {
             <div>
               <div className="flex items-baseline gap-3 mb-4">
                 <span className="text-4xl font-bold text-slate-900">
-                  ৳{offerPrice}
+                  {CURRENCY}{offerPrice}
                 </span>
                 {price > offerPrice && (
                   <>
                     <span className="text-xl text-slate-500 line-through">
-                      ৳{price}
+                      {CURRENCY}{price}
                     </span>
                     {discountPercent > 0 && (
                       <Badge className="bg-red-500 hover:bg-red-600">

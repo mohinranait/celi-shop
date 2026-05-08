@@ -12,11 +12,13 @@ import { useLogoutMutation } from "@/redux/service/auth";
 import { userLogout } from "@/redux/features/authSlice";
 import LoginModal from "./login-modal";
 import NavigationMenus from "./NavigationMenus";
+import { toggleCartDroware } from "@/redux/features/cartSlice";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { user } = useAppSelector((state) => state.auth);
+  const { totalItems } = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
   const [logout] = useLogoutMutation()
   const router = useRouter();
@@ -96,15 +98,15 @@ export default function Header() {
             )}
 
             {/* Cart */}
-            <Link href="/cart">
-              <Button variant="ghost" size="sm" className="relative">
+            <span>
+              <Button variant="ghost" size="sm" className="relative" onClick={() => dispatch(toggleCartDroware()) }>
                 <ShoppingCart className="h-5 w-5" />
 
                 <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  0
+                  {totalItems}
                 </span>
               </Button>
-            </Link>
+            </span>
 
             {/* Mobile Menu */}
             <button

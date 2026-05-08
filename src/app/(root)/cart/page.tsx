@@ -7,65 +7,24 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
 import { Trash2, Plus, Minus, ShoppingCart, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { removeToCart, updateCartQuantity } from "@/redux/features/cartSlice";
+import { CURRENCY } from "@/lib/envSecret";
 
-type CartItem = {
-  id: number;
-  name: string;
-  variant: string;
-  price: number;
-  quantity: number;
-  image: string; // এখানে আপনি URL দিতে পারবেন
-};
 
-const initialCart: CartItem[] = [
-  {
-    id: 1,
-    name: "Nike Air Max 270",
-    variant: "Size: 42 • Black",
-    price: 8500,
-    quantity: 1,
-    image: "https://via.placeholder.com/80x80/000/fff?text=Nike",
-  },
-  {
-    id: 2,
-    name: "Cotton Oversized T-Shirt",
-    variant: "Size: L • White",
-    price: 800,
-    quantity: 2,
-    image: "https://via.placeholder.com/80x80/eee/000?text=T-Shirt",
-  },
-  {
-    id: 3,
-    name: "Laptop Backpack 30L",
-    variant: "Navy Blue",
-    price: 2200,
-    quantity: 1,
-    image: "https://via.placeholder.com/80x80/333/fff?text=Bag",
-  },
-];
 
 export default function CartPage() {
-  const [cart, setCart] = useState<CartItem[]>(initialCart);
+  const { carts, subtotal, totalItems } = useAppSelector(state => state.cart)
+  const dispatch = useAppDispatch()
   const [coupon, setCoupon] = useState("");
 
-  const updateQuantity = (id: number, newQty: number) => {
-    if (newQty < 1) return;
-    setCart(cart.map(item => item.id === id ? { ...item, quantity: newQty } : item));
-  };
-
-  const removeItem = (id: number) => {
-    setCart(cart.filter(item => item.id !== id));
-  };
-
-  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const delivery = 60;
-  const discount = 500;
+  const delivery = 0;
+  const discount = 0;
   const total = subtotal + delivery - discount;
 
-  if (cart.length === 0) {
+  if (carts.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="text-center">
@@ -86,7 +45,7 @@ export default function CartPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Your Cart</h1>
-            <p className="text-slate-500 mt-1">{cart.length} items</p>
+            <p className="text-slate-500 mt-1">{totalItems} items</p>
           </div>
           <Link href="/checkout">
             <Button size="lg" className="gap-2">
@@ -98,59 +57,97 @@ export default function CartPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
-            {cart.map((item) => (
-              <Card key={item.id} className="p-4">
+            {carts.map((item, idx) => (
+              <Card key={idx} className="p-4">
                 <div className="flex gap-4">
-                  <div className="w-24 h-24 rounded-xl overflow-hidden border bg-slate-100 flex-shrink-0">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-full h-full object-cover"
-                    />
+                  <div className="w-24 h-24 rounded-xl overflow-hidden border bg-slate-100 shrink-0">
+                    {
+                      item?.productImage &&
+                      <Image
+                        src={`${item?.productImage}`}
+                        alt={item?.productName}
+                        className="w-full h-full object-cover"
+                        width={100}
+                        height={100}
+                      />
+                    }
                   </div>
 
                   <div className="flex-1">
                     <div className="flex justify-between">
                       <div>
-                        <h3 className="font-semibold text-lg">{item.name}</h3>
-                        <p className="text-sm text-slate-500 mt-1">{item.variant}</p>
+                        <h3 className="font-semibold text-lg">{item.productName}</h3>
+                        {
+                          item?.selectedVariants &&
+                          <p className="mt-1 text-xs text-muted-foreground">
+                            {
+                              Object.keys(item?.selectedVariants || {}).map((key, index, array) => (
+                                <span key={key} className="capitalize">
+                                  {key}: {item.selectedVariants && item.selectedVariants[key]}
+                                  {index !== array.length - 1 && " • "}
+                                </span>
+                              ))
+                            }
+
+                          </p>
+                        }
                       </div>
                       <Button
                         variant="ghost"
                         size="icon"
                         className="text-red-500 hover:text-red-600"
-                        onClick={() => removeItem(item.id)}
+                        onClick={() => dispatch(removeToCart({ productId: item?.productId, sku: item?.sku }))}
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
                     </div>
 
                     <div className="flex items-center justify-between mt-4">
-                      <div className="flex items-center border rounded-lg">
+                        <div className="flex items-center overflow-hidden rounded-md border">
                         <Button
-                          variant="ghost"
                           size="icon"
-                          className="h-9 w-9"
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          variant="ghost"
+                          className="h-8 w-9  rounded-md  rounded-r-none"
+                          onClick={() =>
+                            dispatch(
+                              updateCartQuantity({
+                                productId: item.productId,
+                                sku: item.sku,
+                                quantity: item.quantity - 1,
+                              })
+                            )
+                          }
                         >
-                          <Minus className="w-4 h-4" />
+                          <Minus className="h-4 w-4" />
                         </Button>
-                        <span className="px-4 font-medium">{item.quantity}</span>
+
+                        <span className="flex h-8 min-w-9 items-center justify-center border-x text-sm font-medium">
+                          {item.quantity}
+                        </span>
+
                         <Button
-                          variant="ghost"
                           size="icon"
-                          className="h-9 w-9"
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          variant="ghost"
+                          className="h-8 w-9 rounded-md  rounded-l-none"
+                          onClick={() =>
+                            dispatch(
+                              updateCartQuantity({
+                                productId: item.productId,
+                                sku: item.sku,
+                                quantity: item.quantity + 1,
+                              })
+                            )
+                          }
                         >
-                          <Plus className="w-4 h-4" />
+                          <Plus className="h-4 w-4" />
                         </Button>
                       </div>
 
                       <div className="text-right">
                         <p className="font-semibold text-lg">
-                          ৳{(item.price * item.quantity).toLocaleString("en-IN")}
+                          {CURRENCY}{(item.salePrice ).toLocaleString("en-IN")}
                         </p>
-                        <p className="text-xs text-slate-500">৳{item.price} each</p>
+                        <p className="text-xs text-slate-500">Total: {CURRENCY}{item.salePrice * item.quantity }</p>
                       </div>
                     </div>
                   </div>
@@ -169,23 +166,23 @@ export default function CartPage() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-slate-600">Subtotal</span>
-                    <span className="font-medium">৳{subtotal.toLocaleString("en-IN")}</span>
+                    <span className="font-medium">{CURRENCY}{subtotal.toLocaleString("en-IN")}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-slate-600">Delivery Charge</span>
-                    <span>৳{delivery}</span>
+                    <span>{CURRENCY}{delivery}</span>
                   </div>
-                  <div className="flex justify-between text-green-600">
+                  {/* <div className="flex justify-between text-green-600">
                     <span>Discount</span>
-                    <span>-৳{discount}</span>
-                  </div>
+                    <span>-{CURRENCY}{discount}</span>
+                  </div> */}
                 </div>
 
                 <Separator />
 
                 <div className="flex justify-between text-xl font-semibold">
                   <span>Total</span>
-                  <span>৳{total.toLocaleString("en-IN")}</span>
+                  <span>{CURRENCY}{total.toLocaleString("en-IN")}</span>
                 </div>
 
                 {/* Coupon Code */}

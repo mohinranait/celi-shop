@@ -1,4 +1,5 @@
 
+import EcommerceCartDrawer from '@/components/shared/CartDroware'
 import Footer from '@/components/shared/Footer'
 import Header from '@/components/shared/Header'
 import React from 'react'
@@ -13,6 +14,7 @@ const MyRootLayout = ({children}:Props) => {
       {/* <EcommerceHeader /> */}
       {children}
       <Footer />
+      <EcommerceCartDrawer />
     </main>
   )
 }

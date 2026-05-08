@@ -11,59 +11,20 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCart, MapPin, CreditCard, ShieldCheck, Lock } from "lucide-react";
+import { useAppSelector } from "@/hooks/hooks";
+import Image from "next/image";
+import { CURRENCY } from "@/lib/envSecret";
 
-type CartItem = {
-  id: number;
-  name: string;
-  variant: string;
-  price: number;
-  quantity: number;
-  image: string;
-};
-
-const initialCart: CartItem[] = [
-  {
-    id: 1,
-    name: "Nike Air Max 270",
-    variant: "Size: 42 · Color: Black",
-    price: 8500,
-    quantity: 1,
-    image: "👟",
-  },
-  {
-    id: 2,
-    name: "Cotton Oversized T-Shirt",
-    variant: "Size: L · Color: White",
-    price: 800,
-    quantity: 2,
-    image: "👕",
-  },
-  {
-    id: 3,
-    name: "Laptop Backpack 30L",
-    variant: "Color: Navy Blue",
-    price: 2200,
-    quantity: 1,
-    image: "🎒",
-  },
-  {
-    id: 4,
-    name: "Smart Watch Series 3",
-    variant: "Strap: Black Silicone",
-    price: 5800,
-    quantity: 1,
-    image: "⌚",
-  },
-];
 
 export default function CheckoutPage() {
-  const [cart] = useState<CartItem[]>(initialCart);
+  const { carts, subtotal, totalItems } = useAppSelector(state => state.cart)
+  // const [cart] = useState<CartItem[]>(initialCart);
   const [zone, setZone] = useState<"inside" | "outside">("inside");
   const [paymentMethod, setPaymentMethod] = useState("cod");
 
-  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  // const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const deliveryCharge = zone === "inside" ? 60 : 120;
-  const discount = 500;
+  const discount = 0.00;
   const total = subtotal + deliveryCharge - discount;
 
   return (
@@ -97,20 +58,15 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
-                <div>
-                  <Label>Email (optional)</Label>
-                  <Input type="email" placeholder="email@example.com" className="mt-1" />
-                </div>
-
+                
                 <Separator />
 
                 <div>
                   <Label className="text-base font-medium mb-3 block">Delivery Zone</Label>
                   <RadioGroup value={zone} onValueChange={(v) => setZone(v as "inside" | "outside")} className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div
-                      className={`border rounded-xl p-4 cursor-pointer transition-all ${
-                        zone === "inside" ? "border-blue-600 bg-blue-50" : "border-border"
-                      }`}
+                      className={`border rounded-xl p-4 cursor-pointer transition-all ${zone === "inside" ? "border-blue-600 bg-blue-50" : "border-border"
+                        }`}
                       onClick={() => setZone("inside")}
                     >
                       <div className="flex items-start gap-3">
@@ -123,9 +79,8 @@ export default function CheckoutPage() {
                     </div>
 
                     <div
-                      className={`border rounded-xl p-4 cursor-pointer transition-all ${
-                        zone === "outside" ? "border-blue-600 bg-blue-50" : "border-border"
-                      }`}
+                      className={`border rounded-xl p-4 cursor-pointer transition-all ${zone === "outside" ? "border-blue-600 bg-blue-50" : "border-border"
+                        }`}
                       onClick={() => setZone("outside")}
                     >
                       <div className="flex items-start gap-3">
@@ -139,21 +94,7 @@ export default function CheckoutPage() {
                   </RadioGroup>
                 </div>
 
-                <div>
-                  <Label>District *</Label>
-                  <Select>
-                    <SelectTrigger className="mt-1">
-                      <SelectValue placeholder="জেলা সিলেক্ট করুন" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="dhaka">Dhaka</SelectItem>
-                      <SelectItem value="narayanganj">Narayanganj</SelectItem>
-                      <SelectItem value="gazipur">Gazipur</SelectItem>
-                      <SelectItem value="chittagong">Chittagong</SelectItem>
-                      {/* আরও অপশন যোগ করতে পারবেন */}
-                    </SelectContent>
-                  </Select>
-                </div>
+                
 
                 <div>
                   <Label>Full Address *</Label>
@@ -178,19 +119,18 @@ export default function CheckoutPage() {
               <CardContent>
                 <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {[
-                    { value: "cod", label: "Cash on Delivery", icon: "💵" },
-                    { value: "bkash", label: "bKash", icon: "📱" },
-                    { value: "nagad", label: "Nagad", icon: "📱" },
-                    { value: "card", label: "Card Payment", icon: "💳" },
+                    { value: "cod", label: "Cash on Delivery", icon: "cod.png" },
+                    { value: "bkash", label: "bKash", icon: "bkash.png" },
                   ].map((method) => (
                     <label
                       key={method.value}
-                      className={`flex items-center gap-3 border rounded-xl p-4 cursor-pointer transition-all ${
-                        paymentMethod === method.value ? "border-blue-600 bg-blue-50" : ""
-                      }`}
+                      className={`flex items-center gap-3 border rounded-xl p-4 cursor-pointer transition-all ${paymentMethod === method.value ? "border-blue-600 bg-blue-50" : ""
+                        }`}
                     >
                       <RadioGroupItem value={method.value} />
-                      <span className="text-2xl">{method.icon}</span>
+                      <span className="text-2xl">
+                        <Image src={`/${method?.icon}`} width={60} height={50} alt="Image" />
+                      </span>
                       <span className="font-medium">{method.label}</span>
                     </label>
                   ))}
@@ -205,23 +145,45 @@ export default function CheckoutPage() {
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                   Your Cart
-                  <span className="text-sm font-normal text-muted-foreground">({cart.length} items)</span>
+                  <span className="text-sm font-normal text-muted-foreground">({totalItems} items)</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {cart.map((item) => (
-                    <div key={item.id} className="flex gap-4 py-3 border-b last:border-0">
+                  {carts.map((item, idx) => (
+                    <div key={idx} className="flex gap-4 py-3 border-b last:border-0">
                       <div className="w-14 h-14 rounded-xl bg-slate-100 flex items-center justify-center text-3xl shrink-0">
-                        {item.image}
+                        {
+                          item?.productImage &&
+                          <Image
+                            src={`${item?.productImage}`}
+                            alt={item?.productName}
+                            className="w-full h-full object-cover rounded-md"
+                            width={60}
+                            height={60}
+                          />
+                        }
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium leading-tight">{item.name}</p>
-                        <p className="text-sm text-muted-foreground mt-1">{item.variant}</p>
+                        <p className="font-medium leading-tight">{item.productName}</p>
+                         {
+                          item?.selectedVariants &&
+                          <p className="mt-1 text-xs text-muted-foreground">
+                            {
+                              Object.keys(item?.selectedVariants || {}).map((key, index, array) => (
+                                <span key={key} className="capitalize">
+                                  {key}: {item.selectedVariants && item.selectedVariants[key]}
+                                  {index !== array.length - 1 && " • "}
+                                </span>
+                              ))
+                            }
+
+                          </p>
+                        }
                         <p className="text-sm mt-1">Qty: {item.quantity}</p>
                       </div>
                       <div className="text-right font-semibold">
-                        ৳{(item.price * item.quantity).toLocaleString("en-IN")}
+                        {CURRENCY}{(item.salePrice * item.quantity).toLocaleString("en-IN")}
                       </div>
                     </div>
                   ))}
@@ -232,34 +194,34 @@ export default function CheckoutPage() {
                 {/* Order Summary */}
                 <div className="space-y-3">
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Subtotal ({cart.length} items)</span>
-                    <span>৳{subtotal.toLocaleString("en-IN")}</span>
+                    <span className="text-muted-foreground">Subtotal ({totalItems} items)</span>
+                    <span>{CURRENCY}{subtotal.toLocaleString("en-IN")}</span>
                   </div>
 
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Delivery Charge</span>
                     <Badge variant={zone === "inside" ? "default" : "secondary"}>
-                      ৳{deliveryCharge}
+                      {CURRENCY}{deliveryCharge}
                     </Badge>
                   </div>
 
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Discount</span>
-                    <span className="text-green-600">-৳{discount}</span>
+                    <span className="text-green-600">-৳{discount.toFixed(2)}</span>
                   </div>
 
                   <Separator />
 
                   <div className="flex justify-between text-lg font-semibold">
                     <span>Total</span>
-                    <span>৳{total.toLocaleString("en-IN")}</span>
+                    <span>{CURRENCY}{total.toLocaleString("en-IN")}</span>
                   </div>
                 </div>
 
                 <Button
                   size="lg"
                   className="w-full mt-8 text-base font-semibold h-14"
-                  onClick={() => alert("Order Placed Successfully! 🎉")}
+                  onClick={() => alert("Order Placed Successfully!")}
                 >
                   <ShieldCheck className="mr-2" />
                   Place Order
