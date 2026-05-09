@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Plus, Minus, ShoppingCart, Heart, Share2, Check, Star } from 'lucide-react'
-import { IProduct } from '@/redux/service/products/type'
+import { IProduct, IProductVariant } from '@/redux/service/products/type'
 import ImageGallary from './image-gallary'
 import Cartui from './cartui'
 import Breadcrumb from './Breadcrumb'
@@ -13,22 +13,13 @@ import { useAppDispatch, useAppSelector } from '@/hooks/hooks'
 import { addToCart } from '@/redux/features/cartSlice'
 import { CURRENCY } from '@/lib/envSecret'
 
-interface Variation {
-  name: string
-  price: number
-  offerPriceFixed?: number
-  offerPriceParcent?: number
-  stock: number
-  sku: string
-  images?: string[]
-}
 
 
 
 export function ProductDetailss({ product }: { product: IProduct }) {
   const dispatch = useAppDispatch();
   const [quantity, setQuantity] = useState(1)
-  const [selectedVariation, setSelectedVariation] = useState<Variation | null>(
+  const [selectedVariation, setSelectedVariation] = useState<IProductVariant | null>(
     product.productType === 'variant' && product.variations ? product.variations[0] : null
   )
 
@@ -131,31 +122,16 @@ export function ProductDetailss({ product }: { product: IProduct }) {
       sku: sku || 'N/A',
       quantity: quantity,
       price: price,
+      productType: product.productType,
       salePrice: offerPrice,
       productImage: images[0],
-      selectedVariants: Object.keys(selectedVariantsObj).length > 0 ? selectedVariantsObj : undefined
+      selectedVariants: Object.keys(selectedVariantsObj).length > 0 ? selectedVariantsObj : undefined,
+      variationId:  selectedVariation?._id || null,
     }
 
 
     dispatch(addToCart({cart:cartItem}))
 
-    // const existingItemIndex = cart.findIndex(
-    //   (item) => 
-    //     item.sku === cartItem.sku && 
-    //     item.productId === cartItem.productId && 
-    //     JSON.stringify(item.selectedVariants) === JSON.stringify(cartItem.selectedVariants)
-    // )
-
-    // let updatedCart: ICartItem[]
-    // if (existingItemIndex > -1) {
-    //   updatedCart = [...cart]
-    //   updatedCart[existingItemIndex].quantity += quantity
-    // } else {
-    //   updatedCart = [...cart, cartItem]
-    // }
-
-    // setCart(updatedCart)
-    console.log('Item added to cart:', cartItem)
   }
  
   

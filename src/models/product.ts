@@ -31,7 +31,7 @@ const VariationSchema = new mongoose.Schema({
 
   isDefault: { type: Boolean, default: false }
 
-}, { _id: false });
+}, { _id: true });
 
 
 const ProductSchema = new mongoose.Schema({

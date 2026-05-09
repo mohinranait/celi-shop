@@ -8,7 +8,8 @@ interface IProductSelectedVariant {
 }
 
 
-interface IProductVariant {
+export interface IProductVariant {
+  _id: string;
   name: string,
   price: number,
   offerPriceFixed: number,
@@ -20,11 +21,14 @@ interface IProductVariant {
   images: string[],
   isDefault: false
 }
+
+
+export type TProductType = "variant" | "single";
 // Base Product
 export interface IProductBase {
   name: string;
   slug: string;
-  productType: "variant" | "single",
+  productType: TProductType,
   gallery: string[];
   shipping: {
     isFreeShipping: boolean;

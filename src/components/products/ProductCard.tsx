@@ -1,3 +1,4 @@
+'use client';
 import { IProduct } from "@/redux/service/products/type";
 import { HandCoins, ShoppingCart } from "lucide-react";
 import Image from "next/image";
@@ -9,12 +10,19 @@ import { Card } from "@/components/ui/card";
 import { PRODUCT_IMG } from "@/lib/default-import";
 import { CURRENCY } from "@/lib/envSecret";
 import { cn } from "@/lib/utils";
+import { ICartItem } from "@/redux/service/orders/type";
+import { useAppDispatch } from "@/hooks/hooks";
+import { addToCart } from "@/redux/features/cartSlice";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 type Props = {
   product: IProduct;
 };
 
 const ProductCard = ({ product }: Props) => {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   const {
     _id,
     name,
@@ -114,13 +122,47 @@ const ProductCard = ({ product }: Props) => {
 
   const productPrice = getPriceRange();
 
+
+   const handleAddToCart = (action:'cart'|'buy' = 'cart') => {
+      if (product.productType !== 'single' && product.selectedAttributes && product.selectedAttributes.length > 0) {
+        router.push(`/${product?.slug}`)
+        return;
+      }
+  
+      const sku =  'N/A'
+  
+      const cartItem: ICartItem = {
+        productId: product._id,
+        productName: product.name,
+        productSlug: product?.slug,
+        sku: sku || 'N/A',
+        quantity: 1,
+        productType: 'single',
+        price: (getSinglePrice()?.price || 0),
+        salePrice: (getSinglePrice()?.finalPrice || 0),
+        productImage: productImage,
+      }
+  
+  
+      dispatch(addToCart({cart:cartItem}))
+
+      if(action === 'buy'){
+         router.push(`/checkout`)
+        return;
+      }
+
+      toast.success("Added shopping cart")
+  
+    }
+
+
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg group cursor-pointer h-full py-2 px-2">
       {/* Product Image */}
       <div className={cn(" h-56 overflow-hidden rounded-md", !productImage && 'bg-secondary')}>
         {
           productImage &&
-          <Link href={`/${_id}`} className="rounded-md bg-red-800">
+          <Link href={`/${slug}`} className="rounded-md bg-red-800">
             <Image
               width={600}
               height={400}
@@ -141,7 +183,7 @@ const ProductCard = ({ product }: Props) => {
         </Link>
 
         <Link href={`/${slug}`}>
-          <p className="text-sm text-muted-foreground mb-4 line-clamp-2 min-h-[40px]">
+          <p className="text-sm text-muted-foreground mb-4 line-clamp-2 min-h-10">
             {"No description available"}
           </p>
         </Link>
@@ -171,12 +213,12 @@ const ProductCard = ({ product }: Props) => {
 
         {/* Buttons */}
         <div className="grid grid-cols-2 items-center gap-3 mt-auto">
-          <Button className="w-full" variant={"outline"}>
+          <Button className="w-full" variant={"outline"} onClick={() => handleAddToCart()}>
             <ShoppingCart className="w-4 h-4" />
             Add to Cart
           </Button>
 
-          <Button className="w-full">
+          <Button className="w-full" onClick={() => handleAddToCart('buy')}>
             <HandCoins className="w-4 h-4" />
             Order Now
           </Button>

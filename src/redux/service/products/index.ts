@@ -30,6 +30,13 @@ export const productApi = baseApi.injectEndpoints({
       providesTags: ['product'],
     }),
 
+     getProductBySlug : builder.query<IProductDetailsResponse, string>({
+      query: (productId) => ({
+        url: `/client/products/${productId}`,
+      }),
+      providesTags: ['product'],
+    }),
+
 
     updateProduct: builder.mutation<{data:IProduct}, {id:string, payload:TProductFormType}>({
       query: ({ id, payload }) => ({
@@ -61,4 +68,4 @@ export const productApi = baseApi.injectEndpoints({
 })
 
 
-export const {useCreateProductMutation, useGetProductsQuery, useGetProductByIdQuery, useUpdateProductMutation, useSoftDeleteProductMutation, useDeleteProductMutation} = productApi;
+export const {useCreateProductMutation, useGetProductsQuery, useGetProductByIdQuery, useGetProductBySlugQuery, useUpdateProductMutation, useSoftDeleteProductMutation, useDeleteProductMutation} = productApi;

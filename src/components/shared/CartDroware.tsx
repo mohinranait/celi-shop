@@ -219,7 +219,7 @@ const EcommerceCartDrawer = () => {
         {/* Footer */}
         {carts.length > 0 && (
           <div className="border-t bg-background px-5 py-4">
-            <div className="space-y-4">
+            <div className="space-y-3">
               {/* Subtotal */}
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">
@@ -256,21 +256,22 @@ const EcommerceCartDrawer = () => {
               </div>
 
               {/* Buttons */}
-              <div className="space-y-3 pt-2">
-                <Button className="h-11 w-full text-base font-medium">
-                  Proceed to Checkout
-                </Button>
+              <div className="space-y-2 pt-2">
+                <Link href={'/checkout'} className="block">
+                  <Button className="h-11 w-full text-base font-medium">
+                    Proceed to Checkout
+                  </Button></Link>
 
-                <Link href={'/cart'}>
-                <Button
-                  variant="outline"
-                  className="h-11 w-full"
-                  onClick={() => {
-                    handleToggleCart();
-                  }}
-                >
-                   Shopping Cart
-                </Button></Link>
+                <Link href={'/cart'} className="block">
+                  <Button
+                    variant="outline"
+                    className="h-11 w-full"
+                    onClick={() => {
+                      handleToggleCart();
+                    }}
+                  >
+                    Shopping Cart
+                  </Button></Link>
               </div>
             </div>
           </div>
