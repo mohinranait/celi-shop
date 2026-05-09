@@ -184,9 +184,9 @@ export default function OrderSuccessPage() {
                   ? { label: "Payment Status", value: <PaymentStatusBadge status={order?.payment?.status} /> }
                   : null,
               ]?.filter(Boolean)?.map((info) => (
-                  <div key={info?.label} className="bg-gray-50 rounded-lg p-3 border border-gray-100">
-                    <p className="text-xs text-gray-400 mb-1">{info?.label}</p>
-                    <p className="text-sm font-medium text-gray-900">{info?.value}</p>
+                  <div key={info?.label} className="bg-muted rounded-lg p-3 border border-border">
+                    <p className="text-xs text-muted-foreground mb-1">{info?.label}</p>
+                    <p className="text-sm font-medium text-accent-foreground">{info?.value}</p>
                   </div>
                 ))}
             </div>

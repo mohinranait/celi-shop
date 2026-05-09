@@ -30,7 +30,7 @@ export default function CartPage() {
         <div className="text-center">
           <ShoppingCart className="w-16 h-16 mx-auto text-slate-300 mb-4" />
           <h2 className="text-2xl font-semibold mb-2">Your cart is empty</h2>
-          <p className="text-slate-500 mb-6">Looks like you have not added anything yet.</p>
+          <p className="text-muted-foreground mb-6">Looks like you have not added anything yet.</p>
           <Link href="/shop">
             <Button size="lg">Continue Shopping</Button>
           </Link>
@@ -40,12 +40,12 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 py-8 px-4">
+    <div className="min-h-screen  py-8 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Your Cart</h1>
-            <p className="text-slate-500 mt-1">{totalItems} items</p>
+            <p className="text-muted-foreground mt-1">{totalItems} items</p>
           </div>
           <Link href="/checkout">
             <Button size="lg" className="gap-2">
@@ -147,7 +147,7 @@ export default function CartPage() {
                         <p className="font-semibold text-lg">
                           {CURRENCY}{(item.salePrice ).toLocaleString("en-IN")}
                         </p>
-                        <p className="text-xs text-slate-500">Total: {CURRENCY}{item.salePrice * item.quantity }</p>
+                        <p className="text-xs text-muted-foreground">Total: {CURRENCY}{item.salePrice * item.quantity }</p>
                       </div>
                     </div>
                   </div>
@@ -165,11 +165,11 @@ export default function CartPage() {
               <CardContent className="space-y-5">
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-slate-600">Subtotal</span>
+                    <span className="text-muted-foreground">Subtotal</span>
                     <span className="font-medium">{CURRENCY}{subtotal.toLocaleString("en-IN")}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-slate-600">Delivery Charge</span>
+                    <span className="text-muted-foreground">Delivery Charge</span>
                     <span>{CURRENCY}{delivery}</span>
                   </div>
                   {/* <div className="flex justify-between text-green-600">

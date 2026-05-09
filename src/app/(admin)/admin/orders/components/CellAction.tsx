@@ -10,6 +10,7 @@ import DeleteAlert from '@/components/shared/DeleteAlert';
 import { useDeleteProductMutation, useSoftDeleteProductMutation } from '@/redux/service/products';
 import { useRouter } from 'next/navigation';
 import { IOrder } from '@/redux/service/orders/type';
+import Link from 'next/link';
 
 type Props = {
   data: IOrder;
@@ -25,10 +26,10 @@ const CellAction = ({ data, type }: Props) => {
 
 
   // Soft delete
-  const softDelete = async (action: "restore"|"soft"='restore') => {
+  const softDelete = async (action: "restore" | "soft" = 'restore') => {
     try {
       await softDeleteProduct({ id: data._id, payload: { isDelete: true } }).unwrap();
-       toast.success( action === 'restore' ? "Restore" :"Delete" + ` successfully`);
+      toast.success(action === 'restore' ? "Restore" : "Delete" + ` successfully`);
       setIsDeleteOpen(false);
     } catch (error) {
       console.error(error);
@@ -72,13 +73,15 @@ const CellAction = ({ data, type }: Props) => {
       {/* <Switch checked={data.status} /> */}
 
 
- <Button
+     <Link href={`/admin/order/${data?._id}`}>
+      <Button
         size="icon"
         variant="outline"
-        
+
       >
         <Eye />
       </Button>
+      </Link>
 
       {/* EDIT */}
       <Button
@@ -108,9 +111,9 @@ const CellAction = ({ data, type }: Props) => {
         text={"This order will be moved to trash. You can restore it later or undo this action anytime."}
         deleteType={data?.invoiceNumber}
       />
-     
 
-     
+
+
     </div>
   );
 };

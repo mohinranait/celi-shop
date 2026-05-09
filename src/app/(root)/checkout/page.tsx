@@ -75,10 +75,10 @@ export default function CheckoutPage() {
 
 
   return (
-    <div className="min-h-screen bg-slate-50 py-8 px-4">
+    <div className="min-h-screen  py-8 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center gap-3 mb-8">
-          <ShoppingCart className="w-8 h-8 text-blue-600" />
+          <ShoppingCart className="w-8 h-8 text-primary" />
           <h1 className="text-3xl font-semibold tracking-tight">Checkout</h1>
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -114,7 +114,7 @@ export default function CheckoutPage() {
                     <Label className="text-base font-medium mb-3 block">Delivery Zone</Label>
                     <RadioGroup value={zone} onValueChange={(v) => setZone(v as "inside" | "outside")} className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div
-                        className={`border rounded-xl p-4 cursor-pointer transition-all ${zone === "inside" ? "border-blue-600 bg-blue-50" : "border-border"
+                        className={`border rounded-xl p-4 cursor-pointer transition-all ${zone === "inside" ? "border-primary bg-muted" : "border-border"
                           }`}
 
                       >
@@ -130,7 +130,7 @@ export default function CheckoutPage() {
                       </div>
 
                       <div
-                        className={`border rounded-xl p-4 cursor-pointer transition-all ${zone === "outside" ? "border-blue-600 bg-blue-50" : "border-border"
+                        className={`border rounded-xl p-4 cursor-pointer transition-all ${zone === "outside" ? "border-primary bg-muted" : "border-border"
                           }`}
 
                       >
@@ -183,7 +183,7 @@ export default function CheckoutPage() {
                     ].map((method) => (
                       <label
                         key={method.value}
-                        className={`flex items-center gap-3 border rounded-xl p-4 cursor-pointer transition-all ${paymentMethod === method.value ? "border-blue-600 bg-blue-50" : ""
+                        className={`flex items-center gap-3 border rounded-xl p-4 cursor-pointer transition-all ${paymentMethod === method.value ? "border-primary bg-muted" : ""
                           }`}
                       >
                         <RadioGroupItem value={method.value} />

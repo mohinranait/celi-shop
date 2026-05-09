@@ -1,7 +1,8 @@
 
-import {  baseApi } from "..";
+import { baseApi } from "..";
 import { ISoftDelete } from "@/global";
 import { ICehckoutForm, IOrder, IOrderListResponse } from "./type";
+import { IOrderUpdaeView } from "@/app/(admin)/admin/order/components/OrderUpdateForm";
 
 export const orderApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -11,7 +12,24 @@ export const orderApi = baseApi.injectEndpoints({
     }),
 
 
-    createOrder: builder.mutation<{data:IOrder}, ICehckoutForm>({
+    getOrderByIdAdmin: builder.query<{ data: IOrder }, string>({
+      query: (orderId) => `/admin/orders/${orderId}`
+    }),
+
+
+    updateOrderByIdAdmin: builder.mutation<IOrder, { id: string, payload: IOrderUpdaeView }>({
+      query: ({ id, payload }) => ({
+        url: `/admin/orders/${id}`,
+        method: 'PATCH',
+        body: payload,
+      }),
+      invalidatesTags: ['orders'],
+    }),
+
+
+
+
+    createOrder: builder.mutation<{ data: IOrder }, ICehckoutForm>({
       query: (payload) => ({
         url: '/admin/orders',
         method: 'POST',
@@ -21,21 +39,14 @@ export const orderApi = baseApi.injectEndpoints({
     }),
 
 
-    getOrderByTrackingNumber: builder.query<{data:IOrder}, string>({
+    getOrderByTrackingNumber: builder.query<{ data: IOrder }, string>({
       query: (trackNumber) => `/client/order/tracking/${trackNumber}`
     }),
 
 
-    updateOrder: builder.mutation<IOrder, {id:string,payload:ICehckoutForm}>({
-      query: ({ id, payload }) => ({
-        url: `/admin/orders/${id}`,
-        method: 'PATCH',
-        body: payload,
-      }),
-      invalidatesTags: ['orders'],
-    }),
 
-    softDeleteOrder: builder.mutation<IOrder, {id:string,payload:ISoftDelete}>({
+
+    softDeleteOrder: builder.mutation<IOrder, { id: string, payload: ISoftDelete }>({
       query: ({ id, payload }) => ({
         url: `/admin/orders/${id}/soft`,
         method: 'PATCH',
@@ -56,4 +67,4 @@ export const orderApi = baseApi.injectEndpoints({
 })
 
 
-export const {useGetAdminOrdersQuery, useCreateOrderMutation, useGetOrderByTrackingNumberQuery} = orderApi;
+export const { useGetAdminOrdersQuery, useGetOrderByIdAdminQuery, useUpdateOrderByIdAdminMutation, useCreateOrderMutation, useGetOrderByTrackingNumberQuery } = orderApi;

@@ -137,7 +137,7 @@ export function ProductDetailss({ product }: { product: IProduct }) {
   
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-slate-50">
+    <div className="min-h-screen ">
        <Cartui />
 
       <Breadcrumb name={product?.name} />
@@ -150,7 +150,7 @@ export function ProductDetailss({ product }: { product: IProduct }) {
             <div>
               <div className="flex items-start justify-between gap-4 mb-3">
                 <div className="flex-1">
-                  <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
+                  <h1 className="text-3xl md:text-4xl font-bold text-accent-foreground mb-2">
                     {product.name}
                   </h1>
                   <div className="flex items-center gap-3">
@@ -159,22 +159,22 @@ export function ProductDetailss({ product }: { product: IProduct }) {
                         <Star key={i} className={`w-5 h-5 ${
                           i < Math.floor(product.ratings.average)
                             ? 'text-yellow-400'
-                            : 'text-slate-300'
+                            : 'text-muted-foreground'
                         }`} />
                       ))}
                     </div>
-                    <span className="text-sm text-slate-600">
+                    <span className="text-sm text-accent-foreground">
                       ({product.ratings.totalReviews} reviews)
                     </span>
                   </div>
                 </div>
                 <button
                   onClick={() => setIsWishlisted(!isWishlisted)}
-                  className="p-3 rounded-full bg-white border border-slate-200 hover:border-slate-400 transition-colors"
+                  className="p-3 rounded-full bg-background border border-border  transition-colors"
                 >
                   <Heart
                     className={`w-6 h-6 ${
-                      isWishlisted ? 'fill-red-500 text-red-500' : 'text-slate-600'
+                      isWishlisted ? 'fill-red-500 text-red-500' : 'text-muted-foreground'
                     }`}
                   />
                 </button>
@@ -193,16 +193,16 @@ export function ProductDetailss({ product }: { product: IProduct }) {
 
             <div>
               <div className="flex items-baseline gap-3 mb-4">
-                <span className="text-4xl font-bold text-slate-900">
+                <span className="text-4xl font-bold text-accent-foreground">
                   {CURRENCY}{offerPrice}
                 </span>
                 {price > offerPrice && (
                   <>
-                    <span className="text-xl text-slate-500 line-through">
+                    <span className="text-xl text-muted-foreground line-through">
                       {CURRENCY}{price}
                     </span>
                     {discountPercent > 0 && (
-                      <Badge className="bg-red-500 hover:bg-red-600">
+                      <Badge className="" variant={"destructive"}>
                         {Math.round(discountPercent)}% OFF
                       </Badge>
                     )}
@@ -227,10 +227,10 @@ export function ProductDetailss({ product }: { product: IProduct }) {
             )}
 
             {attributeGroups && Object.keys(attributeGroups).length > 0 && (
-              <div className="space-y-3 border-t border-b border-slate-200 py-4">
+              <div className="space-y-3 border-t border-b border-border py-4">
                 {Object.entries(attributeGroups).map(([attrName, values]) => (
                   <div key={attrName}>
-                    <label className="text-sm font-semibold text-slate-900 mb-2 block capitalize">
+                    <label className="text-sm font-semibold text-accent-foreground mb-2 block capitalize">
                       {attrName} 
                       {!isVariant && product.selectedAttributes && product.selectedAttributes.length > 0 && (
                         <span className="text-red-500">*</span>
@@ -267,32 +267,32 @@ export function ProductDetailss({ product }: { product: IProduct }) {
                   {stock > 10 ? `${stock} in stock` : stock > 0 ? 'Low stock' : 'Out of stock'}
                 </span>
                 {currentVariation && (
-                  <span className="text-xs text-slate-500">SKU: {currentVariation.sku}</span>
+                  <span className="text-xs text-muted-foreground">SKU: {currentVariation.sku}</span>
                 )}
               </div>
 
               {stock > 0 && (
                 <div className="flex items-center gap-4">
-                  <span className="text-sm font-medium text-slate-900">Quantity:</span>
-                  <div className="flex items-center border border-slate-300 rounded-lg">
-                    <button
+                  <span className="text-sm font-medium text-accent-foreground">Quantity:</span>
+                  <div className="flex items-center border border-border rounded-lg">
+                    <Button 
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
                       disabled={quantity === 1}
-                      className="p-2 hover:bg-slate-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="p-2 h-9.5 bg-muted  transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      <Minus className="w-4 h-4 text-slate-600" />
-                    </button>
-                    <span className="px-6 py-2 font-semibold text-slate-900">{quantity}</span>
-                    <button
+                      <Minus className="w-4 h-4 text-accent-foreground" />
+                    </Button>
+                    <span className="px-6 py-2 font-semibold text-accent-foreground">{quantity}</span>
+                    <Button
                       onClick={() => setQuantity(Math.min(stock, quantity + 1))}
                       disabled={quantity >= stock}
-                      className="p-2 hover:bg-slate-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="p-2 h-9.5 bg-muted  transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       title={quantity >= stock ? `Maximum ${stock} available` : ''}
                     >
-                      <Plus className="w-4 h-4 text-slate-600" />
-                    </button>
+                      <Plus className="w-4 h-4 text-accent-foreground" />
+                    </Button>
                   </div>
-                  <span className="text-xs text-slate-500">Max: {stock}</span>
+                  <span className="text-xs text-muted">Max: {stock}</span>
                 </div>
               )}
             </div>
@@ -302,7 +302,7 @@ export function ProductDetailss({ product }: { product: IProduct }) {
                 onClick={handleAddToCart}
                 disabled={stock === 0 || !areAllAttributesSelected()}
                 title={!areAllAttributesSelected() ? 'Please select all attributes' : stock === 0 ? 'Out of stock' : ''}
-                className="w-full h-12 text-base font-semibold bg-slate-900 hover:bg-slate-800 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full h-12 text-base font-semibold  disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <ShoppingCart className="w-5 h-5 mr-2" />
                 Add to Cart
