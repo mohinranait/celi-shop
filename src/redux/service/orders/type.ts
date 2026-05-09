@@ -92,7 +92,7 @@ export interface IOrderPricing {
 /* -------------------------------------------------------------------------- */
 
 export interface IOrder {
-  _id?: string;
+  _id: string;
 
   userId?: string | null;
 

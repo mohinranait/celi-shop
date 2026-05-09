@@ -1,0 +1,96 @@
+'use client';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { DataTable } from '@/components/ui/data-table/Table';
+import { Plus } from 'lucide-react';
+import React, { useState } from 'react'
+import tableColumns from './columns';
+import { useRouter } from 'next/navigation';
+import Pagination from '@/components/shared/Pagination';
+import { useGetAdminOrdersQuery } from '@/redux/service/orders';
+import Filters from './filters';
+
+const AllOrders = () => {
+  const router = useRouter()
+  const [filter, setFilter] = useState<"active" | "deleted">("active");
+  const [isParams, setIsParams] = useState('')
+   const [pagination, setPagination] = useState({ page: 1, limit: 20 })
+  const columns = tableColumns({ type: filter });
+  const { data } = useGetAdminOrdersQuery(`page=${pagination?.page}&limit=${pagination?.limit}&isDelete=${filter === 'active' ? 'false' : "true"}&${isParams}`)
+  const orders = data?.data || [];
+    const meta = data?.meta;
+
+
+
+  return (
+    <div className="max-w-7xl mx-auto  space-y-6">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold">All Orders</h1>
+          <p className="text-muted-foreground text-sm">
+            Manage your orders easily
+          </p>
+        </div>
+
+        {/* <Button onClick={() => router.push('/admin/products/form')}>
+          <Plus /> Add Order
+        </Button> */}
+      </div>
+
+
+      <Filters setParams={setIsParams}  />
+
+      <div className="flex gap-2">
+
+
+        <Button
+          variant={filter === "active" ? "default" : "outline"}
+          onClick={() => setFilter("active")}
+        >
+          Active
+        </Button>
+
+        <Button
+          variant={filter === "deleted" ? "default" : "outline"}
+          onClick={() => setFilter("deleted")}
+        >
+          Deleted
+        </Button>
+      </div>
+
+
+
+
+      {/* TABLE CARD */}
+      <Card className="p-0 rounded-md">
+        <CardContent className="p-0">
+
+          <DataTable
+            columns={columns}
+            data={orders}
+          />
+
+
+
+        </CardContent>
+      </Card>
+
+      <Pagination
+            page={meta?.page || 1}
+            totalPages={meta?.totalPages || 1}
+            onPageChange={(page) =>
+              setPagination((prev) => ({
+                ...prev,
+                page,
+              }))
+            }
+          />
+
+     
+    </div>
+  )
+}
+
+export default AllOrders

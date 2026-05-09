@@ -185,8 +185,8 @@ export async function POST(req: Request) {
           { _id: product._id, "variations._id": cartItem.variationId },
           {
             $inc: {
-              "variations.$.stock": -cartItem.quantity,  
-              stock: -cartItem.quantity,                 
+              "variations.$.stock": -cartItem.quantity,
+              stock: -cartItem.quantity,
             },
           },
           { session, runValidators: false }
@@ -222,7 +222,7 @@ export async function POST(req: Request) {
     /*                              CREATE ORDER                              */
     /* ---------------------------------------------------------------------- */
 
- 
+
     const orderPayload = {
       userId: userId || null,
       items: orderItems,
@@ -260,7 +260,7 @@ export async function POST(req: Request) {
       invoiceNumber,
       trackingNumber,
     };
- 
+
     const order = await Order.create(
       [
         orderPayload
@@ -315,7 +315,9 @@ export async function GET(req: Request) {
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "10");
     const userId = searchParams.get("userId");
-    const orderStatus = searchParams.get("orderStatus");
+    const status = searchParams.get("status");
+    const isDelete = searchParams.get("isDelete");
+    const date = searchParams.get("date");
 
     const skip = (page - 1) * limit;
 
@@ -329,8 +331,26 @@ export async function GET(req: Request) {
       filter.userId = userId;
     }
 
-    if (orderStatus) {
-      filter.orderStatus = orderStatus;
+    if (status) {
+      filter.orderStatus = status;
+    }
+
+
+    // SOFT DELETE FILTER
+    if (isDelete === "true") filter.isDeleted = true;
+    if (isDelete === "false") filter.isDeleted = false;
+
+
+    if (date) {
+      const start = new Date(date);
+      const end = new Date(date);
+
+      end.setHours(23, 59, 59, 999);
+
+      filter.createdAt = {
+        $gte: start,
+        $lte: end,
+      };
     }
 
     /* ------------------------------ DATABASE ------------------------------- */
