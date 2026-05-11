@@ -9,7 +9,7 @@ import ImageGallary from './image-gallary'
 import Cartui from './cartui'
 import Breadcrumb from './Breadcrumb'
 import { ICartItem } from '@/redux/service/orders/type'
-import { useAppDispatch, useAppSelector } from '@/hooks/hooks'
+import { useAppDispatch} from '@/hooks/hooks'
 import { addToCart } from '@/redux/features/cartSlice'
 import { CURRENCY } from '@/lib/envSecret'
 
