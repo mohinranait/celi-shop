@@ -160,6 +160,11 @@ export const sidebarData: SidebarData = {
           icon: Image,
         },
         {
+          title: "Sliders",
+          url: "/admin/sliders",
+          icon: Image,
+        },
+        {
           title: "Setting",
           url: "/admin/setting",
           icon: Settings,
