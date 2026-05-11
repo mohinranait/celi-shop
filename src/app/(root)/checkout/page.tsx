@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -19,6 +19,7 @@ import { checkoutSchema, TCheckoutForm } from "@/components/validations/checkout
 import { useCreateOrderMutation } from "@/redux/service/orders";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useGetAppSettingQuery } from "@/redux/service/setting";
 
 /* ------------------------- ZOD SCHEMA ------------------------- */
 
@@ -27,14 +28,23 @@ import { useRouter } from "next/navigation";
 
 export default function CheckoutPage() {
   const router = useRouter()
-  const [createOrder,{isLoading}] = useCreateOrderMutation()
+  const { data: appSetting } = useGetAppSettingQuery();
+  const [createOrder, { isLoading }] = useCreateOrderMutation()
   const { carts, subtotal, totalItems } = useAppSelector(state => state.cart)
+  // const shippingThreshold = appSetting?.shipping?.freeShippingThreshold || 0;
+  const [zone, setZone] = useState<{
+    areaName: string;
+    fee: number;
+  } | null>(null);
 
-  const [zone, setZone] = useState<"inside" | "outside">("inside");
-
-  const deliveryCharge = zone === "inside" ? 60 : 120;
+  const deliveryCharge =  zone ? zone?.fee : 0;
   const discount = 0;
   const total = subtotal + deliveryCharge - discount;
+
+  const zones = useMemo(() => {
+    return appSetting?.shipping?.shippingZones || [];
+  }, [appSetting?.shipping?.shippingZones]);
+
 
   const {
     register,
@@ -60,17 +70,27 @@ export default function CheckoutPage() {
     const payload = {
       ...data,
       items: carts,
+      pricing: {
+        shippingCharge: deliveryCharge
+      }
     }
-    
+
     try {
-      const {data} = await createOrder(payload).unwrap();
+      const { data } = await createOrder(payload).unwrap();
       toast.success("Order Placed Successfully!")
       router.push(`/order/success?oid=${data?.trackingNumber}`)
     } catch (error) {
       console.log(error);
-      
+
     }
   };
+
+  useEffect(() => {
+    if (zones.length > 0 && !zone) {
+      setZone(zones[0]);
+    }
+  }, [zones, zone]);
+
 
 
 
@@ -112,38 +132,45 @@ export default function CheckoutPage() {
 
                   <div>
                     <Label className="text-base font-medium mb-3 block">Delivery Zone</Label>
-                    <RadioGroup value={zone} onValueChange={(v) => setZone(v as "inside" | "outside")} className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      <div
-                        className={`border rounded-xl p-4 cursor-pointer transition-all ${zone === "inside" ? "border-primary bg-muted" : "border-border"
-                          }`}
+                    <RadioGroup value={zone?.areaName} onValueChange={(v) => {
+                      const findZone = zones?.find(ite => ite.areaName === v)
+                      setZone(findZone || null);
 
-                      >
-                        <div className="flex items-start gap-3"
-                        //  onClick={() => setZone("inside")}
+                    }} className="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+                      {zones?.map((zon, index) => (
+                        <div
+                          key={index}
+                          className={`border rounded-xl p-4 cursor-pointer transition-all hover:bg-muted/50
+                ${zone?.areaName === zon.areaName
+                              ? "border-primary bg-primary/5 shadow-sm"
+                              : "border-border"
+                            }`}
                         >
-                          <RadioGroupItem value="inside" id="inside" />
-                          <Label htmlFor="inside" className="flex flex-col">
-                            <p className="font-medium">Inside Dhaka</p>
-                            <p className="text-sm text-muted-foreground">Delivery: ৳60</p>
-                          </Label>
-                        </div>
-                      </div>
+                          <div className="flex items-start gap-3">
+                            <RadioGroupItem
+                              value={zon.areaName}
+                              id={`zone-${index}`}
+                              className="mt-1"
+                            />
+                            <Label
+                              htmlFor={`zone-${index}`}
+                              className="flex flex-col cursor-pointer items-start flex-1"
+                            >
+                              <p className="font-medium text-left">{zon.areaName}</p>
 
-                      <div
-                        className={`border rounded-xl p-4 cursor-pointer transition-all ${zone === "outside" ? "border-primary bg-muted" : "border-border"
-                          }`}
 
-                      >
-                        <div className="flex items-start gap-3"
-                        // onClick={() => setZone("outside")}
-                        >
-                          <RadioGroupItem value="outside" id="outside" />
-                          <Label htmlFor="outside" className="flex flex-col">
-                            <p className="font-medium">Outside Dhaka</p>
-                            <p className="text-sm text-muted-foreground">Delivery: ৳120</p>
-                          </Label>
+
+                              <p className="text-sm font-semibold text-primary mt-1">
+                                Delivery Fee: {CURRENCY}{zon.fee}
+                              </p>
+                            </Label>
+                          </div>
                         </div>
-                      </div>
+                      ))}
+
+
+
                     </RadioGroup>
                   </div>
 
@@ -259,7 +286,7 @@ export default function CheckoutPage() {
 
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">Delivery Charge</span>
-                      <Badge variant={zone === "inside" ? "default" : "secondary"}>
+                      <Badge variant={'outline'}>
                         {CURRENCY}{deliveryCharge}
                       </Badge>
                     </div>
@@ -291,7 +318,7 @@ export default function CheckoutPage() {
                         className="mt-1 focus:border-pink-500"
                       />
 
-                       <p className="text-red-500 text-sm">{errors.payment?.transactionId?.message}</p>
+                      <p className="text-red-500 text-sm">{errors.payment?.transactionId?.message}</p>
 
                       <p className="text-xs text-muted-foreground mt-1">
                         Make sure the ID is correct before placing order
@@ -304,7 +331,7 @@ export default function CheckoutPage() {
 
                     size="lg"
                     className="w-full mt-8 text-base font-semibold h-14"
-                    // onClick={() => alert("Order Placed Successfully!")}
+                  // onClick={() => alert("Order Placed Successfully!")}
                   >
                     <ShieldCheck className="mr-2" />
                     Place Order

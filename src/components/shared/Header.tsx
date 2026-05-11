@@ -68,9 +68,9 @@ export default function Header() {
                 placeholder="Search products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="rounded-r-none border-r-0"
+                className="rounded-r-none border-r-0 h-9"
               />
-              <Button type="submit" size="sm" className="rounded-l-none h-8">
+              <Button type="submit" size="sm" className="rounded-l-none h-9">
                 <Search className="h-4 w-4" />
               </Button>
             </div>

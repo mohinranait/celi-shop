@@ -6,7 +6,7 @@ import { Main } from "@/components/ui/main";
 const OrderDetailsPage = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
   return <>
-    <Navbar />
+    <Navbar fixed />
     <Main>
       <OrderComponent orderId={id} />
     </Main>

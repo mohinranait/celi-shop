@@ -6,17 +6,18 @@ import { Badge } from '@/components/ui/badge'
 import { Plus, Minus, ShoppingCart, Heart, Share2, Check, Star } from 'lucide-react'
 import { IProduct, IProductVariant } from '@/redux/service/products/type'
 import ImageGallary from './image-gallary'
-import Cartui from './cartui'
 import Breadcrumb from './Breadcrumb'
 import { ICartItem } from '@/redux/service/orders/type'
-import { useAppDispatch} from '@/hooks/hooks'
+import { useAppDispatch } from '@/hooks/hooks'
 import { addToCart } from '@/redux/features/cartSlice'
 import { CURRENCY } from '@/lib/envSecret'
+import { useGetAppSettingQuery } from '@/redux/service/setting'
 
 
 
 
 export function ProductDetailss({ product }: { product: IProduct }) {
+  const { data: appSetting } = useGetAppSettingQuery()
   const dispatch = useAppDispatch();
   const [quantity, setQuantity] = useState(1)
   const [selectedVariation, setSelectedVariation] = useState<IProductVariant | null>(
@@ -35,7 +36,6 @@ export function ProductDetailss({ product }: { product: IProduct }) {
   })
 
   const [isWishlisted, setIsWishlisted] = useState(false)
-  const [cart, setCart] = useState<ICartItem[]>([])
 
   const isVariant = product.productType === 'variant'
   const currentVariation = selectedVariation || (isVariant ? product.variations?.[0] : null)
@@ -102,9 +102,9 @@ export function ProductDetailss({ product }: { product: IProduct }) {
     }
 
     const sku = isVariant ? currentVariation?.sku : 'N/A'
-    
+
     let selectedVariantsObj: Record<string, string> = {}
-    
+
     if (isVariant && currentVariation) {
       const variantParts = currentVariation.name.split(' / ')
       const attributeKeys = Object.keys(attributeGroups)
@@ -126,19 +126,18 @@ export function ProductDetailss({ product }: { product: IProduct }) {
       salePrice: offerPrice,
       productImage: images[0],
       selectedVariants: Object.keys(selectedVariantsObj).length > 0 ? selectedVariantsObj : undefined,
-      variationId:  selectedVariation?._id || null,
+      variationId: selectedVariation?._id || null,
     }
 
 
-    dispatch(addToCart({cart:cartItem}))
+    dispatch(addToCart({ cart: cartItem }))
 
   }
- 
-  
+
+
 
   return (
     <div className="min-h-screen ">
-       <Cartui />
 
       <Breadcrumb name={product?.name} />
 
@@ -156,11 +155,10 @@ export function ProductDetailss({ product }: { product: IProduct }) {
                   <div className="flex items-center gap-3">
                     <div className="flex items-center">
                       {[...Array(5)].map((_, i) => (
-                        <Star key={i} className={`w-5 h-5 ${
-                          i < Math.floor(product.ratings.average)
+                        <Star key={i} className={`w-5 h-5 ${i < Math.floor(product.ratings.average)
                             ? 'text-yellow-400'
                             : 'text-muted-foreground'
-                        }`} />
+                          }`} />
                       ))}
                     </div>
                     <span className="text-sm text-accent-foreground">
@@ -173,9 +171,8 @@ export function ProductDetailss({ product }: { product: IProduct }) {
                   className="p-3 rounded-full bg-background border border-border  transition-colors"
                 >
                   <Heart
-                    className={`w-6 h-6 ${
-                      isWishlisted ? 'fill-red-500 text-red-500' : 'text-muted-foreground'
-                    }`}
+                    className={`w-6 h-6 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-muted-foreground'
+                      }`}
                   />
                 </button>
               </div>
@@ -231,7 +228,7 @@ export function ProductDetailss({ product }: { product: IProduct }) {
                 {Object.entries(attributeGroups).map(([attrName, values]) => (
                   <div key={attrName}>
                     <label className="text-sm font-semibold text-accent-foreground mb-2 block capitalize">
-                      {attrName} 
+                      {attrName}
                       {!isVariant && product.selectedAttributes && product.selectedAttributes.length > 0 && (
                         <span className="text-red-500">*</span>
                       )}
@@ -241,7 +238,7 @@ export function ProductDetailss({ product }: { product: IProduct }) {
                         const isSelected = isVariant
                           ? selectedVariation?.name.includes(value)
                           : selectedAttributes[attrName] === value
-                        
+
                         return (
                           <Button
                             key={value}
@@ -261,9 +258,8 @@ export function ProductDetailss({ product }: { product: IProduct }) {
 
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className={`text-sm font-medium ${
-                  stock > 10 ? 'text-green-600' : stock > 0 ? 'text-orange-600' : 'text-red-600'
-                }`}>
+                <span className={`text-sm font-medium ${stock > 10 ? 'text-green-600' : stock > 0 ? 'text-orange-600' : 'text-red-600'
+                  }`}>
                   {stock > 10 ? `${stock} in stock` : stock > 0 ? 'Low stock' : 'Out of stock'}
                 </span>
                 {currentVariation && (
@@ -275,7 +271,7 @@ export function ProductDetailss({ product }: { product: IProduct }) {
                 <div className="flex items-center gap-4">
                   <span className="text-sm font-medium text-accent-foreground">Quantity:</span>
                   <div className="flex items-center border border-border rounded-lg">
-                    <Button 
+                    <Button
                       onClick={() => setQuantity(Math.max(1, quantity - 1))}
                       disabled={quantity === 1}
                       className="p-2 h-9.5 bg-muted  transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -314,6 +310,62 @@ export function ProductDetailss({ product }: { product: IProduct }) {
                 <Share2 className="w-5 h-5 mr-2" />
                 Share Product
               </Button>
+            </div>
+
+            <div className=" border rounded-xl overflow-hidden bg-background">
+              <div className="px-4 py-3 border-b bg-muted/50">
+                <h3 className="text-sm font-semibold text-accent-foreground">
+                  Shipping Zones
+                </h3>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead className="bg-muted/40">
+                    <tr>
+                      <th className="text-left px-4 py-2 font-medium text-muted-foreground">
+                        Area
+                      </th>
+                      <th className="text-right px-4 py-2 font-medium text-muted-foreground">
+                        Charge
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <tbody className="divide-y">
+                    {appSetting?.shipping?.shippingZones?.map((zone, i) => (
+                      <tr key={i} className="hover:bg-muted/30 transition-colors">
+                        <td className="px-4 py-2 text-accent-foreground">
+                          {zone.areaName}
+                        </td>
+
+                        <td className="px-4 py-2 text-right font-medium text-accent-foreground">
+                          {zone.fee === 0
+                            ? (
+                              <span className="text-green-600 font-semibold">
+                                Free
+                              </span>
+                            )
+                            : (
+                              `${CURRENCY} ${zone.fee.toLocaleString()}`
+                            )}
+                        </td>
+                      </tr>
+                    ))}
+
+                    {!appSetting?.shipping?.shippingZones?.length && (
+                      <tr>
+                        <td
+                          colSpan={2}
+                          className="px-4 py-6 text-center text-muted-foreground"
+                        >
+                          No shipping zones available
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>

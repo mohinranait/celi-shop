@@ -15,6 +15,7 @@ export async function GET(req: NextRequest) {
 
   const { searchParams } = req.nextUrl;
 
+   const search = searchParams.get("search") || "";
   const category  = searchParams.get("category");
   const brandParam = searchParams.get("brand");
   const minPrice  = searchParams.get("minPrice");
@@ -57,6 +58,13 @@ export async function GET(req: NextRequest) {
   if (minRating) {
     filter["ratings.average"] = { $gte: Number(minRating) };
   }
+
+   if (search) {
+      filter.$or = [
+        { name: { $regex: search, $options: "i" } },
+        { slug: { $regex: search, $options: "i" } },
+      ];
+    }
 
   const sortMap: Record<string, Record<string, 1 | -1>> = {
     price_asc:  { price: 1 },

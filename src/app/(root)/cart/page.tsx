@@ -20,9 +20,9 @@ export default function CartPage() {
   const dispatch = useAppDispatch()
   const [coupon, setCoupon] = useState("");
 
-  const delivery = 0;
+
   const discount = 0;
-  const total = subtotal + delivery - discount;
+  const total = subtotal  - discount;
 
   if (carts.length === 0) {
     return (
@@ -168,10 +168,7 @@ export default function CartPage() {
                     <span className="text-muted-foreground">Subtotal</span>
                     <span className="font-medium">{CURRENCY}{subtotal.toLocaleString("en-IN")}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Delivery Charge</span>
-                    <span>{CURRENCY}{delivery}</span>
-                  </div>
+                 
                   {/* <div className="flex justify-between text-green-600">
                     <span>Discount</span>
                     <span>-{CURRENCY}{discount}</span>

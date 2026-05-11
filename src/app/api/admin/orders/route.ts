@@ -28,8 +28,10 @@ export async function POST(req: Request) {
       payment,
       coupon,
       customerNote,
-      deliveryCharge
+      pricing
     } = body;
+
+   
 
     /* ---------------------------------------------------------------------- */
     /*                               VALIDATION                               */
@@ -198,8 +200,7 @@ export async function POST(req: Request) {
     /*                                PRICING                                 */
     /* ---------------------------------------------------------------------- */
 
-    const shippingCharge =
-      subtotal >= 1000 ? 0 : deliveryCharge || 0;
+    const shippingCharge = pricing?.shippingCharge || 0;
 
     let couponDiscount = 0;
 

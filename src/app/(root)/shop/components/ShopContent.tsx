@@ -24,6 +24,8 @@ const SORT_OPTIONS = [
 export function ShopContent() {
   const searchParams = useSearchParams();
 
+  const search = searchParams.get('search');
+
   const [activeCat, setActiveCat] = useState(searchParams.get('category') || '');
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [minPrice, setMinPrice] = useState(0);
@@ -41,12 +43,13 @@ export function ShopContent() {
   const queryParams = useMemo((): IProductFilterParams => {
     const p: IProductFilterParams = { sort, page, limit: 20 };
     if (activeCat) p.category = activeCat;
+    if (search) p.search = search;
     if (selectedBrands.length) p.brand = selectedBrands.join(',');
     if (minPrice > 0) p.minPrice = minPrice;
     if (maxPrice > 0) p.maxPrice = maxPrice;
     if (activeRating > 0) p.minRating = activeRating;
     return p;
-  }, [activeCat, selectedBrands, minPrice, maxPrice, activeRating, sort, page]);
+  }, [activeCat, selectedBrands, minPrice, maxPrice, activeRating, sort, page, search]);
 
   const { data: productData, isLoading } = useGetProductsForFiltersQuery(queryParams);
   const products = productData?.data || [];

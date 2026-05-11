@@ -257,10 +257,13 @@ const EcommerceCartDrawer = () => {
 
               {/* Buttons */}
               <div className="space-y-2 pt-2">
-                <Link href={'/checkout'} className="block">
+                <Link href={'/checkout'} className="block" onClick={() => {
+                  handleToggleCart();
+                }}>
                   <Button className="h-11 w-full text-base font-medium">
                     Proceed to Checkout
-                  </Button></Link>
+                  </Button>
+                </Link>
 
                 <Link href={'/cart'} className="block">
                   <Button

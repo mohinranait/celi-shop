@@ -7,4 +7,5 @@ export interface IProductFilterParams {
   minPrice?: number;
   maxPrice?: number;
   minRating?: number;
+  search?: string | null
 }

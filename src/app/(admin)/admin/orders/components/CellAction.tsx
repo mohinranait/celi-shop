@@ -53,7 +53,7 @@ const CellAction = ({ data, type }: Props) => {
   const handleEditAndRestore = () => {
     if (type === 'active') {
       // setIsOpen(true)
-      router.push(`/admin/products/form?pid=${data?._id}`)
+      router.push(`/admin/order/${data?._id}?mode=edit`)
     } else {
       softDelete("restore")
     }
