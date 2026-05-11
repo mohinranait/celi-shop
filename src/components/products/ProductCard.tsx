@@ -1,6 +1,6 @@
 'use client';
 import { IProduct } from "@/redux/service/products/type";
-import { HandCoins, ShoppingCart } from "lucide-react";
+import { HandCoins, ShoppingCart, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -71,7 +71,7 @@ const ProductCard = ({ product }: Props) => {
 
   const getPriceRange = () => {
     // SINGLE PRODUCT
-    
+
 
     // VARIANT PRODUCT
     if (
@@ -116,48 +116,48 @@ const ProductCard = ({ product }: Props) => {
       const finalPrice =
         originalPrice - discount;
 
-      return {finalPrice, price:originalPrice };
+      return { finalPrice, price: originalPrice };
     }
   }
 
   const productPrice = getPriceRange();
 
 
-   const handleAddToCart = (action:'cart'|'buy' = 'cart') => {
-      if (product.productType !== 'single' && product.selectedAttributes && product.selectedAttributes.length > 0) {
-        router.push(`/${product?.slug}`)
-        return;
-      }
-  
-      const sku =  'N/A'
-  
-      const cartItem: ICartItem = {
-        productId: product._id,
-        productName: product.name,
-        productSlug: product?.slug,
-        sku: sku || 'N/A',
-        quantity: 1,
-        productType: 'single',
-        price: (getSinglePrice()?.price || 0),
-        salePrice: (getSinglePrice()?.finalPrice || 0),
-        productImage: productImage,
-      }
-  
-  
-      dispatch(addToCart({cart:cartItem}))
+  const handleAddToCart = (action: 'cart' | 'buy' = 'cart') => {
+    if (product.productType !== 'single' && product.selectedAttributes && product.selectedAttributes.length > 0) {
+      router.push(`/${product?.slug}`)
+      return;
+    }
 
-      if(action === 'buy'){
-         router.push(`/checkout`)
-        return;
-      }
+    const sku = 'N/A'
 
-      toast.success("Added shopping cart")
-  
+    const cartItem: ICartItem = {
+      productId: product._id,
+      productName: product.name,
+      productSlug: product?.slug,
+      sku: sku || 'N/A',
+      quantity: 1,
+      productType: 'single',
+      price: (getSinglePrice()?.price || 0),
+      salePrice: (getSinglePrice()?.finalPrice || 0),
+      productImage: productImage,
     }
 
 
+    dispatch(addToCart({ cart: cartItem }))
+
+    if (action === 'buy') {
+      router.push(`/checkout`)
+      return;
+    }
+
+    toast.success("Added shopping cart")
+
+  }
+
+
   return (
-    <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg group cursor-pointer h-full py-2 px-2">
+    <Card className="overflow-hidden transition-all duration-300 hover:shadow-sm group cursor-pointer h-full py-2 px-2">
       {/* Product Image */}
       <div className={cn(" h-56 overflow-hidden rounded-md", !productImage && 'bg-secondary')}>
         {
@@ -182,17 +182,25 @@ const ProductCard = ({ product }: Props) => {
           </h4>
         </Link>
 
-        <Link href={`/${slug}`}>
-          <p className="text-sm text-muted-foreground mb-4 line-clamp-2 min-h-10">
-            {"No description available"}
-          </p>
-        </Link>
+        <div className="flex items-center gap-3 mb-2">
+          <div className="flex items-center">
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} className={`w-4 h-4 ${i < Math.floor(product.ratings.average)
+                  ? 'text-yellow-400'
+                  : 'text-muted-foreground'
+                }`} />
+            ))}
+          </div>
+          <span className="text-sm text-accent-foreground">
+            ({product.ratings.totalReviews} reviews)
+          </span>
+        </div>
 
         {/* Price + Variant */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between flex-wrap mb-4">
           {
             productType === 'single' ? <div className="flex gap-2 items-center">
-               <span className="text-2xl font-bold text-primary">
+              <span className="text-2xl font-bold text-primary">
                 {CURRENCY}{getSinglePrice()?.finalPrice}
               </span>
               <del className="text-xl text-muted-foreground">{CURRENCY}{(getSinglePrice()?.price || 0) - (getSinglePrice()?.finalPrice || 0)}</del>
@@ -212,7 +220,7 @@ const ProductCard = ({ product }: Props) => {
         </div>
 
         {/* Buttons */}
-        <div className="grid grid-cols-2 items-center gap-3 mt-auto">
+        <div className="grid sm:grid-cols-2 items-center gap-3 mt-auto">
           <Button className="w-full" variant={"outline"} onClick={() => handleAddToCart()}>
             <ShoppingCart className="w-4 h-4" />
             Add to Cart

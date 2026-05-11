@@ -131,11 +131,27 @@ const OrderItemTable = ({ order }: Props) => {
                       <div>
                         <p className="text-gray-700">{item?.productName}</p>
                         <p className="text-xs text-gray-500">
-                          {" "}
-                          {item?.selectedVariants &&
-                            Object.keys(item?.selectedVariants)?.map(
-                              (key) => `${key}:`
-                            )}
+                          {item?.selectedVariants && (
+                            <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+                              {Object.keys(
+                                item?.selectedVariants || {}
+                              ).map((key, index, array) => (
+                                <span
+                                  key={key}
+                                  className="capitalize"
+                                >
+                                  {key}:{" "}
+                                  {
+                                    item.selectedVariants &&
+                                    item.selectedVariants[key]
+                                  }
+
+                                  {index !== array.length - 1 &&
+                                    " • "}
+                                </span>
+                              ))}
+                            </p>
+                          )}
                         </p>
                       </div>
                     </div>

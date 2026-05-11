@@ -13,6 +13,7 @@ import {
   NotebookPen,
   Bolt,
   GitPullRequest,
+  Network,
 } from "lucide-react";
 
 export interface SidebarNavItem {
@@ -140,20 +141,19 @@ export const sidebarData: SidebarData = {
             },
           ],
         },
-        {
-          title: "Money Receipt",
-          icon: Notebook,
+          {
+          title: "Manage Order",
+          icon: Network ,
           items: [
             {
-              title: "New Receipt",
-              url: "/admin/receipt/new",
+              title: "All Orders",
+              url: "/admin/orders",
             },
-            {
-              title: "All posts",
-              url: "/admin/receipt/all",
-            },
+           
+            
           ],
         },
+      
         {
           title: "Media",
           url: "/admin/media",
@@ -164,16 +164,7 @@ export const sidebarData: SidebarData = {
           url: "/admin/setting",
           icon: Settings,
         },
-        {
-          title: "Leads",
-          url: "/admin/lead",
-          icon: NotebookPen,
-        },
-         {
-          title: "FAQ",
-          url: "/admin/faq",
-          icon: GitPullRequest,
-        },
+       
          {
           title: "Configurations",
           url: "/admin/configure",

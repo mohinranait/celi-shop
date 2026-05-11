@@ -11,14 +11,18 @@ import { CURRENCY } from "@/lib/envSecret";
 import { format } from "date-fns";
 import { PaymentStatusBadge } from "@/components/shared/render-status";
 import DeliveryTracker from "./DeliveryTracker";
+import { SuccessPageSkeleton } from "./SuccessSkeleton";
 
 const SuccessPageCompo = () => {
     const params = useSearchParams();
   const invoiceId = params.get('oid')
-  const { data } = useGetOrderByTrackingNumberQuery(invoiceId!, { skip: !invoiceId });
+  const { data, isLoading } = useGetOrderByTrackingNumberQuery(invoiceId!, { skip: !invoiceId });
 
   const order = data?.data;
   const items = order?.items || [];
+
+
+  if(isLoading) return <SuccessPageSkeleton />
 
   if (!order) return;
 

@@ -1,43 +1,91 @@
+'use client'
 import { Card } from '@/components/ui/card'
+import { PRODUCT_IMG } from '@/lib/default-import';
+import { useGetCategoriesQuery } from '@/redux/service/categories';
+import { ICategory } from '@/redux/service/categories/type';
+import Image from 'next/image';
 import Link from 'next/link'
-import React from 'react'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+
+
+
+const CategoryCard = ({ category }: { category: ICategory }) => {
+  return (
+    <div className="group flex flex-col items-center gap-3 p-6 rounded-2xl border border-border bg-background  transition-all duration-200 cursor-pointer">
+      <div className="  rounded-lg h-40 bg-muted border w-full border-border mb-4 flex items-center justify-center overflow-hidden shrink-0">
+        <div className="">
+          <Image
+            src={category?.thumbnail || `/${PRODUCT_IMG}`}
+            width={106}
+            height={106}
+            alt={category.name}
+            className="w-full h-full object-cover rounded-xl"
+          />
+        </div>
+
+      </div>
+      <div className="text-center">
+        <p className="text-xl font-semibold text-foreground line-clamp-2">
+          {category.name}
+        </p>
+
+        <p className="text-xs text-muted-foreground mt-0.5">
+          12 items
+        </p>
+
+      </div>
+    </div>
+  );
+};
 
 const Categories = () => {
+  const { data, isLoading } = useGetCategoriesQuery('');
+  const categories = data?.data || [];
   return (
-    <section className="max-w-7xl mx-auto py-16 px-4">
+    <section>
+      <div className="container mx-auto py-16 px-4">
         <h3 className="text-3xl font-bold text-foreground mb-12 text-center">Shop by Category</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Link href="/shop?category=mens">
-            <Card className="p-8 text-center hover:shadow-lg transition cursor-pointer h-full">
-              <div className="bg-secondary rounded-lg h-40 flex items-center justify-center mb-4">
-                <span className="text-2xl">👔</span>
-              </div>
-              <h4 className="text-xl font-semibold text-foreground">Men&apos;s Collection</h4>
-              <p className="text-muted-foreground mt-2">Premium clothing and accessories</p>
-            </Card>
-          </Link>
+        {
+          isLoading ? <div className="container mx-auto grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="h-64 rounded-xl bg-muted animate-pulse" />
+            ))}
+          </div> : categories?.length === 0 ? <div className='h-20 flex items-center justify-center'>Category not found</div> :
+            <div className="relative">
 
-          <Link href="/shop?category=womens">
-            <Card className="p-8 text-center hover:shadow-lg transition cursor-pointer h-full">
-              <div className="bg-secondary rounded-lg h-40 flex items-center justify-center mb-4">
-                <span className="text-2xl">👗</span>
-              </div>
-              <h4 className="text-xl font-semibold text-foreground">Women&apos;s Collection</h4>
-              <p className="text-muted-foreground mt-2">Stylish and elegant wear</p>
-            </Card>
-          </Link>
+              <Carousel
+                opts={{
+                  align: "start",
+                  loop: true,
+                }}
+                className="w-full"
+              >
+                <CarouselContent className="-ml-2 md:-ml-3">
+                  {categories.map((category) => (
+                    <CarouselItem
+                      key={category._id}
+                      className="pl-2 md:pl-3 basis-1/2 sm:basis-1/3  lg:basis-1/4 xl:basis-1/5 "
+                    >
+                      <CategoryCard category={category} />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
 
-          <Link href="/shop?category=accessories">
-            <Card className="p-8 text-center hover:shadow-lg transition cursor-pointer h-full">
-              <div className="bg-secondary rounded-lg h-40 flex items-center justify-center mb-4">
-                <span className="text-2xl">⌚</span>
-              </div>
-              <h4 className="text-xl font-semibold text-foreground">Accessories</h4>
-              <p className="text-muted-foreground mt-2">Complete your look</p>
-            </Card>
-          </Link>
-        </div>
-      </section>
+                <CarouselPrevious className="hidden sm:flex left-2 lg:left-2" />
+                <CarouselNext className="hidden sm:flex right-2 lg:right-2" />
+              </Carousel>
+            </div>
+        }
+
+
+      </div>
+    </section>
   )
 }
 
