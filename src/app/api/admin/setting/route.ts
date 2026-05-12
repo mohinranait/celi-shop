@@ -29,10 +29,10 @@ export async function PATCH(req: NextRequest) {
 
 
     const body = await req.json();
-    console.log({body});
+    // console.log({body});
     
     const validatedData = appSettingsSchema.parse(body);
-    console.log({validatedData});
+    // console.log({validatedData});
 
     await connectDB();
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect,  useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 import { useGetAppSettingQuery, useUpdateAppSettingMutation } from '@/redux/service/setting';
 
@@ -92,7 +92,7 @@ export default function SettingsComponent() {
       for (let i = 0; i < keys.length - 1; i++) {
         obj = obj[keys[i]];
       }
-      
+
       obj[keys[keys.length - 1]] = value;
       return next;
     });
@@ -298,6 +298,24 @@ export default function SettingsComponent() {
                       />
                     )}
                   </div>
+                  <Separator />
+                  {/* Nagad */}
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="font-medium">Nagad</p>
+                      </div>
+                      <Switch checked={settings.paymentMethods?.nagad?.enabled} onCheckedChange={v => setValue('paymentMethods.nagad.enabled', v)} />
+                    </div>
+                    {settings.paymentMethods?.nagad?.enabled && (
+                      <Input
+                        value={settings.paymentMethods.nagad.merchantNumber || ''}
+                        onChange={e => setValue('paymentMethods.nagad.merchantNumber', e.target.value)}
+                        placeholder="Nagad Merchant Number"
+                      />
+                    )}
+                  </div>
+                  
 
                   <Separator />
 
@@ -337,7 +355,7 @@ export default function SettingsComponent() {
             )}
 
             {/* ==================== SHIPPING ==================== */}
-            {activeTab === 'shipping' && <ShippingTab shipping={settings?.shipping} onChange={setValue} /> }
+            {activeTab === 'shipping' && <ShippingTab shipping={settings?.shipping} onChange={setValue} />}
 
             {/* ==================== SEO ==================== */}
             {activeTab === 'seo' && (

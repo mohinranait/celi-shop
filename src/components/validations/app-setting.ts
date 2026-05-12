@@ -33,6 +33,7 @@ export const appSettingsSchema = z.object({
     stripe: z.object({ enabled: z.boolean(), publishableKey: z.string().optional() }),
     sslcommerz: z.object({ enabled: z.boolean(), storeId: z.string().optional() }),
     bKash: z.object({ enabled: z.boolean(), merchantNumber: z.string().optional() }),
+    nagad: z.object({ enabled: z.boolean(), merchantNumber: z.string().optional() }),
   }),
 
   shipping: z.object({

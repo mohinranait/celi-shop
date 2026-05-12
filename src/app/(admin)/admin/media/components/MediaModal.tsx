@@ -3,16 +3,18 @@
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { useGetMediasQuery } from "@/redux/service/media";
 import { IMedia } from "@/redux/service/media/type";
 import { Check } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import UploadMedia from "./UploadMedia";
 
 type Props = {
   open: boolean;
@@ -28,10 +30,10 @@ export default function MediaModal({
   imageLimit = "single",
 }: Props) {
   const { data, isLoading } = useGetMediasQuery("");
-
   const medias = data?.data?.medias || [];
 
   const [selectedImages, setSelectedImages] = useState<IMedia[]>([]);
+  const [activeTab, setActiveTab] = useState<"library" | "upload">("library");
 
   const onSelected = (image: IMedia) => {
     if (imageLimit === "single") {
@@ -41,11 +43,7 @@ export default function MediaModal({
 
     setSelectedImages((prev) => {
       const exists = prev.find((img) => img._id === image._id);
-
-      if (exists) {
-        return prev.filter((img) => img._id !== image._id);
-      }
-
+      if (exists) return prev.filter((img) => img._id !== image._id);
       return [...prev, image];
     });
   };
@@ -53,104 +51,123 @@ export default function MediaModal({
   const handleConfirm = () => {
     onSelect(selectedImages.map((img) => img.fileUrl));
     setOpen(false);
+    setSelectedImages([]);
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="min-w-6xl max-w-7xl h-[calc(100vh-200px)] flex flex-col">
-
-        {/* HEADER (fixed) */}
-        <DialogHeader className="border-b pb-3">
+      <DialogContent className="min-w-275 max-w-7xl h-[85vh] gap-0 flex flex-col p-0 overflow-hidden">
+        
+        {/* Header */}
+        <DialogHeader className="px-6 py-4 border-b">
           <DialogTitle>Media Library</DialogTitle>
         </DialogHeader>
 
-        {/* BODY */}
-        <div className="flex-1 overflow-y-auto p-1 mt-4">
-          {isLoading ? (
-            <p>Loading...</p>
-          ) : (
-            <div className="grid grid-cols-5 gap-3">
-              {medias.map((item) => {
-                const active = selectedImages.find(
-                  (img) => img._id === item._id
-                );
+        <Tabs
+          value={activeTab}
+          onValueChange={(v) => setActiveTab(v as "library" | "upload")}
+          className="flex flex-col flex-1 min-h-0"   
+        >
+          <TabsList className="flex  mx-6 mt-2">
+            <TabsTrigger value="library" className="cursor-pointer">Media Library</TabsTrigger>
+            <TabsTrigger value="upload" className="cursor-pointer">Upload New Media</TabsTrigger>
+          </TabsList>
 
-                return (
-                  <div
-                    key={item._id}
-                    onClick={() => onSelected(item)}
-                    className={`relative rounded-lg bg-gray-100 dark:bg-gray-800 border transition cursor-pointer ${
-                      active
-                        ? "ring-2 ring-primary"
-                        : "hover:shadow-md border-gray-200 dark:border-gray-700"
-                    }`}
-                  >
-                    {/* CHECK ICON */}
-                   
-                    <div
-                      className={`w-6 h-6 rounded border z-20 absolute top-2 right-2 flex items-center justify-center ${
-                        active ? "bg-primary text-white" : "bg-white/70"
-                      }`}
-                    >
-                      <Check size={14} />
-                    </div>
+          {/* ==================== LIBRARY TAB ==================== */}
+          <TabsContent 
+            value="library" 
+            className="flex-1 flex flex-col min-h-0 overflow-hidden "
+          >
+            <div className="flex-1 overflow-y-auto p-6 pt-2 custom-scroll">
+              {isLoading ? (
+                <div className="h-full flex items-center justify-center">
+                  <p className="text-lg">Loading media files...</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-5 gap-4 pb-6">
+                  {medias.map((item) => {
+                    const isActive = selectedImages.some(
+                      (img) => img._id === item._id
+                    );
 
-                    {/* IMAGE */}
-                    <div className="aspect-square relative">
-                      {item.fileUrl ? (
-                        <Image
-                          src={item.fileUrl}
-                          alt="image"
-                          fill
-                          className="object-cover rounded-lg"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <span className="text-xs text-gray-500">
-                            No Image
-                          </span>
+                    return (
+                      <div
+                        key={item._id}
+                        onClick={() => onSelected(item)}
+                        className={`relative rounded-xl bg-gray-100 dark:bg-gray-800 border transition-all cursor-pointer overflow-hidden group ${
+                          isActive
+                            ? "ring-2 ring-primary border-primary"
+                            : "hover:shadow-lg border-gray-200 dark:border-gray-700"
+                        }`}
+                      >
+                        <div className="aspect-square relative">
+                          <Image
+                            src={item.fileUrl}
+                            alt="media"
+                            fill
+                            className="object-cover"
+                          />
                         </div>
-                      )}
-                    </div>
 
-                    {/* FOOTER */}
-                    <div className="p-2 bg-white dark:bg-gray-900 rounded-b-lg">
-                      <p className="text-xs truncate">
-                        Extension: {item.extension}
-                      </p>
-                      <p className="text-xs text-gray-500">
-                        {(item.size / 1024 / 1024).toFixed(2)} MB
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
+                        {/* Check Icon */}
+                        <div
+                          className={`absolute top-3 right-3 z-20 w-7 h-7 rounded-full border flex items-center justify-center transition-all ${
+                            isActive
+                              ? "bg-primary text-white border-primary"
+                              : "bg-white/80 border-white group-hover:opacity-100 opacity-0"
+                          }`}
+                        >
+                          <Check size={16} />
+                        </div>
+
+                        {/* Info */}
+                        <div className="p-3 bg-white dark:bg-gray-900 text-xs">
+                          <p className="truncate">{item.extension?.toUpperCase()}</p>
+                          <p className="text-gray-500">
+                            {(item.size / 1024 / 1024).toFixed(2)} MB
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
-          )}
-        </div>
+          </TabsContent>
 
-        {/* FOOTER (fixed) */}
-        <DialogFooter className="border-t pt-3 flex justify-between">
-          <p className="text-sm text-gray-500">
-            {selectedImages.length} selected
-          </p>
+          {/* ==================== UPLOAD TAB ==================== */}
+          <TabsContent 
+            value="upload" 
+            className="flex-1 overflow-auto p-6 pt-2"
+          >
+            <UploadMedia />
+          </TabsContent>
+        </Tabs>
 
-          <div className="flex gap-2">
-            <button
-              onClick={() => setOpen(false)}
-              className="px-3 py-1 border rounded"
-            >
-              Cancel
-            </button>
+        {/* Footer */}
+        {activeTab === "library" && (
+          <div className="px-6  py-3 border-t flex justify-between items-center">
+            <p className="text-sm text-gray-500">
+              {selectedImages.length} image{selectedImages.length !== 1 ? "s" : ""} selected
+            </p>
 
-            <button
-              onClick={handleConfirm}
-              className="px-3 py-1 bg-primary text-white rounded"
-            >
-              Apply
-            </button>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setOpen(false)}
+                className="px-5 py-2 border rounded-lg hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirm}
+                disabled={selectedImages.length === 0}
+                className="px-5 py-2 bg-primary text-white rounded-lg disabled:opacity-50"
+              >
+                Apply
+              </button>
+            </div>
           </div>
-        </DialogFooter>
+        )}
       </DialogContent>
     </Dialog>
   );

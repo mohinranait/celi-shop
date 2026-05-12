@@ -37,13 +37,20 @@ export default function CheckoutPage() {
     fee: number;
   } | null>(null);
 
-  const deliveryCharge =  zone ? zone?.fee : 0;
+  const deliveryCharge = zone ? zone?.fee : 0;
   const discount = 0;
   const total = subtotal + deliveryCharge - discount;
 
   const zones = useMemo(() => {
     return appSetting?.shipping?.shippingZones || [];
   }, [appSetting?.shipping?.shippingZones]);
+
+  const paymentMethods = useMemo(() => {
+    return appSetting?.paymentMethods || {};
+  }, [appSetting])
+
+
+  
 
 
   const {

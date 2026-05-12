@@ -157,7 +157,10 @@ const ProductCard = ({ product }: Props) => {
 
 
   return (
-    <Card className="overflow-hidden transition-all duration-300 hover:shadow-sm group cursor-pointer h-full py-2 px-2">
+    <Card className="overflow-hidden transition-all duration-300 hover:shadow-sm group cursor-pointer h-full py-2 relative px-2">
+      <span className="w-12 h-12 rounded-full border text-[8px] flex items-center justify-center text-center absolute top-4 right-4 bg-white/70  ">
+        100  টাকা  ছাড় 
+      </span>
       {/* Product Image */}
       <div className={cn(" h-56 overflow-hidden rounded-md", !productImage && 'bg-secondary')}>
         {

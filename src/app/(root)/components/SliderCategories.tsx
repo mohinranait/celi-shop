@@ -43,8 +43,10 @@ const CategoryCard = ({ category }: { category: ICategory }) => {
 };
 
 const SliderCategories = () => {
-  const { data, isLoading } = useGetCategoriesQuery('');
+  const { data, isLoading } = useGetCategoriesQuery('page=1&limit=20&isDelete=false&status=true');
   const categories = data?.data || [];
+
+  const finalCategories = categories?.filter( cat => cat.thumbnail)
 
   return (
     <section className=" mx-auto py-16 px-4">
@@ -59,7 +61,7 @@ const SliderCategories = () => {
             {Array.from({ length: 5 }).map((_, i) => (
               <div key={i} className="h-40 rounded-xl bg-muted animate-pulse" />
             ))}
-          </div> : categories?.length === 0 ? <div className='h-20 flex items-center justify-center'>Category not found</div> : 
+          </div> : finalCategories?.length === 0 ? <div className='h-20 flex items-center justify-center'>Category not found</div> : 
             <div className="relative">
               <Carousel
                 opts={{
@@ -69,7 +71,7 @@ const SliderCategories = () => {
                 className="w-full"
               >
                 <CarouselContent className="-ml-2 md:-ml-3">
-                  {categories.map((category) => (
+                  {finalCategories.map((category) => (
                     <CarouselItem
                       key={category._id}
                       className="pl-2 md:pl-3 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6"

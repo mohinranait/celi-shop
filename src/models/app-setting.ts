@@ -46,6 +46,10 @@ export interface IAppSettings extends Document {
       enabled: boolean;
       merchantNumber?: string;
     };
+    nagad: {
+      enabled: boolean;
+      merchantNumber?: string;
+    };
   };
 
   // Shipping
@@ -129,6 +133,10 @@ const appSettingsSchema = new Schema<IAppSettings>(
         storeId: String,
       },
       bKash: {
+        enabled: { type: Boolean, default: false },
+        merchantNumber: String,
+      },
+      nagad: {
         enabled: { type: Boolean, default: false },
         merchantNumber: String,
       },
