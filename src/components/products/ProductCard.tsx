@@ -24,7 +24,6 @@ const ProductCard = ({ product }: Props) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const {
-    _id,
     name,
     slug,
     productType,
@@ -156,11 +155,36 @@ const ProductCard = ({ product }: Props) => {
   }
 
 
+  const getOfferCar = (): number => {
+    let discount = 0;
+    if (productType === "single") {
+      const price = getSinglePrice()?.price
+      const finalPrice = getSinglePrice()?.finalPrice
+      discount = (price || 0) - (finalPrice || 0)
+    }
+    else if (productType === 'variant') {
+      if (variations?.length) {
+        const offerVariant = variations.find(
+          (variant) => variant?.offerPriceFixed > 0
+        );
+
+        if (offerVariant) {
+          discount = offerVariant?.offerPriceFixed
+        }
+      }
+    }
+    return discount
+  }
+
+
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-sm group cursor-pointer h-full py-2 relative px-2">
-      <span className="w-12 h-12 rounded-full border text-[8px] flex items-center justify-center text-center absolute top-4 right-4 bg-white/70  ">
-        100  টাকা  ছাড় 
-      </span>
+      {
+        getOfferCar() > 0 &&
+        <span className="w-12 h-12 rounded-full border text-[8px] flex items-center justify-center text-center absolute top-4 right-4 bg-black/70 text-white z-10 p-[2px]  ">
+          {getOfferCar()}  টাকা  ছাড়
+        </span>
+      }
       {/* Product Image */}
       <div className={cn(" h-56 overflow-hidden rounded-md", !productImage && 'bg-secondary')}>
         {
@@ -189,8 +213,8 @@ const ProductCard = ({ product }: Props) => {
           <div className="flex items-center">
             {[...Array(5)].map((_, i) => (
               <Star key={i} className={`w-4 h-4 ${i < Math.floor(product.ratings.average)
-                  ? 'text-yellow-400'
-                  : 'text-muted-foreground'
+                ? 'text-yellow-400'
+                : 'text-muted-foreground'
                 }`} />
             ))}
           </div>
@@ -206,7 +230,10 @@ const ProductCard = ({ product }: Props) => {
               <span className="text-2xl font-bold text-primary">
                 {CURRENCY}{getSinglePrice()?.finalPrice}
               </span>
-              <del className="text-xl text-muted-foreground">{CURRENCY}{(getSinglePrice()?.price || 0) - (getSinglePrice()?.finalPrice || 0)}</del>
+              {
+                (getSinglePrice()?.price || 0) - (getSinglePrice()?.finalPrice || 0) > 0 &&
+                <del className="text-xl text-muted-foreground">{CURRENCY}{(getSinglePrice()?.price || 0) - (getSinglePrice()?.finalPrice || 0)}</del>
+              }
             </div> :
               <span className="text-2xl font-bold text-primary">
                 {productPrice}

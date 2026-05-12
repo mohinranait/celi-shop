@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Plus, Minus, ShoppingCart, Heart, Share2, Check, Star } from 'lucide-react'
+import { Plus, Minus, ShoppingCart, Heart, Share2, Check, Star, Handbag } from 'lucide-react'
 import { IProduct, IProductVariant } from '@/redux/service/products/type'
 import ImageGallary from './image-gallary'
 import Breadcrumb from './Breadcrumb'
@@ -12,11 +12,13 @@ import { useAppDispatch } from '@/hooks/hooks'
 import { addToCart } from '@/redux/features/cartSlice'
 import { CURRENCY } from '@/lib/envSecret'
 import { useGetAppSettingQuery } from '@/redux/service/setting'
+import { useRouter } from 'next/navigation'
 
 
 
 
 export function ProductDetailss({ product }: { product: IProduct }) {
+  const router = useRouter();
   const { data: appSetting } = useGetAppSettingQuery()
   const dispatch = useAppDispatch();
   const [quantity, setQuantity] = useState(1)
@@ -93,7 +95,7 @@ export function ProductDetailss({ product }: { product: IProduct }) {
     return true
   }
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (action:'cart'|"order" = 'cart') => {
     if (product.productType === 'single' && product.selectedAttributes && product.selectedAttributes.length > 0) {
       if (!areAllAttributesSelected()) {
         console.log('Please select all attributes before adding to cart')
@@ -131,6 +133,10 @@ export function ProductDetailss({ product }: { product: IProduct }) {
 
 
     dispatch(addToCart({ cart: cartItem }))
+
+    if(action === 'order'){
+      router.push('/checkout')
+    }
 
   }
 
@@ -294,8 +300,19 @@ export function ProductDetailss({ product }: { product: IProduct }) {
             </div>
 
             <div className="space-y-3 pt-4">
+              <div className='grid grid-cols-2 gap-3'>
               <Button
-                onClick={handleAddToCart}
+                onClick={() => handleAddToCart('order')}
+                disabled={stock === 0 || !areAllAttributesSelected()}
+                title={!areAllAttributesSelected() ? 'Please select all attributes' : stock === 0 ? 'Out of stock' : ''}
+                className="w-full h-12 text-base font-semibold  disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Handbag  className="w-5 h-5 mr-2"/>
+                Order Now
+              </Button>
+              <Button
+              variant={'outline'}
+                onClick={() => handleAddToCart('cart')}
                 disabled={stock === 0 || !areAllAttributesSelected()}
                 title={!areAllAttributesSelected() ? 'Please select all attributes' : stock === 0 ? 'Out of stock' : ''}
                 className="w-full h-12 text-base font-semibold  disabled:opacity-50 disabled:cursor-not-allowed"
@@ -303,6 +320,8 @@ export function ProductDetailss({ product }: { product: IProduct }) {
                 <ShoppingCart className="w-5 h-5 mr-2" />
                 Add to Cart
               </Button>
+
+              </div>
               <Button
                 variant="outline"
                 className="w-full h-12 text-base font-semibold border-slate-300"
