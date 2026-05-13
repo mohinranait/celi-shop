@@ -7,52 +7,7 @@ import { Card } from "../ui/card";
 import { useGetCategoriesQuery } from "@/redux/service/categories";
 import { ICategory } from "@/redux/service/categories/type";
 
-const categories = [
-  {
-    name: "Electronics",
-    slug: "electronics",
-    children: [
-      "Mobiles",
-      "Laptops",
-      "Smart Watch",
-      "Headphones",
-      "Camera",
-    ],
-  },
-  {
-    name: "Fashion",
-    slug: "fashion",
-    children: [
-      "Men Clothing",
-      "Women Clothing",
-      "Shoes",
-      "Bags",
-      "Watches",
-    ],
-  },
-  {
-    name: "Home & Living",
-    slug: "home-living",
-    children: [
-      "Furniture",
-      "Kitchen",
-      "Lighting",
-      "Decor",
-      "Storage",
-    ],
-  },
-  {
-    name: "Beauty",
-    slug: "beauty",
-    children: [
-      "Skin Care",
-      "Hair Care",
-      "Makeup",
-      "Perfume",
-      "Tools",
-    ],
-  },
-];
+
 
 export interface ICategoryTree extends ICategory {
   children: ICategoryTree[];
@@ -75,7 +30,7 @@ const NavigationMenus = () => {
   console.log(categoriesTree);
 
   return (
-    <div className="bg-primary py-2">
+    <div className="hidden md:block bg-primary py-2">
       <div className="container mx-auto">
         <nav className="hidden md:flex items-center justify-center gap-8 relative">
           <Link
@@ -148,7 +103,7 @@ const NavigationMenus = () => {
                 </div>
 
                 {/* Bottom Banner */}
-                <div className="mt-8 rounded-xl bg-gradient-to-r from-primary/10 to-primary/5 p-6 flex items-center justify-between">
+                <div className="mt-8 rounded-xl bg-linear-to-r from-primary/10 to-primary/5 p-6 flex items-center justify-between">
                   <div>
                     <h4 className="text-lg font-semibold">
                       New Summer Collection

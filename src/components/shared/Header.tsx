@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Menu, X, Search, ShoppingCart, User } from "lucide-react";
+import { Menu, X, Search, ShoppingCart, User, ShoppingBag } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { setLoginModalOpen } from "@/redux/features/uiSlice";
@@ -22,6 +22,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { MobileMenu } from "./MobileMenu";
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -59,6 +60,10 @@ export default function Header() {
       {/* Main header */}
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between gap-4">
+
+            {/* Mobile Menu Button - 3 Dot / Hamburger stays here */}
+            <MobileMenu />
+
           {/* Logo */}
           <Link href="/" className="shrink-0">
             <h1 className="text-2xl font-bold text-foreground">CeliShop</h1>
@@ -89,7 +94,7 @@ export default function Header() {
             {user ? (
               <span
                 onClick={handleLogout}
-                className="inline-flex gap-2 items-center cursor-pointer hover:text-primary transition-colors"
+                className=" hidden md:inline-flex gap-2 items-center cursor-pointer hover:text-primary transition-colors"
               >
                 <User className="h-5 w-5" />
                 {user?.name}
@@ -98,7 +103,7 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="hidden sm:flex items-center gap-2"
+                className="hidden md:flex items-center gap-2"
                 type="button"
                 onClick={() => dispatch(setLoginModalOpen({ isOpen: true }))}
               >
@@ -110,76 +115,19 @@ export default function Header() {
             {/* Cart */}
             <Button
               variant="ghost"
-              size="sm"
+              size="icon"
               className="relative"
               onClick={() => dispatch(toggleCartDroware())}
             >
-              <ShoppingCart className="h-5 w-5" />
+              <ShoppingBag className="h-55 w-5" />
+              {/* <ShoppingCart className="h-5 w-5" /> */}
               <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full h-5 w-5 flex items-center justify-center">
                 {totalItems}
               </span>
             </Button>
 
-            {/* Mobile Menu Button - 3 Dot / Hamburger stays here */}
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden">
-                  <Menu className="h-6 w-6" />
-                </Button>
-              </SheetTrigger>
-
-              <SheetContent side="left" className="w-80">
-                <SheetHeader>
-                  <SheetTitle className="text-left text-2xl font-bold">
-                    CeliShop
-                  </SheetTitle>
-                </SheetHeader>
-
-                <div className="mt-8 flex flex-col gap-6">
-                  <nav className="flex flex-col gap-1">
-                    <Link
-                      href="/shop"
-                      className="block px-4 py-3 text-lg font-medium hover:bg-secondary rounded-lg transition-colors"
-                    >
-                      🛍️ Shop All
-                    </Link>
-                    <Link
-                      href="/shop?category=mens"
-                      className="block px-4 py-3 text-lg font-medium hover:bg-secondary rounded-lg transition-colors"
-                    >
-                      👕 Men
-                    </Link>
-                    <Link
-                      href="/shop?category=womens"
-                      className="block px-4 py-3 text-lg font-medium hover:bg-secondary rounded-lg transition-colors"
-                    >
-                      👗 Women
-                    </Link>
-                    <Link
-                      href="/shop?category=accessories"
-                      className="block px-4 py-3 text-lg font-medium hover:bg-secondary rounded-lg transition-colors"
-                    >
-                      ⌚ Accessories
-                    </Link>
-                  </nav>
-
-                  <div className="border-t pt-6">
-                    {!user && (
-                      <div className="flex flex-col gap-3 px-4">
-                        <Link href="/login">
-                          <Button variant="outline" className="w-full">
-                            Login
-                          </Button>
-                        </Link>
-                        <Link href="/register">
-                          <Button className="w-full">Sign Up</Button>
-                        </Link>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
+          
+          
           </div>
         </div>
 
@@ -191,9 +139,9 @@ export default function Header() {
               placeholder="Search products..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="rounded-r-none border-r-0"
+              className="rounded-r-none border-r-0 h-9"
             />
-            <Button type="submit" size="sm" className="rounded-l-none">
+            <Button type="submit" size="sm" className="rounded-l-none h-9">
               <Search className="h-4 w-4" />
             </Button>
           </div>
