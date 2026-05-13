@@ -52,7 +52,7 @@ export interface IShippingAddress {
 /*                              PAYMENT TYPE                                  */
 /* -------------------------------------------------------------------------- */
 
-type TPaymentMethod =  "COD" | "BKASH" ;
+export type TPaymentMethod =  "COD" | "BKASH" | "NAGAD";
 export type TPaymentStatus =  "PENDING" | "PAID" | "FAILED" | "REFUNDED";
 export interface IPayment {
   method: TPaymentMethod;

@@ -8,7 +8,7 @@ export const checkoutSchema = z.object({
     postalCode: z.string().optional().nullable()
   }),
   payment: z.object({
-    method: z.enum(['COD', "BKASH"]).default("COD"),
+    method: z.enum(['COD', "BKASH","NAGAD"]).default("COD"),
     status: z.enum(["PENDING", "PAID", "FAILED", "REFUNDED"]).default("PENDING"),
     transactionId: z.string().optional().nullable(),
   }),
@@ -20,14 +20,17 @@ export const checkoutSchema = z.object({
   deliveryCharge: z.coerce.number().optional().nullable(),
   customerNote: z.string().optional(),
 }).superRefine((data, ctx) => {
-  if (
-    data.payment.method === "BKASH" &&
-    (!data.payment.transactionId || data.payment.transactionId.trim() === "")
-  ) {
+  const method = data.payment.method;
+  const txId = data.payment.transactionId;
+
+
+  if ((method === "BKASH" || method === "NAGAD") && 
+      (!txId || typeof txId === "string" && txId.trim() === "")) {
+    
     ctx.addIssue({
       path: ["payment", "transactionId"],
       code: "custom",
-      message: "Transaction ID is required for bKash payment",
+      message: `Transaction ID is required for ${method} payment`,
     });
   }
 });

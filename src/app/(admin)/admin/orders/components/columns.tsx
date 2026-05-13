@@ -43,7 +43,11 @@ const tableColumns = ({ type = 'active' }: { type: "active" | "deleted" }) => {
       accessorKey: "payment.method",
       header: "Method",
       cell: ({ row }) => {
-        return <span> {row?.original?.payment.method}</span>
+        const method = row?.original?.payment.method;
+        return <div> 
+          <p>{method}</p>
+          <Badge variant={"outline"}>T. ID: {method === 'BKASH' || method === 'NAGAD' && row?.original?.payment?.transactionId || '--'}</Badge>
+        </div>
       }
     },
      {

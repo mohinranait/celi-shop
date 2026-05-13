@@ -248,11 +248,7 @@ export async function POST(req: Request) {
 
       shippingAddress,
 
-      payment: {
-        method:
-          payment?.method || "COD",
-        status: "PENDING",
-      },
+      payment,
 
       customerNote: customerNote || "",
 
