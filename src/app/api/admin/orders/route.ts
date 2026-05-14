@@ -31,8 +31,6 @@ export async function POST(req: Request) {
       pricing
     } = body;
 
-   
-
     /* ---------------------------------------------------------------------- */
     /*                               VALIDATION                               */
     /* ---------------------------------------------------------------------- */
@@ -46,154 +44,98 @@ export async function POST(req: Request) {
     }
 
     /* ---------------------------------------------------------------------- */
-    /*                              ORDER ITEMS                               */
+    /*                              PROCESS ORDER ITEMS                       */
     /* ---------------------------------------------------------------------- */
 
     const orderItems = [];
-
     let subtotal = 0;
     let totalQuantity = 0;
 
     for (const cartItem of items) {
-      const product = await Product.findById(
-        cartItem.productId
-      ).session(session);
+      const product = await Product.findById(cartItem.productId).session(session);
 
       if (!product) {
-        throw new Error("Product not found");
+        throw new Error(`Product not found: ${cartItem.productName}`);
       }
 
+      const { productType, quantity: requestedQty, variationId } = cartItem;
 
-      const productType = cartItem?.productType;
+      /* --------------------------- STOCK CHECK & UPDATE --------------------------- */
 
+      if (productType === "single") {
+        // Single Product
+        if ((product.stock || 0) < requestedQty) {
+          throw new Error(
+            `Insufficient stock for ${product.name}. Available: ${product.stock || 0}, Requested: ${requestedQty}`
+          );
+        }
 
+        // Update stock
+        await Product.updateOne(
+          { _id: product._id },
+          { $inc: { stock: -requestedQty } },
+          { session }
+        );
+      } 
+      else {
+        // Variant Product
+        if (!variationId) {
+          throw new Error(`Variation ID is required for ${product.name}`);
+        }
 
-      /* ------------------------------ PRICE ------------------------------- */
+        const variation = product.variations.find(
+          (v: any) => v._id.toString() === variationId.toString()
+        );
 
+        if (!variation) {
+          throw new Error(`Variation not found for ${product.name}`);
+        }
 
-      const itemSubtotal = cartItem.salePrice * cartItem.quantity;
+        if ((variation.stock || 0) < requestedQty) {
+          throw new Error(
+            `Insufficient stock for ${product.name} (${variation.name || 'Variant'}). ` +
+            `Available: ${variation.stock || 0}, Requested: ${requestedQty}`
+          );
+        }
 
+        // Update Variant stock + Root product stock
+        await Product.updateOne(
+          { 
+            _id: product._id, 
+            "variations._id": variationId 
+          },
+          {
+            $inc: {
+              "variations.$.stock": -requestedQty,
+              stock: -requestedQty,           // Root stock (sum of all variants)
+            },
+          },
+          { session }
+        );
+      }
+
+      /* ------------------------------ PRICE CALCULATION ------------------------------- */
+
+      const itemSubtotal = cartItem.salePrice * requestedQty;
       subtotal += itemSubtotal;
+      totalQuantity += requestedQty;
 
-      totalQuantity += cartItem.quantity;
-
-      /* ---------------------------- ORDER ITEM ---------------------------- */
+      /* ---------------------------- PUSH ORDER ITEM ---------------------------- */
 
       orderItems.push({
         productId: product._id,
-
         productName: cartItem.productName,
-
         productImage: cartItem.productImage,
-
         productSlug: cartItem.productSlug,
-
         sku: cartItem.sku || "",
-
-        quantity: cartItem.quantity,
-
+        quantity: requestedQty,
         price: cartItem.price,
-
         salePrice: cartItem.salePrice,
-
         subtotal: itemSubtotal,
-
-        selectedVariants:
-          cartItem.selectedVariants || {},
-
-        categoryName:
-          product?.category?.name || "",
-
-        brandName:
-          product?.brand?.name || "",
+        selectedVariants: cartItem.selectedVariants || {},
+        categoryName: product?.category?.name || "",
+        brandName: product?.brand?.name || "",
       });
-
-      /* --------------------------- STOCK UPDATE --------------------------- */
-
-
-      // update product quantity
-      if (productType === "single") {
-        if (product.stock < cartItem.quantity) {
-          throw new Error(
-            `${product.name} stock not available`
-          );
-        }
-
-        product.stock -= cartItem.quantity;
-      } else {
-        const findVariation =
-          product.variations.find(
-            (variant: any) =>
-              variant._id.toString() ===
-              cartItem.variationId
-          );
-
-        if (!findVariation) {
-          throw new Error(
-            `Variation not found`
-          );
-        }
-
-        if (
-          findVariation.stock <
-          cartItem.quantity
-        ) {
-          throw new Error(
-            `Variation stock not available`
-          );
-        }
-
-        // decrement variation stock
-        findVariation.stock -=
-          cartItem.quantity;
-
-        // recalculate total stock
-        product.stock =
-          product.variations.reduce(
-            (total: number, variation: { stock: number }) =>
-              total + variation.stock,
-            0
-          );
-      }
-
-      // await product.save({ session });
-
-      if (productType === "single") {
-        if (product.stock < cartItem.quantity) {
-          throw new Error(`${product.name} stock not available`);
-        }
-
-        await Product.updateOne(
-          { _id: product._id },
-          { $inc: { stock: -cartItem.quantity } },
-          { session, runValidators: false }
-        );
-
-      } else {
-        // variant product
-        const findVariation = product.variations.find(
-          (variant: any) => variant._id.toString() === cartItem.variationId
-        );
-
-        if (!findVariation) {
-          throw new Error(`Variation not found`);
-        }
-
-        if (findVariation.stock < cartItem.quantity) {
-          throw new Error(`Variation stock not available`);
-        }
-
-        await Product.updateOne(
-          { _id: product._id, "variations._id": cartItem.variationId },
-          {
-            $inc: {
-              "variations.$.stock": -cartItem.quantity,
-              stock: -cartItem.quantity,
-            },
-          },
-          { session, runValidators: false }
-        );
-      }
     }
 
     /* ---------------------------------------------------------------------- */
@@ -201,37 +143,25 @@ export async function POST(req: Request) {
     /* ---------------------------------------------------------------------- */
 
     const shippingCharge = pricing?.shippingCharge || 0;
-
-    let couponDiscount = 0;
-
-    if (coupon?.discountAmount) {
-      couponDiscount = coupon.discountAmount;
-    }
-
+    const couponDiscount = coupon?.discountAmount || 0;
     const total = subtotal - couponDiscount + shippingCharge;
 
+    /* ---------------------------------------------------------------------- */
+    /*                            INVOICE & TRACKING                          */
+    /* ---------------------------------------------------------------------- */
 
-    /* ---------------------------------------------------------------------- */
-    /*                            INVOICE NUMBER                              */
-    /* ---------------------------------------------------------------------- */
-    const number1 = Math.random().toString(36).slice(2, 7).toUpperCase();
-    const number2 = Math.random().toString(36).slice(2, 9).toUpperCase();
-    const invoiceNumber = `INV-${number1}`;
-    const trackingNumber = `tr-${number2}`
+    const invoiceNumber = `INV-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
+    const trackingNumber = `TR-${Math.random().toString(36).slice(2, 9).toUpperCase()}`;
 
     /* ---------------------------------------------------------------------- */
     /*                              CREATE ORDER                              */
     /* ---------------------------------------------------------------------- */
 
-
     const orderPayload = {
       userId: userId || null,
       items: orderItems,
-
       totalItems: orderItems.length,
-
       totalQuantity,
-
       pricing: {
         subtotal,
         discount: couponDiscount,
@@ -239,63 +169,39 @@ export async function POST(req: Request) {
         tax: 0,
         total,
       },
-
       coupon: {
         code: coupon?.code || "",
-        discountAmount:
-          couponDiscount,
+        discountAmount: couponDiscount,
       },
-
       shippingAddress,
-
       payment,
-
       customerNote: customerNote || "",
-
       orderStatus: "PENDING",
-
       invoiceNumber,
       trackingNumber,
     };
 
-    const order = await Order.create(
-      [
-        orderPayload
-      ],
-      { session }
-    );
-
-
-    /* ---------------------------------------------------------------------- */
-    /*                               COMMIT DB                                */
-    /* ---------------------------------------------------------------------- */
+    const order = await Order.create([orderPayload], { session });
 
     await session.commitTransaction();
 
     return NextResponse.json(
       {
         success: true,
-        message:
-          "Order created successfully",
+        message: "Order created successfully",
         data: order[0],
       },
-      {
-        status: 201,
-      }
+      { status: 201 }
     );
+
   } catch (error: any) {
     await session.abortTransaction();
-
     return NextResponse.json(
       {
         success: false,
-        message:
-          error.message ||
-          "Failed to create order",
+        message: error.message || "Failed to create order",
       },
-      {
-        status: 400,
-      }
+      { status: 400 }
     );
   } finally {
     session.endSession();

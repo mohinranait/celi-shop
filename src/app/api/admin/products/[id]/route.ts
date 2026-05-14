@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   await connectDB();
-  const {id}  = await params;
+  const { id } = await params;
   const product = await Product.findById(id);
   if (!product) return NextResponse.json({ error: "Not Found" }, { status: 404 });
   return NextResponse.json({ data: product });
@@ -15,13 +15,13 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: Promise< { id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
 
     const body = await req.json();
-     const { id } = await  params;
+    const { id } = await params;
 
     //  validate input
     const parsed = productSchema.safeParse(body);
@@ -53,7 +53,7 @@ export async function PATCH(
     }
 
     //  check duplicate slug (exclude current id)
-    if (slug  && slug !== existingProduct.slug) {
+    if (slug && slug !== existingProduct.slug) {
       const duplicate = await Product.findOne({
         slug,
         _id: { $ne: id },
@@ -70,10 +70,17 @@ export async function PATCH(
       }
     }
 
+
+    const { productType, variations, stock } = body;
+    let productStock = stock || 0;
+    if (productType === 'variant') {
+      productStock = variations.reduce((acc: number, varient: { stock: number }) => acc + varient.stock, 0)
+    }
+
     //  update product
     const updatedProduct = await Product.findByIdAndUpdate(
       id,
-      { ...body },
+      { ...body, stock: productStock },
       { new: true, runValidators: true }
     );
 
@@ -105,9 +112,9 @@ export async function DELETE(
   try {
     await connectDB();
 
-   
-     const { id } = await params;
-  
+
+    const { id } = await params;
+
 
     //  check product exists
     const product = await Product.findByIdAndDelete(id);
@@ -122,7 +129,7 @@ export async function DELETE(
       );
     }
 
-  
+
 
     return NextResponse.json(
       {

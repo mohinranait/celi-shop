@@ -178,23 +178,26 @@ const ProductCard = ({ product }: Props) => {
 
 
   const isStockOut = () => {
-    let isStock = true;
+    let isNotAvailable = false;
 
-    if (product.stock === 0) isStock = false;
+    if (product.stock === 0) isNotAvailable = true;
 
-    return isStock
+    return isNotAvailable
   }
 
 
   return (
     <Card className=" transition-all overflow-visible duration-300 hover:shadow-sm group cursor-pointer h-full py-2 relative px-2">
 
-{/* Stock Out  */}
-      <div className="w-37.5 h-37.5 absolute overflow-hidden -top-2.5 -right-2.5  z-30">
-        <span className="h-2.5 w-3 bg-red-700 absolute top-0 left-0"></span>
-        <span className="h-3 w-2.5 bg-red-700 absolute bottom-0 right-0"></span>
-        <span className="w-56.25 py-2.5 rotate-45 top-7.5 -left-6.25  absolute  border-l-0 text-center text-lg uppercase bg-[#ff115e] text-white before:w-0 before:h-0 before:border-l-4 before:border-red-600 before:rotate-45 before:absolute before:left-6.5 before:-bottom-1 before:bg-[#e9034c] font-semibold">Stock Out</span>
-      </div>
+      {/* Stock Out  */}
+      {
+        isStockOut() &&
+        <div className="w-37.5 h-37.5 absolute overflow-hidden -top-2.5 -right-2.5  z-30">
+          <span className="h-2.5 w-3 bg-red-700 absolute top-0 left-0"></span>
+          <span className="h-3 w-2.5 bg-red-700 absolute bottom-0 right-0"></span>
+          <span className="w-56.25 py-2.5 rotate-45 top-7.5 -left-6.25  absolute  border-l-0 text-center text-lg uppercase bg-[#ff115e] text-white before:w-0 before:h-0 before:border-l-4 before:border-red-600 before:rotate-45 before:absolute before:left-6.5 before:-bottom-1 before:bg-[#e9034c] font-semibold">Stock Out</span>
+        </div>
+      }
 
       {/* Discount  */}
       {
@@ -208,8 +211,8 @@ const ProductCard = ({ product }: Props) => {
 
         {
           isStockOut() &&
-          <div className="w-full h-full absolute top-0 left-0 bg-black/20 z-20 flex items-center justify-center">
-            {/* <span className="bg-[#ff115e] inline-flex py-2 px-4 rounded uppercase text-white">Stock Out</span> */}
+          <div className="w-full h-full absolute top-0 left-0 bg-black/40 z-20 flex items-center justify-center">
+            <span className="bg-white inline-flex py-2 px-4 rounded uppercase text-black">Stock Out</span>
           </div>
         }
         {
@@ -220,7 +223,7 @@ const ProductCard = ({ product }: Props) => {
               height={400}
               src={productImage}
               alt={name}
-              className={cn("w-full h-full object-contain rounded-md  transition-transform duration-500 group-hover:scale-105", isStockOut() && 'opacity-20')}
+              className={cn("w-full h-full object-contain rounded-md  transition-transform duration-500 group-hover:scale-105", )}
             />
           </Link>
         }
