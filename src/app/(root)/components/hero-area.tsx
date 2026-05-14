@@ -11,9 +11,12 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { useGetSlidersQuery } from '@/redux/service/sliders';
+import { useGetAppSettingQuery } from '@/redux/service/setting';
 
 const HeroSection = () => {
   const { data } = useGetSlidersQuery(`page=1&limit=10&isDelete=false&status=true`);
+  const {data:appSetting} = useGetAppSettingQuery();
+  const isBanner = appSetting?.features?.bannerSlider;
 
   //  Filter valid sliders only ===
   const validSliders = React.useMemo(() => {
@@ -34,7 +37,9 @@ const HeroSection = () => {
     return null;
   }
 
-  return (
+
+
+  return isBanner &&  (
     <section>
       <div className="container pt-4 mx-auto">
         <div className="relative">

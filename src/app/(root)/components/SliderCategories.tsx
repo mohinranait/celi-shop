@@ -18,13 +18,15 @@ const CategoryCard = ({ category }: { category: ICategory }) => {
   return (
     <div className="group flex flex-col items-center gap-3 p-4 rounded-2xl border border-border bg-background hover:bg-muted hover:border-foreground/20 transition-all duration-200 cursor-pointer">
       <div className="w-14 h-14 rounded-xl bg-muted border border-border flex items-center justify-center overflow-hidden shrink-0">
+        <Link href={`/shop?category=${category?._id}`}>
         <Image
           src={category?.thumbnail || `/${PRODUCT_IMG}`}
           width={56}
           height={56}
           alt={category.name}
           className="w-full h-full object-cover rounded-xl"
-        />
+          />
+          </Link>
       </div>
       <div className="text-center">
         <Link href={`/shop?category=${category?._id}`}>

@@ -21,11 +21,14 @@ import {
   Truck,
   ToggleLeft,
   Save,
-  Globe
+  Globe,
+  LayoutTemplate
 } from 'lucide-react';
 import LeftBar from './LeftBar';
 import { IAppSettings } from '@/models/app-setting';
 import ShippingTab from './ShippingTab';
+import FeaturesTab from './FeaturesTab';
+import LayoutTab from './LayoutTab';
 
 export const tabs = [
   { id: 'general', label: 'General', icon: Settings },
@@ -34,6 +37,7 @@ export const tabs = [
   { id: 'shipping', label: 'Shipping', icon: Truck },
   { id: 'seo', label: 'SEO', icon: Globe },
   { id: 'features', label: 'Features', icon: ToggleLeft },
+  { id: 'layouts', label: 'Layouts', icon: LayoutTemplate },
 ];
 
 export type TShippingZone = {
@@ -49,21 +53,8 @@ const platforms: SocialPlatform[] = [
 ];
 
 
-type FeatureKey =
-  | "wishlist"
-  | "productReview"
-  | "couponSystem"
-  | "flashSale"
-  | "multiVendor"
-  | "blog";
-const featureList: { key: FeatureKey; label: string }[] = [
-  { key: "wishlist", label: "Wishlist System" },
-  { key: "productReview", label: "Product Reviews" },
-  { key: "couponSystem", label: "Coupon System" },
-  { key: "flashSale", label: "Flash Sale" },
-  { key: "multiVendor", label: "Multi-Vendor Support" },
-  { key: "blog", label: "Blog System" },
-];
+
+
 export default function SettingsComponent() {
   const { data: serverData, isLoading } = useGetAppSettingQuery();
   const [updateSettings, { isLoading: isSaving }] = useUpdateAppSettingMutation();
@@ -398,23 +389,12 @@ export default function SettingsComponent() {
 
             {/* ==================== FEATURES ==================== */}
             {activeTab === 'features' && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Feature Management</CardTitle>
-                  <CardDescription>Enable or disable website features</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {featureList.map((f) => (
-                    <div key={f.key} className="flex items-center justify-between py-3 border-b last:border-0">
-                      <p className="font-medium">{f.label}</p>
-                      <Switch
-                        checked={settings.features?.[f.key]}
-                        onCheckedChange={(v) => setValue(`features.${f.key}`, v)}
-                      />
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
+             <FeaturesTab settings={settings} callBack={(key:string, value:boolean) => setValue(key, value) } />
+            )}
+
+            {/* ==================== Layouts ==================== */}
+             {activeTab === 'layouts' && (
+             <LayoutTab settings={settings} callBack={(key:string, value: number) => setValue(key, value) } />
             )}
 
           </div>

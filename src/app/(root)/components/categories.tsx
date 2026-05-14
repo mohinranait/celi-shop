@@ -19,21 +19,25 @@ const CategoryCard = ({ category }: { category: ICategory }) => {
   return (
     <div className="group flex flex-col items-center gap-3 p-6 rounded-2xl border border-border bg-background  transition-all duration-200 cursor-pointer">
       <div className="  rounded-lg h-40 bg-transparent  w-full border-border mb-4 flex items-center justify-center overflow-hidden shrink-0">
-        <div className="">
-          <Image
-            src={category?.thumbnail || `/${PRODUCT_IMG}`}
-            width={106}
-            height={106}
-            alt={category.name}
-            className="w-full h-full object-cover rounded-xl"
-          />
-        </div>
+        <Link href={`/shop?category=${category?._id}`}>
+          <div className="">
+            <Image
+              src={category?.thumbnail || `/${PRODUCT_IMG}`}
+              width={106}
+              height={106}
+              alt={category.name}
+              className="w-full h-full object-cover rounded-xl"
+            />
+          </div>
+        </Link>
 
       </div>
       <div className="text-center">
-        <p className="text-xl font-semibold text-foreground line-clamp-2">
-          {category.name}
-        </p>
+        <Link href={`/shop?category=${category?._id}`}>
+          <p className="text-xl font-semibold text-foreground line-clamp-2">
+            {category.name}
+          </p>
+        </Link>
 
         <p className="text-xs text-muted-foreground mt-0.5">
           12 items
@@ -45,10 +49,10 @@ const CategoryCard = ({ category }: { category: ICategory }) => {
 };
 
 const Categories = () => {
- const { data, isLoading } = useGetCategoriesQuery('page=1&limit=20&isDelete=false&status=true');
+  const { data, isLoading } = useGetCategoriesQuery('page=1&limit=20&isDelete=false&status=true');
   const categories = data?.data || [];
 
-  const finalCategories = categories?.filter( cat => cat.thumbnail)
+  const finalCategories = categories?.filter(cat => cat.thumbnail)
   return (
     <section>
       <div className="container mx-auto py-16 px-4">

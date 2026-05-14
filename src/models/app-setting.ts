@@ -76,7 +76,15 @@ export interface IAppSettings extends Document {
     flashSale: boolean;
     multiVendor: boolean;
     blog: boolean;
+    bannerSlider: boolean;
+    guestOrder: boolean;
   };
+
+
+  layouts: {
+    categorySection: number;
+    header: number;
+  },
 
   // Social
   socialLinks: {
@@ -142,6 +150,17 @@ const appSettingsSchema = new Schema<IAppSettings>(
       },
     },
 
+    layouts: {
+      categorySection: {
+        type: Number,
+        default: 1,
+      },
+      header: {
+        type: Number,
+        default: 1,
+      }
+    },
+
     shipping: {
       freeShippingThreshold: { type: Number, default: 0 },
       defaultShippingFee: { type: Number, default: 60 },
@@ -165,6 +184,8 @@ const appSettingsSchema = new Schema<IAppSettings>(
       flashSale: { type: Boolean, default: true },
       multiVendor: { type: Boolean, default: false },
       blog: { type: Boolean, default: true },
+      bannerSlider: { type: Boolean, default: true },
+      guestOrder: { type: Boolean, default: true },
     },
 
     socialLinks: {

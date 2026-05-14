@@ -57,6 +57,13 @@ export const appSettingsSchema = z.object({
     flashSale: z.boolean(),
     multiVendor: z.boolean(),
     blog: z.boolean(),
+    bannerSlider: z.boolean(),
+    guestOrder: z.boolean(),
+  }),
+
+  layouts: z.object({
+    categorySection: z.coerce.number().default(1),
+    header: z.coerce.number().default(1),
   }),
 
   socialLinks: z.object({

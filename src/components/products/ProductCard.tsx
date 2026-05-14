@@ -177,16 +177,41 @@ const ProductCard = ({ product }: Props) => {
   }
 
 
+  const isStockOut = () => {
+    let isStock = true;
+
+    if (product.stock === 0) isStock = false;
+
+    return isStock
+  }
+
+
   return (
-    <Card className="overflow-hidden transition-all duration-300 hover:shadow-sm group cursor-pointer h-full py-2 relative px-2">
+    <Card className=" transition-all overflow-visible duration-300 hover:shadow-sm group cursor-pointer h-full py-2 relative px-2">
+
+{/* Stock Out  */}
+      <div className="w-37.5 h-37.5 absolute overflow-hidden -top-2.5 -right-2.5  z-30">
+        <span className="h-2.5 w-3 bg-red-700 absolute top-0 left-0"></span>
+        <span className="h-3 w-2.5 bg-red-700 absolute bottom-0 right-0"></span>
+        <span className="w-56.25 py-2.5 rotate-45 top-7.5 -left-6.25  absolute  border-l-0 text-center text-lg uppercase bg-[#ff115e] text-white before:w-0 before:h-0 before:border-l-4 before:border-red-600 before:rotate-45 before:absolute before:left-6.5 before:-bottom-1 before:bg-[#e9034c] font-semibold">Stock Out</span>
+      </div>
+
+      {/* Discount  */}
       {
         getOfferCar() > 0 &&
-        <span className="w-12 h-12 rounded-full border text-[8px] flex items-center justify-center text-center absolute top-4 right-4 bg-black/70 text-white z-10 p-[2px]  ">
+        <span className="w-12 h-12 rounded-full  text-[8px]  flex items-center justify-center text-center absolute top-4 right-4 bg-white text-black z-10 p-1 before:w-12 before:h-12 before:rounded-full before:bg-transparent before:left-0 before:top-0 before:right-0 before:bottom-0 before:absolute before:border-dashed before:border-2 before:border-primary before:animate-spin  before:animation-duration-[7s]  ">
           {getOfferCar()}  টাকা  ছাড়
         </span>
       }
       {/* Product Image */}
-      <div className={cn(" h-56 overflow-hidden rounded-md", !productImage && 'bg-secondary')}>
+      <div className={cn(" h-56 overflow-hidden relative rounded-md", !productImage && 'bg-secondary')}>
+
+        {
+          isStockOut() &&
+          <div className="w-full h-full absolute top-0 left-0 bg-black/20 z-20 flex items-center justify-center">
+            {/* <span className="bg-[#ff115e] inline-flex py-2 px-4 rounded uppercase text-white">Stock Out</span> */}
+          </div>
+        }
         {
           productImage &&
           <Link href={`/${slug}`} className="rounded-md bg-red-800">
@@ -195,7 +220,7 @@ const ProductCard = ({ product }: Props) => {
               height={400}
               src={productImage}
               alt={name}
-              className="w-full h-full object-contain rounded-md transition-transform duration-500 group-hover:scale-105"
+              className={cn("w-full h-full object-contain rounded-md  transition-transform duration-500 group-hover:scale-105", isStockOut() && 'opacity-20')}
             />
           </Link>
         }
@@ -251,12 +276,12 @@ const ProductCard = ({ product }: Props) => {
 
         {/* Buttons */}
         <div className="grid sm:grid-cols-2 items-center gap-3 mt-auto">
-          <Button className="w-full" variant={"outline"} onClick={() => handleAddToCart()}>
+          <Button disabled={isStockOut()} className="w-full" variant={"outline"} onClick={() => handleAddToCart()}>
             <ShoppingCart className="w-4 h-4" />
             Add to Cart
           </Button>
 
-          <Button className="w-full" onClick={() => handleAddToCart('buy')}>
+          <Button disabled={isStockOut()} className="w-full" onClick={() => handleAddToCart('buy')}>
             <HandCoins className="w-4 h-4" />
             Order Now
           </Button>
