@@ -14,6 +14,7 @@ import {
   Bolt,
   GitPullRequest,
   Network,
+  Users,
 } from "lucide-react";
 
 export interface SidebarNavItem {
@@ -141,13 +142,25 @@ export const sidebarData: SidebarData = {
             },
           ],
         },
-          {
+        {
           title: "Manage Order",
           icon: Network ,
           items: [
             {
               title: "All Orders",
               url: "/admin/orders",
+            },
+           
+            
+          ],
+        },
+        {
+          title: "Users",
+          icon: Users ,
+          items: [
+            {
+              title: "All Users",
+              url: "/admin/users",
             },
            
             
