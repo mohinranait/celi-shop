@@ -10,7 +10,11 @@ type FeatureKey =
   | "multiVendor"
   | "blog"
   | "bannerSlider"
-  | "guestOrder";
+  | "guestOrder"
+  | "latestSection"
+  | "offerSection"
+  | "featureSection"
+  | "bestSelling";
 const featureList: { key: FeatureKey; label: string }[] = [
   { key: "wishlist", label: "Wishlist System" },
   { key: "productReview", label: "Product Reviews" },
@@ -20,6 +24,10 @@ const featureList: { key: FeatureKey; label: string }[] = [
   { key: "blog", label: "Blog System" },
   { key: "bannerSlider", label: "Banner Slider" },
   { key: "guestOrder", label: "Guest Order" },
+  { key: "latestSection", label: "Latest Section" },
+  { key: "offerSection", label: "Offer Section" },
+  { key: "featureSection", label: "Feature Section" },
+  { key: "bestSelling", label: "Best Selling" },
 ];
 
 
@@ -27,7 +35,7 @@ type Props = {
   settings: IAppSettings;
   callBack: (key: string, value: boolean) => void
 }
-const FeaturesTab = ({ settings,callBack }: Props) => {
+const FeaturesTab = ({ settings, callBack }: Props) => {
   return (
     <Card>
       <CardHeader>

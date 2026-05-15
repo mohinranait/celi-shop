@@ -100,8 +100,7 @@ export default function Header() {
               </span>
             ) : (
               <Button
-                variant="ghost"
-                size="sm"
+                variant="default"
                 className="hidden md:flex items-center gap-2"
                 type="button"
                 onClick={() => dispatch(setLoginModalOpen({ isOpen: true }))}

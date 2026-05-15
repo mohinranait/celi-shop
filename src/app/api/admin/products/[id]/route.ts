@@ -77,6 +77,9 @@ export async function PATCH(
       productStock = variations.reduce((acc: number, varient: { stock: number }) => acc + varient.stock, 0)
     }
 
+    // console.log({productStock});
+    
+
     //  update product
     const updatedProduct = await Product.findByIdAndUpdate(
       id,

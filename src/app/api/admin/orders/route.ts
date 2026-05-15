@@ -73,7 +73,7 @@ export async function POST(req: Request) {
         // Update stock
         await Product.updateOne(
           { _id: product._id },
-          { $inc: { stock: -requestedQty } },
+          { $inc: { stock: -requestedQty, totalSold: requestedQty } },
           { session }
         );
       } 
@@ -108,6 +108,7 @@ export async function POST(req: Request) {
             $inc: {
               "variations.$.stock": -requestedQty,
               stock: -requestedQty,           // Root stock (sum of all variants)
+              totalSold: requestedQty,
             },
           },
           { session }

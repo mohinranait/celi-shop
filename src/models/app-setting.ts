@@ -79,6 +79,10 @@ export interface IAppSettings extends Document {
     blog: boolean;
     bannerSlider: boolean;
     guestOrder: boolean;
+    latestSection: boolean;
+    offerSection: boolean;
+    featureSection: boolean;
+    bestSelling: boolean;
   };
 
 
@@ -188,6 +192,10 @@ const appSettingsSchema = new Schema<IAppSettings>(
       blog: { type: Boolean, default: true },
       bannerSlider: { type: Boolean, default: true },
       guestOrder: { type: Boolean, default: true },
+      latestSection: { type: Boolean, default: true },
+      offerSection: { type: Boolean, default: true },
+      featureSection: { type: Boolean, default: true },
+      bestSelling: { type: Boolean, default: true },
     },
 
     socialLinks: {

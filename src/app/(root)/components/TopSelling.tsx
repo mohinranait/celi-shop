@@ -1,19 +1,16 @@
 "use client";
 import ProductCard from "@/components/products/ProductCard";
-import SectionHeader from "@/components/shared/SectionHeader";
+import { useGetClientProductsQuery } from "@/redux/client/products";
+import React from "react";
 
-import { useGetProductsQuery } from "@/redux/service/products";
 
+const TopSelling = () => {
 
-const HomeProducts = () => {
-
-  const { data, isLoading } = useGetProductsQuery(`page=1&limit=8`);
+  const { data, isLoading } = useGetClientProductsQuery(`page=1&limit=8&type=bestselling`);
   const products = data?.data;
 
   return (
-    <section className=" py-10 px-4">
-       <SectionHeader title='Popular Products'description="Explore your popular products, you can buy here." seeAllLink='/shop' seeAllText='All Products' className='pb-4' />
-
+    <React.Fragment>
       {isLoading ? (
         <div className="container mx-auto grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
           {Array.from({ length: 8 }).map((_, i) => (
@@ -29,8 +26,8 @@ const HomeProducts = () => {
           <p className="text-foreground">No products available</p>
         </div>
       )}
-    </section>
+    </React.Fragment>
   );
 };
 
-export default HomeProducts;
+export default TopSelling;

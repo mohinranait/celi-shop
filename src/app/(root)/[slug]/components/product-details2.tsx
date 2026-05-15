@@ -266,7 +266,7 @@ export function ProductDetailss({ product }: { product: IProduct }) {
               <div className="flex items-center justify-between">
                 <span className={`text-sm font-medium ${stock > 10 ? 'text-green-600' : stock > 0 ? 'text-orange-600' : 'text-red-600'
                   }`}>
-                  {stock > 10 ? `${stock} in stock` : stock > 0 ? 'Low stock' : 'Out of stock'}
+                  {stock > 10 ? `Available stock` : stock > 0 ? 'Low stock' : 'Out of stock'}
                 </span>
                 {currentVariation && (
                   <span className="text-xs text-muted-foreground">SKU: {currentVariation.sku}</span>

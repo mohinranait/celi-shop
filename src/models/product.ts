@@ -105,6 +105,9 @@ const ProductSchema = new mongoose.Schema({
 
   // flags
   isFeatured: { type: Boolean, default: false },
+  totalSold: { type: Number, default: 0 }, 
+
+
   isDelete: { type: Boolean, default: false },
 
   status: {
@@ -116,9 +119,12 @@ const ProductSchema = new mongoose.Schema({
 
 
 //  Indexing (important for performance)
+ProductSchema.index({ isFeatured: 1 });
+ProductSchema.index({ totalSold: -1 });
 ProductSchema.index({ name: "text", slug: 1 });
 ProductSchema.index({ category: 1 });
 ProductSchema.index({ brand: 1 });
+ProductSchema.index({ "ratings.average": -1 });
 ProductSchema.index({ "variations.sku": 1 });
 
 const Product =

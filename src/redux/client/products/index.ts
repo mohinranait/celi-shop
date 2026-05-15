@@ -7,6 +7,9 @@ import { IProductListResponse } from "@/redux/service/products/type";
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    getClientProducts : builder.query<IProductListResponse, string>({
+      query: (params) => `/client/products?${params}`
+    }),
     getProductsForFilters: builder.query<IProductListResponse, IProductFilterParams>({
       query: (params) => ({
         url: "/client/products/filters",
@@ -23,4 +26,4 @@ const authApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetProductsForFiltersQuery, useGetBrandsByCategoryQuery  } = authApi;
+export const { useGetClientProductsQuery, useGetProductsForFiltersQuery, useGetBrandsByCategoryQuery  } = authApi;

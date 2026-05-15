@@ -52,6 +52,8 @@ import VariantTable from "./variant-table";
 import { useGetAttributesQuery } from "@/redux/service/attributes";
 import { Card } from "@/components/ui/card";
 import { ProductFormSkeleton } from "./skeletion";
+import { Switch } from "@/components/ui/switch";
+import NestedCategorySelector from "./NextedCategorySelector";
 
 
 
@@ -122,6 +124,10 @@ export default function AddProductForm() {
     control,
     name: "variations",
   });
+
+
+  // console.log({errors});
+
 
   // Auto-generate slug
   const watchedName = watch("name");
@@ -206,16 +212,16 @@ export default function AddProductForm() {
         selectedAttributes: selectedConfigs,
       };
 
-      console.log({ payload });
+      // console.log({ payload });
 
       let url = '';
 
       if (product) {
-        const {data} = await updateProduct({ id: product?._id, payload })
+        const { data } = await updateProduct({ id: product?._id, payload })
         url = data?.data?._id as string;
       } else {
-       const {data} = await createProduct(payload);
-       url = data?.data?._id as string;
+        const { data } = await createProduct(payload);
+        url = data?.data?._id as string;
       }
 
 
@@ -229,6 +235,8 @@ export default function AddProductForm() {
     }
   };
 
+
+  console.log({ errors });
 
 
 
@@ -297,7 +305,7 @@ export default function AddProductForm() {
 
 
 
-  if(productLoading) return <ProductFormSkeleton />
+  if (productLoading) return <ProductFormSkeleton />
 
   return (
     <div className="min-h-screen ">
@@ -374,6 +382,21 @@ export default function AddProductForm() {
               </div>
             </FormField>
 
+
+
+
+            <FormField
+              label="feature"
+              hint="Auto-generated from product name. You can edit it."
+            >
+              <div className="flex items-center">
+                <Switch
+                  checked={form.watch("isFeatured") || false}
+                  onCheckedChange={(value) => form.setValue("isFeatured", value, { shouldValidate: true })}
+                />
+              </div>
+            </FormField>
+
             <FormField label="Description">
               <Textarea
                 {...register("description")}
@@ -382,6 +405,20 @@ export default function AddProductForm() {
               />
             </FormField>
           </SectionCard>
+
+          <div className="space-y-1">
+            <Label>Select Category</Label>
+
+            {
+              categories?.length && 
+            <NestedCategorySelector
+            categories={categories || []}
+            value={watch("category")}
+            onChange={(id) => setValue("category", id, { shouldValidate: true })}
+            error={errors.category?.message}
+            />
+          }
+          </div>
 
           {/* Images */}
           <SectionCard
@@ -543,7 +580,7 @@ export default function AddProductForm() {
               <Button
                 type="button"
                 variant="outline"
-            
+
                 onClick={addAttributeRow}
                 className="text-xs gap-1.5 flex-1"
               >
@@ -552,7 +589,7 @@ export default function AddProductForm() {
               {productType === "variant" && (
                 <Button
                   type="button"
-             
+
                   onClick={generateVariations}
                   className="text-xs gap-1.5 flex-1 bg-indigo-600 hover:bg-indigo-700 text-white"
                 >
@@ -618,27 +655,36 @@ export default function AddProductForm() {
               />
             </FormField>
 
+
+
             <FormField label="Category">
               <Controller
                 control={control}
                 name="category"
                 render={({ field }) => (
-                  <Select
-                    value={field.value}
-                    onValueChange={field.onChange}
-                    disabled={categoriesLoading}
-                  >
-                    <SelectTrigger className="h-9 text-sm w-full">
-                      <SelectValue placeholder="Select category..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories?.map((c) => (
-                        <SelectItem key={c._id} value={c._id}>
-                          {c.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <div>
+
+                    <Select
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      disabled={categoriesLoading}
+                    >
+                      <SelectTrigger className="h-9 text-sm w-full">
+                        <SelectValue placeholder="Select category..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categories?.map((c) => (
+                          <SelectItem key={c._id} value={c._id}>
+                            {c.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {
+                      errors.category &&
+                      <p className="text-xs text-red-500">{errors?.category?.message}</p>
+                    }
+                  </div>
                 )}
               />
             </FormField>

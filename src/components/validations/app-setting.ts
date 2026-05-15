@@ -60,6 +60,10 @@ export const appSettingsSchema = z.object({
     blog: z.boolean(),
     bannerSlider: z.boolean(),
     guestOrder: z.boolean(),
+    latestSection: z.boolean(),
+    offerSection: z.boolean(),
+    featureSection: z.boolean(),
+    bestSelling: z.boolean(),
   }),
 
   layouts: z.object({
