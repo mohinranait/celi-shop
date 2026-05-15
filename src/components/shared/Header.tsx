@@ -23,6 +23,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { MobileMenu } from "./MobileMenu";
+import HeaderLogo from "./HeaderLogo";
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -65,9 +66,7 @@ export default function Header() {
             <MobileMenu />
 
           {/* Logo */}
-          <Link href="/" className="shrink-0">
-            <h1 className="text-2xl font-bold text-foreground">CeliShop</h1>
-          </Link>
+         <HeaderLogo />
 
           {/* Desktop Search */}
           <form

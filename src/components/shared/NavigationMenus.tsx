@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, HandHeart } from "lucide-react";
 import { useState } from "react";
 import { Card } from "../ui/card";
 import { useGetCategoriesQuery } from "@/redux/service/categories";
 import { ICategory } from "@/redux/service/categories/type";
+import Image from "next/image";
+import { PRODUCT_IMG } from "@/lib/default-import";
 
 
 
@@ -31,7 +33,7 @@ const NavigationMenus = () => {
 
   return (
     <div className="hidden md:block bg-primary py-2">
-      <div className="container mx-auto">
+      <div className="container py-1 mx-auto">
         <nav className="hidden md:flex items-center justify-center gap-8 relative">
           <Link
             href="/"
@@ -74,26 +76,28 @@ const NavigationMenus = () => {
                   : "opacity-0 invisible translate-y-3"
               }`}
             >
-              <Card className="w-225 border-t-4 border-foreground  p-5 shadow-md">
+              <Card className="w-225 border-t-4 border-primary  p-5 shadow-md">
                 <div className="grid grid-cols-4 gap-8">
                   {categoriesTree.map((category) => (
                     <div key={category.slug}>
                       {/* Parent */}
                       <Link
                         href={`/category/${category.slug}`}
-                        className="text-base font-semibold text-gray-900 hover:text-primary transition"
+                        className="text-base font-semibold text-gray-900 hover:text-primary transition flex gap-1 items-center"
                       >
+                        <Image src={category?.thumbnail || `/${PRODUCT_IMG}`} width={20} height={20} alt={category?.name} className="w-5 h-5 rounded-md" />
                         {category.name}
                       </Link>
 
                       {/* Child */}
-                      <div className="mt-4 space-y-2">
+                      <div className="mt-3 space-y-2">
                         {category.children.map((child) => (
                           <Link
                             key={child?._id}
                             href={`/shop?category=${child.slug}`}
-                            className="block text-sm text-muted-foreground hover:text-primary transition"
+                            className=" text-sm text-muted-foreground hover:text-primary flex gap-1 items-center transition "
                           >
+                            <HandHeart size={14} />
                             {child?.name}
                           </Link>
                         ))}

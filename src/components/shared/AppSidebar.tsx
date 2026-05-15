@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { NavGroup } from "./NavGroup";
 import { sidebarData } from "../constants/nav-bar";
+import { useAppSelector } from "@/hooks/hooks";
 type PropTypes = {
   setOpen: (open: boolean) => void;
   state: "expanded" | "collapsed";
@@ -37,6 +38,7 @@ type PropTypes = {
 
 const AppSidebar = ({ setOpen, state }: PropTypes) => {
   const { isMobile } = useSidebar();
+  const {user} = useAppSelector(state => state.auth)
 
   return (
     <Sidebar
@@ -55,8 +57,8 @@ const AppSidebar = ({ setOpen, state }: PropTypes) => {
                 href={"/"}
                 className="text-2xl flex  items-center font-bold"
               >
-                {"</>"}
-                CELISHOP <span className="text-primary"></span>
+               
+                Dashboard <span className="text-primary"></span>
               </Link>
             )}
           </SidebarMenuItem>
@@ -79,11 +81,11 @@ const AppSidebar = ({ setOpen, state }: PropTypes) => {
                 >
                   <Avatar className="h-8 w-8 rounded-lg">
                     <AvatarImage src={"/seller-logo.jpg"} alt={"user name"} />
-                    <AvatarFallback className="rounded-lg">SN</AvatarFallback>
+                    <AvatarFallback className="rounded-lg uppercase">{user?.name[0] || 'N'}</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">shiker</span>
-                    <span className="truncate text-xs">shikder@gmail.com</span>
+                    <span className="truncate font-semibold">{user?.name}</span>
+                    <span className="truncate text-xs">{user?.phone}</span>
                   </div>
                   <ChevronsUpDown className="ml-auto size-4" />
                 </SidebarMenuButton>
@@ -98,12 +100,12 @@ const AppSidebar = ({ setOpen, state }: PropTypes) => {
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                     <Avatar className="h-8 w-8 rounded-lg">
                       <AvatarImage src={"/seller-logo.jpg"} alt={"Name"} />
-                      <AvatarFallback className="rounded-lg">SN</AvatarFallback>
+                      <AvatarFallback className="rounded-lg">{user?.name[0] || 'N'}</AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-semibold">shikder</span>
+                      <span className="truncate font-semibold">{user?.name}</span>
                       <span className="truncate text-xs">
-                        shikder@gmail.com
+                        {user?.phone}
                       </span>
                     </div>
                   </div>

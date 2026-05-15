@@ -12,6 +12,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import SectionHeader from '@/components/shared/SectionHeader';
 
 
 
@@ -55,8 +56,9 @@ const Categories = () => {
   const finalCategories = categories?.filter(cat => cat.thumbnail)
   return (
     <section>
-      <div className="container mx-auto py-16 px-4">
-        <h3 className="text-3xl font-bold text-foreground mb-12 text-center">Shop by Category</h3>
+      <div className="container mx-auto py-10 px-4">
+      <SectionHeader title='Popular category'description="Explore your popular category, you can visit this." seeAllLink='/categories' seeAllText='All Categories' className='pb-4' />
+      
         {
           isLoading ? <div className="container mx-auto grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {Array.from({ length: 5 }).map((_, i) => (

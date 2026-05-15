@@ -10,14 +10,13 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAppSelector } from "@/hooks/hooks";
 import { ChevronDown, LogOut, Settings, User } from "lucide-react";
 import Link from "next/link";
 
 export function ProfileDropdown() {
-  const user = {
-    name: "Jhon",
-    email: "jhon@gmail.com"
-  }
+    const {user} = useAppSelector(state => state.auth)
+
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
@@ -32,7 +31,7 @@ export function ProfileDropdown() {
             <p className="font-semibold text-base">
               {user?.name} 
             </p>
-            <p className="text-gray text-sm leading-3 ">Admin</p>
+            <p className="text-gray text-sm leading-3 ">{user?.role}</p>
           </div>
           <ChevronDown className="size-5 hidden md:block" />
         </div>
@@ -45,7 +44,7 @@ export function ProfileDropdown() {
               {user?.name} 
             </p>
             <p className="text-muted-foreground text-xs leading-none">
-              {user?.email}
+              {user?.phone}
             </p>
           </div>
         </DropdownMenuLabel>

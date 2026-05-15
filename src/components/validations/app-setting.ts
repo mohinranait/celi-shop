@@ -4,6 +4,7 @@ export const appSettingsSchema = z.object({
   siteName: z.string().min(3),
   siteDescription: z.string().optional(),
   logo: z.string().url().optional().or(z.literal("")),
+  footerLogo: z.string().url().optional().or(z.literal("")),
   favicon: z.string().url().optional().or(z.literal("")),
 
   contactEmail: z.string().email(),

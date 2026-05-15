@@ -6,6 +6,7 @@ export interface IAppSettings extends Document {
   siteName: string;
   siteDescription: string;
   logo: string;
+  footerLogo: string;
   favicon: string;
 
   contactEmail: string;
@@ -107,6 +108,7 @@ const appSettingsSchema = new Schema<IAppSettings>(
     siteName: { type: String, required: true, default: "My Ecommerce" },
     siteDescription: { type: String, default: "" },
     logo: { type: String, default: "" },
+    footerLogo: { type: String, default: "" },
     favicon: { type: String, default: "" },
 
     contactEmail: { type: String, required: true },

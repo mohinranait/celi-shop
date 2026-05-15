@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 
@@ -29,6 +29,7 @@ import { IAppSettings } from '@/models/app-setting';
 import ShippingTab from './ShippingTab';
 import FeaturesTab from './FeaturesTab';
 import LayoutTab from './LayoutTab';
+import GeneralTab from './GeneralTab';
 
 export const tabs = [
   { id: 'general', label: 'General', icon: Settings },
@@ -142,64 +143,7 @@ export default function SettingsComponent() {
 
             {/* ==================== GENERAL ==================== */}
             {activeTab === 'general' && (
-              <>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Site Identity</CardTitle>
-                    <CardDescription>Basic information about your store</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="grid grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <Label>Site Name</Label>
-                        <Input value={settings.siteName} onChange={e => setValue('siteName', e.target.value)} />
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Logo URL</Label>
-                        <Input value={settings.logo} onChange={e => setValue('logo', e.target.value)} placeholder="https://" />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label>Site Description</Label>
-                      <Textarea value={settings.siteDescription} onChange={e => setValue('siteDescription', e.target.value)} />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <Label>Language</Label>
-                        <Select value={settings.language} onValueChange={v => setValue('language', v)}>
-                          <SelectTrigger><SelectValue /></SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="bn">বাংলা</SelectItem>
-                            <SelectItem value="en">English</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label>Currency</Label>
-                        <div className="flex gap-3">
-                          <Input className="w-20" value={settings.currency?.symbol} onChange={e => setValue('currency.symbol', e.target.value)} />
-                          <Input value={settings.currency?.code} onChange={e => setValue('currency.code', e.target.value)} />
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader><CardTitle>Maintenance Mode</CardTitle></CardHeader>
-                  <CardContent>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium">Enable Maintenance Mode</p>
-                        <p className="text-sm text-muted-foreground">Temporarily take site offline</p>
-                      </div>
-                      <Switch checked={settings.maintenanceMode} onCheckedChange={v => setValue('maintenanceMode', v)} />
-                    </div>
-                  </CardContent>
-                </Card>
-              </>
+             <GeneralTab settings={settings} callBack={(key:string, value:string | boolean) =>  setValue(key, value)} />
             )}
 
             {/* ==================== CONTACT ==================== */}

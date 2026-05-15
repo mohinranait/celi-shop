@@ -1,5 +1,6 @@
 "use client";
 import ProductCard from "@/components/products/ProductCard";
+import SectionHeader from "@/components/shared/SectionHeader";
 
 import { useGetProductsQuery } from "@/redux/service/products";
 
@@ -10,10 +11,8 @@ const HomeProducts = () => {
   const products = data?.data;
 
   return (
-    <section className=" py-16 px-4">
-      <h3 className="text-3xl font-bold text-foreground mb-12 text-center">
-        Featured Products
-      </h3>
+    <section className=" py-10 px-4">
+       <SectionHeader title='Popular Products'description="Explore your popular products, you can buy here." seeAllLink='/shop' seeAllText='All Products' className='pb-4' />
 
       {isLoading ? (
         <div className="container mx-auto grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">

@@ -11,6 +11,7 @@ import Image from "next/image";
 import { PRODUCT_IMG } from "@/lib/default-import";
 import { ICategory } from '@/redux/service/categories/type';
 import Link from 'next/link';
+import SectionHeader from '@/components/shared/SectionHeader';
 
 
 
@@ -51,12 +52,10 @@ const SliderCategories = () => {
   const finalCategories = categories?.filter( cat => cat.thumbnail)
 
   return (
-    <section className=" mx-auto py-16 px-4">
+    <section className=" mx-auto py-10 px-4">
+       
       <div className='container mx-auto'>
-        <h3 className="text-3xl font-bold text-foreground mb-12 text-center">
-          Shop by Category
-        </h3>
-
+      <SectionHeader title='Popular category'description="Explore your popular category, you can visit this." seeAllLink='/categories' seeAllText='All Categories' className='pb-4' />
 
         {
           isLoading ? <div className="container mx-auto grid grid-cols-2 md:grid-cols-3  lg:grid-cols-5 gap-4">
