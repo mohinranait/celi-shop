@@ -28,22 +28,7 @@ export async function GET(req: NextRequest) {
     // =========================
     // BUILD QUERY
     // =========================
-    const query:  {
-      name?: string;
-      slug?: string;
-       createdAt?: {
-        $gte?: Date;
-        $lte?: Date;
-      };
-      status?: boolean;
-      isDelete?: boolean;
-      // productType: 'single' | "variant";
-      isFeatured?: boolean;
-      $or?: {
-        name?: { $regex: string; $options: string };
-        slug?: { $regex: string; $options: string };
-      }[];
-    } = {
+    const query:   Record<string, any>  = {
       status: true,
       isDelete: false,
     };
