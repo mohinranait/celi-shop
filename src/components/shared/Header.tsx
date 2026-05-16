@@ -50,7 +50,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-background border-b border-border">
+    <header className="sticky top-0 z-50 w-full bg-white border-b border-border">
       {/* Top bar */}
       <div className="bg-foreground text-background py-2 px-4 text-sm">
         <div className="max-w-7xl mx-auto text-center">
@@ -79,7 +79,7 @@ export default function Header() {
                 placeholder="Search products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="rounded-r-none border-r-0 h-9"
+                className="rounded-r-none bg-background border-r-0 h-9"
               />
               <Button type="submit" size="sm" className="rounded-l-none h-9">
                 <Search className="h-4 w-4" />

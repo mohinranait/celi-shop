@@ -41,7 +41,7 @@ const HeroSection = () => {
 
   return isBanner &&  (
     <section>
-      <div className="container pt-4 mx-auto">
+      <div className="container px-4 md:px-0 pt-4 mx-auto">
         <div className="relative">
           <Carousel
             opts={{
@@ -58,7 +58,7 @@ const HeroSection = () => {
                 if (slide.sliderType === 'directImage') {
                   return (
                     <CarouselItem key={slide._id}>
-                      <div className="relative h-125 overflow-hidden rounded-xl">
+                      <div className="relative h-64 lg:h-72 xl:h-125 overflow-hidden rounded-xl">
                         {slide.image && (
                           <Image
                             src={slide.image}
@@ -88,7 +88,7 @@ const HeroSection = () => {
                 return (
                   <CarouselItem key={slide._id}>
                     <div
-                      className={`relative h-125 flex items-center rounded-xl overflow-hidden
+                      className={`relative h-64 lg:h-72 xl:h-125 flex items-center rounded-xl overflow-hidden
                         ${isWithImage 
                           ? 'bg-cover bg-center' 
                           : 'bg-linear-to-r from-foreground/87 to-primary/90'}`}
@@ -101,14 +101,14 @@ const HeroSection = () => {
                       {/* Overlay */}
                       {isWithImage && <div className="absolute inset-0 bg-black/40" />}
 
-                      <div className="container mx-auto px-6 relative z-10">
+                      <div className=" mx-auto px-6 relative z-10">
                         <div className="max-w-3xl text-center mx-auto">
-                          <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-white drop-shadow-lg">
+                          <h2 className="text-3xl lg:text-4xl xl:text-6xl 2xl:text-7xl font-bold mb-2 xl:mb-6 text-white drop-shadow-lg">
                             {slide.title}
                           </h2>
 
                           {slide.description && (
-                            <p className="text-lg md:text-xl mb-8 text-white/90 max-w-2xl mx-auto">
+                            <p className="text-base lg:text-lg xl:text-xl mb-4 xl:mb-8 text-white/90 max-w-2xl mx-auto">
                               {slide.description}
                             </p>
                           )}
@@ -117,7 +117,7 @@ const HeroSection = () => {
                             <Link href={slide.link || '/'}>
                               <Button
                                 size="lg"
-                                className="bg-white text-black hover:bg-white/90 text-base font-semibold px-8 py-6"
+                                className="bg-white text-black hover:bg-white/90 text-base font-semibold px-8 py-2 2xl:py-6"
                               >
                                 {slide.buttonName}
                               </Button>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X, ShoppingBag, Search, LayoutGrid, Shirt,  Watch, Tag, Heart, Package, LogIn, UserPlus } from "lucide-react";
+import { Menu, X, ShoppingBag, Search, LayoutGrid, Shirt,  Watch, Tag, Heart, Package, LogIn, UserPlus, Store, Gift, Dices, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -32,38 +32,45 @@ interface MobileMenuProps {
 // ─── Nav data ─────────────────────────────────────────────────────────────────
 
 const shopItems: NavItem[] = [
-  {
-    href: "/shop",
-    label: "Shop All",
+    {
+    href: "/",
+    label: "Home",
     icon: <LayoutGrid size={17} />,
     iconBg: "bg-blue-50",
     iconColor: "text-blue-600",
   },
   {
-    href: "/shop?category=mens",
-    label: "Men",
+    href: "/shop",
+    label: "Shop All",
+    icon: <Store size={17} />,
+    iconBg: "bg-blue-50",
+    iconColor: "text-blue-600",
+  },
+  {
+    href: "/categories",
+    label: "All Categories",
     icon: <Shirt size={17} />,
     iconBg: "bg-emerald-50",
     iconColor: "text-emerald-600",
   },
   {
-    href: "/shop?category=womens",
-    label: "Women",
-    icon: <Shirt size={17} />,
+    href: "/offers",
+    label: "All Offers",
+    icon: <Gift size={17} />,
     iconBg: "bg-pink-50",
     iconColor: "text-pink-600",
   },
   {
-    href: "/shop?category=accessories",
-    label: "Accessories",
-    icon: <Watch size={17} />,
+    href: "/brands",
+    label: "All Brands",
+    icon: <Dices size={17} />,
     iconBg: "bg-amber-50",
     iconColor: "text-amber-600",
   },
   {
-    href: "/shop?sale=true",
-    label: "Sale",
-    icon: <Tag size={17} />,
+    href: "/contact-us",
+    label: "Contact Us",
+    icon: <Phone size={17} />,
     iconBg: "bg-red-50",
     iconColor: "text-red-500",
     badge: "Up to 50%",

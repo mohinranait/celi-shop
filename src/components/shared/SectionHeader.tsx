@@ -22,13 +22,13 @@ export default function SectionHeader({
       <div className="flex flex-col items-center text-center">
         
         {/* Title */}
-        <h2 className="text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white tracking-tight">
+        <h2 className=" text-base lg:text-lg  xl:text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white tracking-tight">
           {title}
         </h2>
 
         {/* Description */}
         {description && (
-          <p className="mt-2 text-muted-foreground text-lg max-w-2xl">
+          <p className=" mt-1 lg:mt-2 text-muted-foreground text-xs lg:text-sm xl:text-lg max-w-2xl">
             {description}
           </p>
         )}
@@ -38,10 +38,10 @@ export default function SectionHeader({
           href={seeAllLink}
           className="mt-2"
         >
-          <Button variant={'outline'} >
+          <Button className='h-9 px-6' variant={'default'} >
 
           {seeAllText}
-          <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
+          <span className="group-hover:translate-x-1  transition-transform duration-300">→</span>
           </Button>
         </Link>
       </div>

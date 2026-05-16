@@ -16,6 +16,7 @@ export interface IBaseCategory {
 
 export interface ICategory extends IBaseCategory {
   _id: string;
+  totalProducts: number;
   createdAt: string;
   updatedAt: string;
 }

@@ -24,7 +24,7 @@ const HomePage = () => {
       {/* Latest product section */}
       {
         appSetting?.features?.latestSection &&
-        <section className=" py-10 px-4">
+        <section className=" py-10 px-2">
           <SectionHeader title='New Products' description="Explore your popular products, you can buy here." seeAllLink='/shop' seeAllText='All Products' className='pb-4' />
           <NewProducts />
         </section>
@@ -35,7 +35,7 @@ const HomePage = () => {
       {/* top Selling product section */}
       {
         appSetting?.features?.bestSelling &&
-        <section className=" py-10 px-4">
+        <section className=" py-10 px-2">
           <SectionHeader title='Best Selling Products' description="Explore your popular products, you can buy here." seeAllLink='/shop' seeAllText='All Products' className='pb-4' />
           <TopSelling />
         </section>
@@ -45,7 +45,7 @@ const HomePage = () => {
       {/* Feature products */}
       {
         appSetting?.features?.featureSection &&
-        <section className=" py-10 px-4">
+        <section className=" py-10 px-2">
           <SectionHeader title='Features Products' description="Explore your popular products, you can buy here." seeAllLink='/shop' seeAllText='All Products' className='pb-4' />
           <FeatureProducts />
         </section>
@@ -55,7 +55,7 @@ const HomePage = () => {
       {/* Offer products */}
       {
         appSetting?.features?.offerSection &&
-        <section className=" py-10 px-4">
+        <section className=" py-10 px-2">
           <SectionHeader title='Offer Products' description="Explore your popular products, you can buy here." seeAllLink='/shop' seeAllText='All Products' className='pb-4' />
           <OfferProducts />
         </section>

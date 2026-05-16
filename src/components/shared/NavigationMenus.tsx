@@ -33,7 +33,7 @@ const NavigationMenus = () => {
 
   return (
     <div className="hidden md:block bg-primary py-2">
-      <div className="container py-1 mx-auto">
+      <div className="container py-2 mx-auto">
         <nav className="hidden md:flex items-center justify-center gap-8 relative">
           <Link
             href="/"
@@ -82,7 +82,7 @@ const NavigationMenus = () => {
                     <div key={category.slug}>
                       {/* Parent */}
                       <Link
-                        href={`/category/${category.slug}`}
+                        href={`/shop?category=${category._id}`}
                         className="text-base font-semibold text-gray-900 hover:text-primary transition flex gap-1 items-center"
                       >
                         <Image src={category?.thumbnail || `/${PRODUCT_IMG}`} width={20} height={20} alt={category?.name} className="w-5 h-5 rounded-md" />
@@ -94,7 +94,7 @@ const NavigationMenus = () => {
                         {category.children.map((child) => (
                           <Link
                             key={child?._id}
-                            href={`/shop?category=${child.slug}`}
+                            href={`/shop?category=${child._id}`}
                             className=" text-sm text-muted-foreground hover:text-primary flex gap-1 items-center transition "
                           >
                             <HandHeart size={14} />
@@ -130,10 +130,25 @@ const NavigationMenus = () => {
           </div>
 
           <Link
-            href="/shop?category=accessories"
+            href="/offers"
             className="text-secondary text-sm font-medium hover:opacity-80 transition"
           >
-            Accessories
+            Offers
+          </Link>
+          
+        
+           <Link
+            href="/brands"
+            className="text-secondary text-sm font-medium hover:opacity-80 transition"
+          >
+            All Brands
+          </Link>
+        
+           <Link
+            href="/contact-us"
+            className="text-secondary text-sm font-medium hover:opacity-80 transition"
+          >
+            Contact Us
           </Link>
         </nav>
       </div>

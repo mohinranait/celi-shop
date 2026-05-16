@@ -1,7 +1,10 @@
 
 import { categorySchema } from "@/components/validations/categories";
+import { getAllDescendantIds } from "@/lib/category-utils";
 import connectDB from "@/lib/db";
 import { Category } from "@/models/categories";
+import Product from "@/models/product";
+import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -11,36 +14,16 @@ export async function GET(req: NextRequest) {
     await connectDB();
 
     const { searchParams } = new URL(req.url);
-
     const search = searchParams.get("search") || "";
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "10000");
-
-    const status = searchParams.get("status"); // true / false / all
-    const isDelete = searchParams.get("isDelete"); // true / false / all
-    const date = searchParams.get("date");
+    const status = searchParams.get("status");
+    const isDelete = searchParams.get("isDelete");
 
     const skip = (page - 1) * limit;
 
-    // =========================
-    // BUILD QUERY
-    // =========================
-    const query: {
-      name?: string;
-      slug?: string;
-       createdAt?: {
-        $gte?: Date;
-        $lte?: Date;
-      };
-      status?: boolean;
-      isDelete?: boolean;
-       $or?: {
-        name?: { $regex: string; $options: string };
-        slug?: { $regex: string; $options: string };
-      }[];
-    } = {};
+    const query: any = {};
 
-    //  SEARCH (name or slug)
     if (search) {
       query.$or = [
         { name: { $regex: search, $options: "i" } },
@@ -48,45 +31,45 @@ export async function GET(req: NextRequest) {
       ];
     }
 
-    //  STATUS FILTER
     if (status === "true") query.status = true;
     if (status === "false") query.status = false;
-
-    // 🗑 SOFT DELETE FILTER
     if (isDelete === "true") query.isDelete = true;
     if (isDelete === "false") query.isDelete = false;
 
-    
-    // date filter
-    if (date) {
-      const start = new Date(date);
-      const end = new Date(date);
-
-      end.setHours(23, 59, 59, 999);
-
-      query.createdAt = {
-        $gte: start,
-        $lte: end,
-      };
-    }
-    
-
-    // =========================
-    // DB QUERY
-    // =========================
+    // Fetch categories
     const categories = await Category.find(query)
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .lean();
 
     const total = await Category.countDocuments(query);
 
     // =========================
-    // RESPONSE
+    // Add totalProducts for each category (including nested)
     // =========================
+    const categoriesWithCount = await Promise.all(
+      categories.map(async (cat) => {
+        // Get all descendant category IDs (self + children + grandchildren)
+        const descendantIds = await getAllDescendantIds(cat._id.toString());
+
+        // Count products in all these categories
+        const totalProducts = await Product.countDocuments({
+          category: { $in: descendantIds.map(id => new mongoose.Types.ObjectId(id)) },
+          status: true,
+          isDelete: false,
+        });
+
+        return {
+          ...cat,
+          totalProducts,           
+        };
+      })
+    );
+
     return NextResponse.json({
       success: true,
-      data: categories,
+      data: categoriesWithCount,
       meta: {
         total,
         page,
@@ -95,6 +78,7 @@ export async function GET(req: NextRequest) {
       },
     });
   } catch (error) {
+    console.error(error);
     return NextResponse.json(
       { success: false, message: "Error fetching categories" },
       { status: 500 }

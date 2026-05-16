@@ -17,15 +17,15 @@ import SectionHeader from '@/components/shared/SectionHeader';
 
 const CategoryCard = ({ category }: { category: ICategory }) => {
   return (
-    <div className="group flex flex-col items-center gap-3 p-4 rounded-2xl border border-border bg-background hover:bg-muted hover:border-foreground/20 transition-all duration-200 cursor-pointer">
-      <div className="w-14 h-14 rounded-xl bg-muted border border-border flex items-center justify-center overflow-hidden shrink-0">
-        <Link href={`/shop?category=${category?._id}`}>
+    <div className="group  flex flex-col items-center gap-3 rounded-2xl bg-background transition-all duration-200 cursor-pointer">
+      <div className="inset-0 w-full  aspect-square rounded-full  bg-muted border border-border flex items-center justify-center overflow-hidden shrink-0">
+        <Link href={`/shop?category=${category?._id}`} className='w-full h-full'>
         <Image
           src={category?.thumbnail || `/${PRODUCT_IMG}`}
           width={56}
           height={56}
           alt={category.name}
-          className="w-full h-full object-cover rounded-xl"
+          className="w-full h-full rounded-full object-cover   border-8 border-white overflow-hidden"
           />
           </Link>
       </div>
@@ -37,7 +37,7 @@ const CategoryCard = ({ category }: { category: ICategory }) => {
         </Link>
 
         <p className="text-xs text-muted-foreground mt-0.5">
-          12 items
+          {category?.totalProducts || 0} items
         </p>
 
       </div>
@@ -75,15 +75,15 @@ const SliderCategories = () => {
                   {finalCategories.map((category) => (
                     <CarouselItem
                       key={category._id}
-                      className="pl-2 md:pl-3 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6"
+                      className="pl-2 md:pl-3 basis-1/3 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6 2xl:basis-1/7"
                     >
                       <CategoryCard category={category} />
                     </CarouselItem>
                   ))}
                 </CarouselContent>
 
-                <CarouselPrevious className="hidden sm:flex left-2 lg:left-2" />
-                <CarouselNext className="hidden sm:flex right-2 lg:right-2" />
+                <CarouselPrevious className=" bg-primary w-8 h-8 text-white lg:w-10 lg:h-10  flex left-2 top-24 lg:left-2" />
+                <CarouselNext className=" bg-primary w-8 h-8 text-white lg:w-10 lg:h-10  flex right-2 top-24 lg:right-2" />
               </Carousel>
             </div>
         }

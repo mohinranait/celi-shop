@@ -187,12 +187,12 @@ const ProductCard = ({ product }: Props) => {
 
 
   return (
-    <Card className=" transition-all overflow-visible duration-300 hover:shadow-sm group cursor-pointer h-full py-2 relative px-2">
+    <Card className=" p-1 md:p-2 gap-2 transition-all overflow-visible duration-300 hover:shadow-sm group cursor-pointer h-full  relative ">
 
       {/* Stock Out  */}
       {
         isStockOut() &&
-        <div className="w-37.5 h-37.5 absolute overflow-hidden -top-2.5 -right-2.5  z-30">
+        <div className="hidden xl:block w-37.5 h-37.5 absolute overflow-hidden -top-2.5 -right-2.5  z-30">
           <span className="h-2.5 w-3 bg-red-700 absolute top-0 left-0"></span>
           <span className="h-3 w-2.5 bg-red-700 absolute bottom-0 right-0"></span>
           <span className="w-56.25 py-2.5 rotate-45 top-7.5 -left-6.25  absolute  border-l-0 text-center text-lg uppercase bg-[#ff115e] text-white before:w-0 before:h-0 before:border-l-4 before:border-red-600 before:rotate-45 before:absolute before:left-6.5 before:-bottom-1 before:bg-[#e9034c] font-semibold">Stock Out</span>
@@ -207,7 +207,7 @@ const ProductCard = ({ product }: Props) => {
         </span>
       }
       {/* Product Image */}
-      <div className={cn(" h-56 overflow-hidden relative rounded-md", !productImage && 'bg-secondary')}>
+      <div className={cn(" aspect-square overflow-hidden relative rounded-md", !productImage && 'bg-secondary')}>
 
         {
           isStockOut() &&
@@ -217,53 +217,53 @@ const ProductCard = ({ product }: Props) => {
         }
         {
           productImage &&
-          <Link href={`/${slug}`} className="rounded-md bg-red-800">
+          <Link href={`/${slug}`} className="rounded-md  bg-red-800">
             <Image
               width={600}
               height={400}
               src={productImage}
               alt={name}
-              className={cn("w-full h-full object-contain rounded-md  transition-transform duration-500 group-hover:scale-105", )}
+              className={cn("w-full h-full  object-contain rounded-md  transition-transform duration-500 group-hover:scale-105", )}
             />
           </Link>
         }
       </div>
 
       {/* Content */}
-      <div className="p-4 flex flex-col flex-1">
+      <div className=" flex flex-col flex-1">
         <Link href={`/${slug}`}>
-          <h4 className="text-lg font-semibold text-foreground mb-2 line-clamp-1 hover:text-primary transition">
+          <h4 className="text-xs md:text-sm xl:text-lg  font-semibold text-foreground mb-1 md:mb-2 line-clamp-2 lg:line-clamp-1 hover:text-primary transition">
             {name}
           </h4>
         </Link>
 
-        <div className="flex items-center gap-3 mb-2">
+        <div className="flex items-center gap-2 mb-1 md:mb-2">
           <div className="flex items-center">
             {[...Array(5)].map((_, i) => (
-              <Star key={i} className={`w-4 h-4 ${i < Math.floor(product.ratings.average)
+              <Star key={i} className={`w-3 md:w-4 h-3 md:h-4 ${i < Math.floor(product.ratings.average)
                 ? 'text-yellow-400'
                 : 'text-muted-foreground'
                 }`} />
             ))}
           </div>
           <span className="text-sm text-accent-foreground">
-            ({product.ratings.totalReviews} reviews)
+            ({product.ratings.totalReviews})
           </span>
         </div>
 
         {/* Price + Variant */}
-        <div className="flex items-center justify-between flex-wrap mb-4">
+        <div className="flex items-center justify-between flex-wrap mb-1 lg:mb-3">
           {
             productType === 'single' ? <div className="flex gap-2 items-center">
-              <span className="text-2xl font-bold text-primary">
+              <span className="text-sm md:text-base lg:text-lg  font-bold text-primary">
                 {CURRENCY}{getSinglePrice()?.finalPrice}
               </span>
               {
                 (getSinglePrice()?.price || 0) - (getSinglePrice()?.finalPrice || 0) > 0 &&
-                <del className="text-xl text-muted-foreground">{CURRENCY}{(getSinglePrice()?.price || 0) - (getSinglePrice()?.finalPrice || 0)}</del>
+                <del className="text-sm md:text-base lg:text-lg text-muted-foreground">{CURRENCY}{(getSinglePrice()?.price || 0) - (getSinglePrice()?.finalPrice || 0)}</del>
               }
             </div> :
-              <span className="text-2xl font-bold text-primary">
+              <span className="text-sm md:text-base lg:text-lg font-bold text-primary">
                 {productPrice}
               </span>
           }
@@ -278,7 +278,7 @@ const ProductCard = ({ product }: Props) => {
         </div>
 
         {/* Buttons */}
-        <div className="grid sm:grid-cols-2 items-center gap-3 mt-auto">
+        <div className="flex flex-col items-center gap-1 mg:gap-2 mt-auto">
           <Button disabled={isStockOut()} className="w-full" variant={"outline"} onClick={() => handleAddToCart()}>
             <ShoppingCart className="w-4 h-4" />
             Add to Cart

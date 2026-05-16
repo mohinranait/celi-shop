@@ -44,13 +44,13 @@ function CategoryNode({ node, all, activeCat, setActiveCat }: CategoryNodeProps)
         <button
           onClick={() => setActiveCat(isActive ? '' : node._id)}
           className={cn(
-            'flex-1 text-left px-2 py-1.5 rounded-lg transition-colors text-sm',
+            'flex-1 text-left justify-between  px-2 py-1.5 rounded-lg transition-colors text-sm',
             isActive
               ? 'bg-primary/10 text-primary font-medium'
               : 'text-foreground hover:bg-muted'
           )}
         >
-          {node.name}
+          {node.name} <span className="text-sm text-muted-foreground">({node?.totalProducts})</span>
         </button>
       </div>
 

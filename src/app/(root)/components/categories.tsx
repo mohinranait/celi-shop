@@ -41,7 +41,7 @@ const CategoryCard = ({ category }: { category: ICategory }) => {
         </Link>
 
         <p className="text-xs text-muted-foreground mt-0.5">
-          12 items
+          {category?.totalProducts || 0} items
         </p>
 
       </div>

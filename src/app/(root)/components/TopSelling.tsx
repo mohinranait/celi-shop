@@ -12,13 +12,13 @@ const TopSelling = () => {
   return (
     <React.Fragment>
       {isLoading ? (
-        <div className="container mx-auto grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className=" lg:container mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5   gap-2 xl:gap-3 2xl:gap-4">
           {Array.from({ length: 8 }).map((_, i) => (
             <div key={i} className="h-64 rounded-xl bg-muted animate-pulse" />
           ))}
         </div>
       ) : products && products?.length > 0 ? (
-        <div className=" container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  gap-6">
+        <div className=" lg:container mx-auto grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5   gap-2 xl:gap-3 2xl:gap-4">
           {products?.map((product, i) => <ProductCard key={i} product={product} />)}
         </div>
       ) : (
