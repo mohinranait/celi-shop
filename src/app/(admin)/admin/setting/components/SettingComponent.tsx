@@ -160,7 +160,7 @@ export default function SettingsComponent() {
                       <Input type="email" value={settings.contactEmail || ''} onChange={e => setValue('contactEmail', e.target.value)} />
                     </div>
                     <div className="space-y-2">
-                      <Label>Phone Number</Label>
+                      <Label>Phone Number (WhatsApp included)</Label>
                       <Input value={settings.contactPhone || ''} onChange={e => setValue('contactPhone', e.target.value)} />
                     </div>
                   </div>

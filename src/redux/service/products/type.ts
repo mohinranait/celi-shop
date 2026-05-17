@@ -28,6 +28,7 @@ export type TProductType = "variant" | "single";
 export interface IProductBase {
   name: string;
   slug: string;
+  videoUrl?: string;
   productType: TProductType,
   gallery: string[];
   shipping: {

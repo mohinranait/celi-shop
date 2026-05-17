@@ -13,6 +13,7 @@ import { addToCart } from '@/redux/features/cartSlice'
 import { CURRENCY } from '@/lib/envSecret'
 import { useGetAppSettingQuery } from '@/redux/service/setting'
 import { useRouter } from 'next/navigation'
+import VideoSection from './VideoSection'
 
 
 
@@ -95,7 +96,7 @@ export function ProductDetailss({ product }: { product: IProduct }) {
     return true
   }
 
-  const handleAddToCart = (action:'cart'|"order" = 'cart') => {
+  const handleAddToCart = (action: 'cart' | "order" = 'cart') => {
     if (product.productType === 'single' && product.selectedAttributes && product.selectedAttributes.length > 0) {
       if (!areAllAttributesSelected()) {
         console.log('Please select all attributes before adding to cart')
@@ -134,7 +135,7 @@ export function ProductDetailss({ product }: { product: IProduct }) {
 
     dispatch(addToCart({ cart: cartItem }))
 
-    if(action === 'order'){
+    if (action === 'order') {
       router.push('/checkout')
     }
 
@@ -152,186 +153,188 @@ export function ProductDetailss({ product }: { product: IProduct }) {
           <ImageGallary product={product} images={images} stock={stock} />
 
           <div className="flex flex-col space-y-6">
-            <div>
-              <div className="flex items-start justify-between gap-4 mb-3">
-                <div className="flex-1">
-                  <h1 className="text-3xl md:text-4xl font-bold text-accent-foreground mb-2">
-                    {product.name}
-                  </h1>
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className={`w-5 h-5 ${i < Math.floor(product.ratings.average)
+            <div className='p-4 rounded-md bg-white border border-border'>
+              <div className=''>
+                <div className="flex items-start justify-between gap-4 mb-3">
+                  <div className="flex-1">
+                    <h1 className="text-3xl md:text-4xl font-bold text-accent-foreground mb-2">
+                      {product.name}
+                    </h1>
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className={`w-5 h-5 ${i < Math.floor(product.ratings.average)
                             ? 'text-yellow-400'
                             : 'text-muted-foreground'
-                          }`} />
-                      ))}
+                            }`} />
+                        ))}
+                      </div>
+                      <span className="text-sm text-accent-foreground">
+                        ({product.ratings.totalReviews} reviews)
+                      </span>
                     </div>
-                    <span className="text-sm text-accent-foreground">
-                      ({product.ratings.totalReviews} reviews)
-                    </span>
                   </div>
+                  <button
+                    onClick={() => setIsWishlisted(!isWishlisted)}
+                    className="p-3 rounded-full bg-background border border-border  transition-colors"
+                  >
+                    <Heart
+                      className={`w-6 h-6 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-muted-foreground'
+                        }`}
+                    />
+                  </button>
                 </div>
-                <button
-                  onClick={() => setIsWishlisted(!isWishlisted)}
-                  className="p-3 rounded-full bg-background border border-border  transition-colors"
-                >
-                  <Heart
-                    className={`w-6 h-6 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-muted-foreground'
-                      }`}
-                  />
-                </button>
+
+                {product.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {product.tags.map((tag) => (
+                      <Badge key={tag} variant="secondary" className="bg-slate-100 text-slate-700">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
               </div>
 
-              {product.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {product.tags.map((tag) => (
-                    <Badge key={tag} variant="secondary" className="bg-slate-100 text-slate-700">
-                      {tag}
+              <div>
+                <div className="flex items-baseline gap-3 mb-4">
+                  <span className="text-4xl font-bold text-accent-foreground">
+                    {CURRENCY}{offerPrice}
+                  </span>
+                  {price > offerPrice && (
+                    <>
+                      <span className="text-xl text-muted-foreground line-through">
+                        {CURRENCY}{price}
+                      </span>
+                      {discountPercent > 0 && (
+                        <Badge className="" variant={"destructive"}>
+                          {Math.round(discountPercent)}% OFF
+                        </Badge>
+                      )}
+                    </>
+                  )}
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  {product.shipping.isFreeShipping && (
+                    <Badge variant="outline" className="border-green-200 bg-green-50">
+                      <Check className="w-3 h-3 mr-1" />
+                      Free Shipping
                     </Badge>
+                  )}
+                </div>
+              </div>
+
+              {product.description && (
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-900 mb-2">Description</h3>
+                  <p className="text-slate-600 leading-relaxed">{product.description}</p>
+                </div>
+              )}
+
+              {attributeGroups && Object.keys(attributeGroups).length > 0 && (
+                <div className="space-y-3 border-t border-b border-border py-4">
+                  {Object.entries(attributeGroups).map(([attrName, values]) => (
+                    <div key={attrName}>
+                      <label className="text-sm font-semibold text-accent-foreground mb-2 block capitalize">
+                        {attrName}
+                        {!isVariant && product.selectedAttributes && product.selectedAttributes.length > 0 && (
+                          <span className="text-red-500">*</span>
+                        )}
+                      </label>
+                      <div className="flex flex-wrap gap-2">
+                        {values.map((value) => {
+                          const isSelected = isVariant
+                            ? selectedVariation?.name.includes(value)
+                            : selectedAttributes[attrName] === value
+
+                          return (
+                            <Button
+                              key={value}
+                              variant={isSelected ? "default" : 'outline'}
+                              onClick={() => handleVariationChange(attrName, value)}
+                              className="rounded-lg border font-medium transition-all"
+                            >
+                              {value}
+                            </Button>
+                          )
+                        })}
+                      </div>
+                    </div>
                   ))}
                 </div>
               )}
-            </div>
 
-            <div>
-              <div className="flex items-baseline gap-3 mb-4">
-                <span className="text-4xl font-bold text-accent-foreground">
-                  {CURRENCY}{offerPrice}
-                </span>
-                {price > offerPrice && (
-                  <>
-                    <span className="text-xl text-muted-foreground line-through">
-                      {CURRENCY}{price}
-                    </span>
-                    {discountPercent > 0 && (
-                      <Badge className="" variant={"destructive"}>
-                        {Math.round(discountPercent)}% OFF
-                      </Badge>
-                    )}
-                  </>
-                )}
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                {product.shipping.isFreeShipping && (
-                  <Badge variant="outline" className="border-green-200 bg-green-50">
-                    <Check className="w-3 h-3 mr-1" />
-                    Free Shipping
-                  </Badge>
-                )}
-              </div>
-            </div>
-
-            {product.description && (
-              <div>
-                <h3 className="text-lg font-semibold text-slate-900 mb-2">Description</h3>
-                <p className="text-slate-600 leading-relaxed">{product.description}</p>
-              </div>
-            )}
-
-            {attributeGroups && Object.keys(attributeGroups).length > 0 && (
-              <div className="space-y-3 border-t border-b border-border py-4">
-                {Object.entries(attributeGroups).map(([attrName, values]) => (
-                  <div key={attrName}>
-                    <label className="text-sm font-semibold text-accent-foreground mb-2 block capitalize">
-                      {attrName}
-                      {!isVariant && product.selectedAttributes && product.selectedAttributes.length > 0 && (
-                        <span className="text-red-500">*</span>
-                      )}
-                    </label>
-                    <div className="flex flex-wrap gap-2">
-                      {values.map((value) => {
-                        const isSelected = isVariant
-                          ? selectedVariation?.name.includes(value)
-                          : selectedAttributes[attrName] === value
-
-                        return (
-                          <Button
-                            key={value}
-                            variant={isSelected ? "default" : 'outline'}
-                            onClick={() => handleVariationChange(attrName, value)}
-                            className="rounded-lg border font-medium transition-all"
-                          >
-                            {value}
-                          </Button>
-                        )
-                      })}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className={`text-sm font-medium ${stock > 10 ? 'text-green-600' : stock > 0 ? 'text-orange-600' : 'text-red-600'
-                  }`}>
-                  {stock > 10 ? `Available stock` : stock > 0 ? 'Low stock' : 'Out of stock'}
-                </span>
-                {currentVariation && (
-                  <span className="text-xs text-muted-foreground">SKU: {currentVariation.sku}</span>
-                )}
-              </div>
-
-              {stock > 0 && (
-                <div className="flex items-center gap-4">
-                  <span className="text-sm font-medium text-accent-foreground">Quantity:</span>
-                  <div className="flex items-center border border-border rounded-lg">
-                    <Button
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      disabled={quantity === 1}
-                      className="p-2 h-9.5 bg-muted  transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <Minus className="w-4 h-4 text-accent-foreground" />
-                    </Button>
-                    <span className="px-6 py-2 font-semibold text-accent-foreground">{quantity}</span>
-                    <Button
-                      onClick={() => setQuantity(Math.min(stock, quantity + 1))}
-                      disabled={quantity >= stock}
-                      className="p-2 h-9.5 bg-muted  transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      title={quantity >= stock ? `Maximum ${stock} available` : ''}
-                    >
-                      <Plus className="w-4 h-4 text-accent-foreground" />
-                    </Button>
-                  </div>
-                  <span className="text-xs text-muted">Max: {stock}</span>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className={`text-sm font-medium ${stock > 10 ? 'text-green-600' : stock > 0 ? 'text-orange-600' : 'text-red-600'
+                    }`}>
+                    {stock > 10 ? `Available stock` : stock > 0 ? 'Low stock' : 'Out of stock'}
+                  </span>
+                  {currentVariation && (
+                    <span className="text-xs text-muted-foreground">SKU: {currentVariation.sku}</span>
+                  )}
                 </div>
-              )}
-            </div>
 
-            <div className="space-y-3 pt-4">
-              <div className='grid grid-cols-2 gap-3'>
-              <Button
-                onClick={() => handleAddToCart('order')}
-                disabled={stock === 0 || !areAllAttributesSelected()}
-                title={!areAllAttributesSelected() ? 'Please select all attributes' : stock === 0 ? 'Out of stock' : ''}
-                className="w-full h-12 text-base font-semibold  disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <Handbag  className="w-5 h-5 mr-2"/>
-                Order Now
-              </Button>
-              <Button
-              variant={'outline'}
-                onClick={() => handleAddToCart('cart')}
-                disabled={stock === 0 || !areAllAttributesSelected()}
-                title={!areAllAttributesSelected() ? 'Please select all attributes' : stock === 0 ? 'Out of stock' : ''}
-                className="w-full h-12 text-base font-semibold  disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <ShoppingCart className="w-5 h-5 mr-2" />
-                Add to Cart
-              </Button>
-
+                {stock > 0 && (
+                  <div className="flex items-center gap-4">
+                    <span className="text-sm font-medium text-accent-foreground">Quantity:</span>
+                    <div className="flex items-center border border-border rounded-lg">
+                      <Button
+                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                        disabled={quantity === 1}
+                        className="p-2 h-9.5 bg-muted  transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <Minus className="w-4 h-4 text-accent-foreground" />
+                      </Button>
+                      <span className="px-6 py-2 font-semibold text-accent-foreground">{quantity}</span>
+                      <Button
+                        onClick={() => setQuantity(Math.min(stock, quantity + 1))}
+                        disabled={quantity >= stock}
+                        className="p-2 h-9.5 bg-muted  transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        title={quantity >= stock ? `Maximum ${stock} available` : ''}
+                      >
+                        <Plus className="w-4 h-4 text-accent-foreground" />
+                      </Button>
+                    </div>
+                    <span className="text-xs text-muted">Max: {stock}</span>
+                  </div>
+                )}
               </div>
-              <Button
-                variant="outline"
-                className="w-full h-12 text-base font-semibold border-slate-300"
-              >
-                <Share2 className="w-5 h-5 mr-2" />
-                Share Product
-              </Button>
+
+              <div className="space-y-3 pt-4">
+                <div className='grid grid-cols-2 gap-3'>
+                  <Button
+                    onClick={() => handleAddToCart('order')}
+                    disabled={stock === 0 || !areAllAttributesSelected()}
+                    title={!areAllAttributesSelected() ? 'Please select all attributes' : stock === 0 ? 'Out of stock' : ''}
+                    className="w-full h-12 text-base font-semibold  disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Handbag className="w-5 h-5 mr-2" />
+                    Order Now
+                  </Button>
+                  <Button
+                    variant={'outline'}
+                    onClick={() => handleAddToCart('cart')}
+                    disabled={stock === 0 || !areAllAttributesSelected()}
+                    title={!areAllAttributesSelected() ? 'Please select all attributes' : stock === 0 ? 'Out of stock' : ''}
+                    className="w-full h-12 text-base font-semibold  disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <ShoppingCart className="w-5 h-5 mr-2" />
+                    Add to Cart
+                  </Button>
+
+                </div>
+                <Button
+                  variant="outline"
+                  className="w-full h-12 text-base font-semibold border-slate-300"
+                >
+                  <Share2 className="w-5 h-5 mr-2" />
+                  Share Product
+                </Button>
+              </div>
             </div>
 
-            <div className=" border rounded-xl overflow-hidden bg-background">
+            <div className=" border rounded-xl overflow-hidden bg-white">
               <div className="px-4 py-3 border-b bg-muted/50">
                 <h3 className="text-sm font-semibold text-accent-foreground">
                   Shipping Zones
@@ -386,6 +389,12 @@ export function ProductDetailss({ product }: { product: IProduct }) {
                 </table>
               </div>
             </div>
+
+            {
+              product?.videoUrl &&
+              <VideoSection url={product?.videoUrl} />
+            }
+
           </div>
         </div>
       </div>

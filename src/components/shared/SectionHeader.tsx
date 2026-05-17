@@ -18,7 +18,7 @@ export default function SectionHeader({
   className
 }: Props) {
   return (
-    <div className={cn("max-w-7xl mx-auto px-4 py-8", className)}>
+    <div className={cn("max-w-7xl mx-auto px-4 ", className)}>
       <div className="flex flex-col items-center text-center">
         
         {/* Title */}
@@ -28,7 +28,7 @@ export default function SectionHeader({
 
         {/* Description */}
         {description && (
-          <p className=" mt-1 lg:mt-2 text-muted-foreground text-xs lg:text-sm xl:text-lg max-w-2xl">
+          <p className="  lg:mt-2 text-muted-foreground text-xs lg:text-sm xl:text-lg max-w-2xl">
             {description}
           </p>
         )}
@@ -36,9 +36,9 @@ export default function SectionHeader({
         {/* See All Button */}
         <Link
           href={seeAllLink}
-          className="mt-2"
+          className="mt-1 md:mt-2"
         >
-          <Button className='h-9 px-6' variant={'default'} >
+          <Button className='text-xs h-6 md:h-9 md:px-6' variant={'default'} >
 
           {seeAllText}
           <span className="group-hover:translate-x-1  transition-transform duration-300">→</span>

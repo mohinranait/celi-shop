@@ -14,18 +14,13 @@ import LoginModal from "./login-modal";
 import NavigationMenus from "./NavigationMenus";
 import { toggleCartDroware } from "@/redux/features/cartSlice";
 
-// Shadcn Sheet (Drawer)
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+
 import { MobileMenu } from "./MobileMenu";
 import HeaderLogo from "./HeaderLogo";
+import { cn } from "@/lib/utils";
 
 export default function Header() {
+  const [isMobileSearch, setIsMobileSearch] = useState(false)
   const [searchQuery, setSearchQuery] = useState("");
   const { user } = useAppSelector((state) => state.auth);
   const { totalItems } = useAppSelector((state) => state.cart);
@@ -59,14 +54,14 @@ export default function Header() {
       </div>
 
       {/* Main header */}
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto px-4 py-2 lg:py-4">
         <div className="flex items-center justify-between gap-4">
 
-            {/* Mobile Menu Button - 3 Dot / Hamburger stays here */}
-            <MobileMenu />
+          {/* Mobile Menu Button - 3 Dot / Hamburger stays here */}
+          <MobileMenu />
 
           {/* Logo */}
-         <HeaderLogo />
+          <HeaderLogo />
 
           {/* Desktop Search */}
           <form
@@ -79,9 +74,9 @@ export default function Header() {
                 placeholder="Search products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="rounded-r-none bg-background border-r-0 h-9"
+                className="rounded-r-none bg-background border-r-0 h-10"
               />
-              <Button type="submit" size="sm" className="rounded-l-none h-9">
+              <Button type="submit" size="sm" className="rounded-l-none h-10">
                 <Search className="h-4 w-4" />
               </Button>
             </div>
@@ -90,27 +85,30 @@ export default function Header() {
           {/* Right side icons */}
           <div className="flex items-center gap-2 md:gap-4">
             {/* User Account */}
-            {user ? (
-              <span
-                onClick={handleLogout}
-                className=" hidden md:inline-flex gap-2 items-center cursor-pointer hover:text-primary transition-colors"
-              >
-                <User className="h-5 w-5" />
-                {user?.name}
-              </span>
-            ) : (
+           
               <Button
                 variant="default"
-                className="hidden md:flex items-center gap-2"
+                className="hidden md:flex items-center h-10 px-5 gap-2"
                 type="button"
                 onClick={() => dispatch(setLoginModalOpen({ isOpen: true }))}
               >
                 <User className="h-5 w-5" />
-                <span>Login</span>
+                <span>Login</span> / 
+                <span>Register</span>
               </Button>
-            )}
+          
 
             {/* Cart */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative md:hidden"
+              onClick={() => setIsMobileSearch(prev => !prev)}
+            >
+              <Search className="h-55 w-5" />
+
+            </Button>
+
             <Button
               variant="ghost"
               size="icon"
@@ -124,13 +122,13 @@ export default function Header() {
               </span>
             </Button>
 
-          
-          
+
+
           </div>
         </div>
 
         {/* Mobile Search */}
-        <form onSubmit={handleSearch} className="md:hidden mt-4">
+        <form onSubmit={handleSearch} className={cn("md:hidden h-0 overflow-hidden transition-all ", isMobileSearch && 'h-10 mt-2')}>
           <div className="flex">
             <Input
               type="text"

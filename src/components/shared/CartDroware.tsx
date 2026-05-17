@@ -40,7 +40,14 @@ const EcommerceCartDrawer = () => {
       onOpenChange={handleToggleCart}
       direction="right"
     >
-      <DrawerContent className="ml-auto flex h-full w-full max-w-md flex-col rounded-none border-l bg-background">
+      <DrawerContent className="
+    fixed inset-y-0 right-0 z-50
+    w-screen! max-w-none!
+    md:w-112.5!
+    h-full flex flex-col
+    bg-background border-l shadow-xl
+    rounded-none md:rounded-l-2xl
+  ">
         {/* Header */}
         <DrawerHeader className="border-b px-5 py-4">
           <div className="flex items-center justify-between">
@@ -88,11 +95,11 @@ const EcommerceCartDrawer = () => {
               </Button>
             </div>
           ) : (
-            <div className="divide-y px-5 py-3">
+            <div className=" px-5 space-y-3 py-3">
               {carts.map((item, idx) => (
                 <div
                   key={idx}
-                  className="flex gap-4 py-4"
+                  className="flex gap-4 bg-white p-3 rounded-md py-4"
                 >
                   {/* Product Image */}
                   <div className="relative h-24 w-24 overflow-hidden rounded-2xl border bg-muted">

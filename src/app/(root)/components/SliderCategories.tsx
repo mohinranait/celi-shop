@@ -18,16 +18,16 @@ import SectionHeader from '@/components/shared/SectionHeader';
 const CategoryCard = ({ category }: { category: ICategory }) => {
   return (
     <div className="group  flex flex-col items-center gap-3 rounded-2xl bg-background transition-all duration-200 cursor-pointer">
-      <div className="inset-0 w-full  aspect-square rounded-full  bg-muted border border-border flex items-center justify-center overflow-hidden shrink-0">
+      <div className="inset-0 w-full max-w-32 max-h-32  aspect-square rounded-full  bg-muted border border-border flex items-center justify-center overflow-hidden shrink-0">
         <Link href={`/shop?category=${category?._id}`} className='w-full h-full'>
-        <Image
-          src={category?.thumbnail || `/${PRODUCT_IMG}`}
-          width={56}
-          height={56}
-          alt={category.name}
-          className="w-full h-full rounded-full object-cover   border-8 border-white overflow-hidden"
+          <Image
+            src={category?.thumbnail || `/${PRODUCT_IMG}`}
+            width={180}
+            height={180}
+            alt={category.name}
+            className="w-full h-full rounded-full object-cover   border-8 border-white overflow-hidden"
           />
-          </Link>
+        </Link>
       </div>
       <div className="text-center">
         <Link href={`/shop?category=${category?._id}`}>
@@ -49,20 +49,20 @@ const SliderCategories = () => {
   const { data, isLoading } = useGetCategoriesQuery('page=1&limit=20&isDelete=false&status=true');
   const categories = data?.data || [];
 
-  const finalCategories = categories?.filter( cat => cat.thumbnail)
+  const finalCategories = categories?.filter(cat => cat.thumbnail)
 
   return (
-    <section className=" mx-auto py-10 px-4">
-       
+    <section className=" mx-auto py-3 md:py-6 lg:pt-10 px-4">
+
       <div className='container mx-auto'>
-      <SectionHeader title='Popular category'description="Explore your popular category, you can visit this." seeAllLink='/categories' seeAllText='All Categories' className='pb-4' />
+        <SectionHeader title='Popular category' description="Explore your popular category, you can visit this." seeAllLink='/categories' seeAllText='All Categories' className='pb-2 md:pb-4' />
 
         {
           isLoading ? <div className="container mx-auto grid grid-cols-2 md:grid-cols-3  lg:grid-cols-5 gap-4">
             {Array.from({ length: 5 }).map((_, i) => (
               <div key={i} className="h-40 rounded-xl bg-muted animate-pulse" />
             ))}
-          </div> : finalCategories?.length === 0 ? <div className='h-20 flex items-center justify-center'>Category not found</div> : 
+          </div> : finalCategories?.length === 0 ? <div className='h-20 flex items-center justify-center'>Category not found</div> :
             <div className="relative">
               <Carousel
                 opts={{
@@ -82,8 +82,8 @@ const SliderCategories = () => {
                   ))}
                 </CarouselContent>
 
-                <CarouselPrevious className=" bg-primary w-8 h-8 text-white lg:w-10 lg:h-10  flex left-2 top-24 lg:left-2" />
-                <CarouselNext className=" bg-primary w-8 h-8 text-white lg:w-10 lg:h-10  flex right-2 top-24 lg:right-2" />
+                <CarouselPrevious className=" bg-primary w-8 h-8 text-white lg:w-10 lg:h-10  flex left-2 top-16 lg:left-2" />
+                <CarouselNext className=" bg-primary w-8 h-8 text-white lg:w-10 lg:h-10  flex right-2 top-16 lg:right-2" />
               </Carousel>
             </div>
         }

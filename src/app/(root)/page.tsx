@@ -24,7 +24,7 @@ const HomePage = () => {
       {/* Latest product section */}
       {
         appSetting?.features?.latestSection &&
-        <section className=" py-10 px-2">
+        <section className=" py-4 lg:py-10 px-2">
           <SectionHeader title='New Products' description="Explore your popular products, you can buy here." seeAllLink='/shop' seeAllText='All Products' className='pb-4' />
           <NewProducts />
         </section>

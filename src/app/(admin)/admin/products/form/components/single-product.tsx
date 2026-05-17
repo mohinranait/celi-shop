@@ -82,7 +82,7 @@ const SingleProduct = ({ form }: Props) => {
   };
 
   return (
-    <div className="border rounded-2xl p-6 bg-background shadow-sm space-y-6">
+    <div className="border rounded-2xl p-6 bg-white shadow-sm space-y-6">
       {/* Header */}
       <div className="space-y-1">
         <h2 className="text-xl font-semibold tracking-tight">

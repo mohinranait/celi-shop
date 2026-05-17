@@ -9,6 +9,10 @@ const nextConfig = {
         remotePatterns: [
             { hostname: 'images.app.goo.gl' },
             { hostname: 'res.cloudinary.com' },
+            {
+                protocol: "https",
+                hostname: "img.youtube.com",
+            },
           
         ],
     },

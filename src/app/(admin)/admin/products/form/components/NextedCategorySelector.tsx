@@ -139,7 +139,7 @@ export default function NestedCategorySelector({
     <div className="relative">
       <div
         onClick={handleOpen}
-        className="border border-input rounded-lg px-4 py-1 cursor-pointer hover:border-primary transition flex items-center justify-between min-h-11.5 bg-background"
+        className="border border-input rounded-lg px-4 py-1 cursor-pointer hover:border-primary transition flex items-center justify-between min-h-11.5 bg-white"
       >
         {selectedPath.length > 0 ? (
           <div className="flex items-center gap-1.5 flex-wrap text-sm">

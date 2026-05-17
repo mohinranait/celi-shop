@@ -410,54 +410,65 @@ export default function AddProductForm() {
             <Label>Select Category</Label>
 
             {
-              categories?.length && 
-            <NestedCategorySelector
-            categories={categories || []}
-            value={watch("category")}
-            onChange={(id) => setValue("category", id, { shouldValidate: true })}
-            error={errors.category?.message}
-            />
-          }
+              categories?.length &&
+              <NestedCategorySelector
+                categories={categories || []}
+                value={watch("category")}
+                onChange={(id) => setValue("category", id, { shouldValidate: true })}
+                error={errors.category?.message}
+              />
+            }
           </div>
 
           {/* Images */}
           <SectionCard
             icon={<ImagePlus size={15} />}
-            title="Product Images"
+            title="Product Images & Video"
             description="Select images from your media library"
           >
-            <div className="flex flex-wrap gap-3">
-              {productImages.map((url, i) => (
-                <div
-                  key={i}
-                  className="relative w-24 h-24 rounded-lg overflow-hidden border border-border group"
-                >
-                  <Image src={url} alt="product" fill className="object-cover" />
+            <div className="space-y-6">
+              <div>
+                <div className="flex flex-wrap gap-3">
+                  {productImages.map((url, i) => (
+                    <div
+                      key={i}
+                      className="relative w-24 h-24 rounded-lg overflow-hidden border border-border group"
+                    >
+                      <Image src={url} alt="product" fill className="object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => setProductImages(productImages.filter((_, j) => j !== i))}
+                        className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+                      >
+                        <X size={16} className="text-white" />
+                      </button>
+                    </div>
+                  ))}
+
                   <button
                     type="button"
-                    onClick={() => setProductImages(productImages.filter((_, j) => j !== i))}
-                    className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+                    onClick={() => setMediaOpen(true)}
+                    className="w-24 h-24 rounded-lg border-2 border-dashed border-border   transition-all flex flex-col items-center justify-center gap-1 text-accent-foreground "
                   >
-                    <X size={16} className="text-white" />
+                    <Plus size={18} />
+                    <span className="text-[10px] font-medium">Add Image</span>
                   </button>
                 </div>
-              ))}
 
-              <button
-                type="button"
-                onClick={() => setMediaOpen(true)}
-                className="w-24 h-24 rounded-lg border-2 border-dashed border-border   transition-all flex flex-col items-center justify-center gap-1 text-accent-foreground "
-              >
-                <Plus size={18} />
-                <span className="text-[10px] font-medium">Add Image</span>
-              </button>
+                {productImages.length === 0 && (
+                  <p className="text-xs text-muted-foreground">
+                    {`No images selected. Click "Add Image" to open the media library.`}
+                  </p>
+                )}
+              </div>
+              <FormField label="Product Video URL (Optional)" >
+              <Input
+                {...register("videoUrl")}
+                placeholder="Youtube Video URL"
+                className="h-9 text-sm"
+              />
+            </FormField>
             </div>
-
-            {productImages.length === 0 && (
-              <p className="text-xs text-muted-foreground">
-                {`No images selected. Click "Add Image" to open the media library.`}
-              </p>
-            )}
           </SectionCard>
 
 

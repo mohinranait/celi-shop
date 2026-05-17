@@ -35,13 +35,13 @@ export const Navbar = ({
   return (
     <div
       className={cn(
-        "w-full bg-background",
+        "w-full ",
         fixed && "header-fixed peer/header fixed z-50 w-[inherit]"
       )}
     >
       <header
         className={cn(
-          "flex w-full justify-between bg-background h-16 items-center gap-3 p-4 sm:gap-4",
+          "flex w-full bg-white justify-between  h-16 items-center gap-3 p-4 sm:gap-4",
           fixed && "header-fixed peer/header fixed z-50 w-[inherit]",
           offset > 10 && fixed ? "shadow-sm" : "shadow-none",
           className

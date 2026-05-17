@@ -2,11 +2,20 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, ShoppingBag, ShoppingCart, User } from "lucide-react";
+import { Home, ShoppingBag, ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/hooks/hooks";
+import WhatsAppIcon from "../svg/WhatsApp";
+import { useGetAppSettingQuery } from "@/redux/service/setting";
 
-const navItems = [
+
+
+export default function BottomNav() {
+  const {totalItems} = useAppSelector(state => state.cart)
+  const {data:appSetting} = useGetAppSettingQuery()
+  const pathname = usePathname();
+
+  const navItems = [
   {
     href: "/",
     label: "Home",
@@ -17,25 +26,22 @@ const navItems = [
     label: "Shop",
     icon: ShoppingBag,
   },
+   {
+    href: `https://wa.me/+88${appSetting?.contactPhone}`,
+    label: "WhatsApp",
+    icon: WhatsAppIcon,
+  },
   {
     href: "/cart",
     label: "Cart",
     icon: ShoppingCart,
     badge: true,
   },
-  {
-    href: "/account",
-    label: "Account",
-    icon: User,
-  },
+ 
 ];
 
-export default function BottomNav() {
-  const {totalItems} = useAppSelector(state => state.cart)
-  const pathname = usePathname();
-
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur-lg md:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-white backdrop-blur-lg md:hidden">
       <nav className="flex items-center justify-around py-2">
         {navItems.map((item) => {
           const isActive = pathname === item.href;

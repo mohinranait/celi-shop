@@ -169,7 +169,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export function MobileMenu({ user, cartCount = 0 }: MobileMenuProps) {
+export function MobileMenu({ user }: MobileMenuProps) {
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
 
@@ -220,13 +220,13 @@ export function MobileMenu({ user, cartCount = 0 }: MobileMenuProps) {
           {/* Footer — auth buttons (guest only) */}
           {!user && (
             <div className="border-t px-4 py-4 flex flex-col gap-2.5">
-              <Link href="/login" onClick={close}>
+              <Link href="/user-auth" onClick={close}>
                 <Button variant="outline" className="w-full gap-2 rounded-xl h-10">
                   <LogIn className="h-4 w-4" />
                   Login
                 </Button>
               </Link>
-              <Link href="/register" onClick={close}>
+              <Link href="/user-auth" onClick={close}>
                 <Button className="w-full gap-2 rounded-xl h-10">
                   <UserPlus className="h-4 w-4" />
                   Sign Up

@@ -37,6 +37,7 @@ const VariationSchema = new mongoose.Schema({
 const ProductSchema = new mongoose.Schema({
   name: { type: String, required: true },
   slug: { type: String, unique: true },
+  videoUrl: {type:String},
 
   shortDescription: String,
   description: String,
