@@ -8,10 +8,10 @@ const AllProductsPage = () => {
 
   return (
     <>
-    <Navbar fixed />
-    <Main>
-    <AllOrders />
-    </Main>
+      <Navbar fixed />
+      <Main>
+        <AllOrders />
+      </Main>
     </>
   )
 }

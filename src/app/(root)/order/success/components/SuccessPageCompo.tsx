@@ -1,4 +1,4 @@
-import { CheckCircle, Truck, MapPin,  ShoppingBag, Receipt, Tag } from "lucide-react";
+import { CheckCircle, Truck, MapPin, ShoppingBag, Receipt, Tag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,7 +14,7 @@ import DeliveryTracker from "./DeliveryTracker";
 import { SuccessPageSkeleton } from "./SuccessSkeleton";
 
 const SuccessPageCompo = () => {
-    const params = useSearchParams();
+  const params = useSearchParams();
   const invoiceId = params.get('oid')
   const { data, isLoading } = useGetOrderByTrackingNumberQuery(invoiceId!, { skip: !invoiceId });
 
@@ -22,14 +22,14 @@ const SuccessPageCompo = () => {
   const items = order?.items || [];
 
 
-  if(isLoading) return <SuccessPageSkeleton />
+  if (isLoading) return <SuccessPageSkeleton />
 
   if (!order) return;
 
   if (!invoiceId) return;
 
   return (
-     <div className="min-h-screen  py-10 px-4">
+    <div className="min-h-screen  py-10 px-4">
       <div className="max-w-xl mx-auto space-y-4">
 
         {/* Hero */}
@@ -47,6 +47,18 @@ const SuccessPageCompo = () => {
               <Receipt className="w-3 h-3" />
               Order #{order?.trackingNumber}
             </Badge>
+            {(
+              order?.payment?.method === "BKASH" ||
+              order?.payment?.method === "NAGAD"
+            ) && (
+                <Badge
+                  variant="secondary"
+                  className="mt-4 gap-1.5 px-3 py-1 text-xs"
+                >
+                  <Receipt className="w-3 h-3" />
+                  Txt ID: #{order?.payment?.transactionId}
+                </Badge>
+              )}
           </CardContent>
         </Card>
 
@@ -143,7 +155,7 @@ const SuccessPageCompo = () => {
               <span className="text-lg font-semibold text-accent-foreground">{CURRENCY} {order?.pricing?.total.toLocaleString()}</span>
             </div>
 
-           
+
           </CardContent>
         </Card>
 
@@ -185,11 +197,11 @@ const SuccessPageCompo = () => {
                   ? { label: "Payment Status", value: <PaymentStatusBadge status={order?.payment?.status} /> }
                   : null,
               ]?.filter(Boolean)?.map((info) => (
-                  <div key={info?.label} className="bg-muted rounded-lg p-3 border border-border">
-                    <p className="text-xs text-muted-foreground mb-1">{info?.label}</p>
-                    <p className="text-sm font-medium text-accent-foreground">{info?.value}</p>
-                  </div>
-                ))}
+                <div key={info?.label} className="bg-muted rounded-lg p-3 border border-border">
+                  <p className="text-xs text-muted-foreground mb-1">{info?.label}</p>
+                  <p className="text-sm font-medium text-accent-foreground">{info?.value}</p>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>

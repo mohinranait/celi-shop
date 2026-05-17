@@ -6,6 +6,7 @@ import CellAction from "./CellAction";
 import { IOrder } from "@/redux/service/orders/type";
 import { OrderStatusBadge } from "@/components/shared/render-status";
 import { CURRENCY } from "@/lib/envSecret";
+import { format } from "date-fns";
 
 
 const tableColumns = ({ type = 'active' }: { type: "active" | "deleted" }) => {
@@ -46,7 +47,10 @@ const tableColumns = ({ type = 'active' }: { type: "active" | "deleted" }) => {
         const method = row?.original?.payment.method;
         return <div> 
           <p>{method}</p>
-          <Badge variant={"outline"}>T. ID: {method === 'BKASH' || method === 'NAGAD' && row?.original?.payment?.transactionId || '--'}</Badge>
+          {
+           ( method === 'BKASH' || method === 'NAGAD') && 
+          <Badge variant={"outline"}>T. ID: { row?.original?.payment?.transactionId || '--'}</Badge>
+          }
         </div>
       }
     },
@@ -72,7 +76,10 @@ const tableColumns = ({ type = 'active' }: { type: "active" | "deleted" }) => {
       header: "Date",
       accessorKey: "createdAt",
       cell: ({ row }) => {
-        return <GetDateFormate date={row.original.createdAt && row.original.createdAt } />
+        return <div>
+          <GetDateFormate date={row.original.createdAt && row.original.createdAt } />
+          <p className="text-xs">{format(row.original?.createdAt, "hh:mm a")}</p>
+        </div>
       }
     },
     {
