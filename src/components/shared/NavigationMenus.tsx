@@ -135,6 +135,13 @@ const NavigationMenus = () => {
           >
             Offers
           </Link>
+
+          <Link
+            href="/free-shipping"
+            className="text-secondary text-sm font-medium hover:opacity-80 transition"
+          >
+            Free Shipping
+          </Link>
           
         
            <Link

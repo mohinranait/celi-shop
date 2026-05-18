@@ -76,6 +76,11 @@ export async function GET(req: NextRequest) {
         sortOption = { totalSold: -1, createdAt: -1 };
         break;
 
+      case "freeshipping":
+        query["shipping.isFreeShipping"] = true;
+        sortOption = { createdAt: -1 };
+        break;
+
       case "offer":
       case "discount":
         query.$or = [
