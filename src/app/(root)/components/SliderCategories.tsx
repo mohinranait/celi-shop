@@ -7,6 +7,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import { PRODUCT_IMG } from "@/lib/default-import";
 import { ICategory } from '@/redux/service/categories/type';
@@ -65,10 +66,17 @@ const SliderCategories = () => {
           </div> : finalCategories?.length === 0 ? <div className='h-20 flex items-center justify-center'>Category not found</div> :
             <div className="relative">
               <Carousel
+                plugins={[
+                  Autoplay({
+                    delay: 3000,
+                    stopOnInteraction: false,
+                  }),
+                ]}
                 opts={{
                   align: "start",
                   loop: true,
                 }}
+
                 className="w-full"
               >
                 <CarouselContent className="-ml-2 md:-ml-3">

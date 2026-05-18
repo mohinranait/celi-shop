@@ -130,6 +130,7 @@ export function ProductDetailss({ product }: { product: IProduct }) {
       productImage: images[0],
       selectedVariants: Object.keys(selectedVariantsObj).length > 0 ? selectedVariantsObj : undefined,
       variationId: selectedVariation?._id || null,
+      freeShipping: product?.shipping?.isFreeShipping,
     }
 
 

@@ -385,7 +385,8 @@ export default function AddProductForm() {
 
 
 
-            <FormField
+           <div className="flex gap-2 items-center">
+             <FormField
               label="feature"
               hint="Auto-generated from product name. You can edit it."
             >
@@ -396,6 +397,18 @@ export default function AddProductForm() {
                 />
               </div>
             </FormField>
+             <FormField
+              label="Free Delivery"
+              hint="Auto-generated from product name. You can edit it."
+            >
+              <div className="flex items-center">
+                <Switch
+                  checked={form.watch("shipping.isFreeShipping") || false}
+                  onCheckedChange={(value) => form.setValue("shipping.isFreeShipping", value, { shouldValidate: true })}
+                />
+              </div>
+            </FormField>
+           </div>
 
             <FormField label="Description">
               <Textarea

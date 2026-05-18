@@ -140,6 +140,7 @@ const ProductCard = ({ product }: Props) => {
       price: (getSinglePrice()?.price || 0),
       salePrice: (getSinglePrice()?.finalPrice || 0),
       productImage: productImage,
+      freeShipping: product?.shipping?.isFreeShipping
     }
 
 

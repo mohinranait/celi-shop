@@ -51,6 +51,8 @@ export default function CheckoutPage() {
   } | null>(null);
 
 
+  const isShippingProduct = carts?.some(item => item.freeShipping === false)
+
 
   const paymentMethodss = useMemo(() => {
     const methods = appSetting?.paymentMethods as TPaymentMethodType;
@@ -86,7 +88,11 @@ export default function CheckoutPage() {
 
 
 
-  const deliveryCharge = zone ? zone?.fee : 0;
+  let deliveryCharge = 0;
+
+  if (isShippingProduct) {
+    deliveryCharge = zone ? zone?.fee : 0;
+  }
 
 
   const zones = useMemo(() => {
@@ -117,7 +123,7 @@ export default function CheckoutPage() {
 
 
   const onSubmit = async (data: TCheckoutForm) => {
-    if(carts?.length === 0) {
+    if (carts?.length === 0) {
       toast.warning("Your cart is empty");
       return;
     }
@@ -155,7 +161,7 @@ export default function CheckoutPage() {
 
   console.log(getValues());
   console.log(errors);
-  
+
 
 
   return (
@@ -194,49 +200,53 @@ export default function CheckoutPage() {
 
                   <Separator />
 
-                  <div>
-                    <Label className="text-base font-medium mb-3 block">Delivery Zone</Label>
-                    <RadioGroup value={zone?.areaName} onValueChange={(v) => {
-                      const findZone = zones?.find(ite => ite.areaName === v)
-                      setZone(findZone || null);
+                  {
+                    isShippingProduct ?
+                      <div>
+                        <Label className="text-base font-medium mb-3 block">Delivery Zone</Label>
+                        <RadioGroup value={zone?.areaName} onValueChange={(v) => {
+                          const findZone = zones?.find(ite => ite.areaName === v)
+                          setZone(findZone || null);
 
-                    }} className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        }} className="grid grid-cols-1 md:grid-cols-2 gap-3">
 
-                      {zones?.map((zon, index) => (
-                        <div
-                          key={index}
-                          className={`border rounded-xl p-4 cursor-pointer transition-all hover:bg-muted/50
+                          {zones?.map((zon, index) => (
+                            <div
+                              key={index}
+                              className={`border rounded-xl p-4 cursor-pointer transition-all hover:bg-muted/50
                 ${zone?.areaName === zon.areaName
-                              ? "border-primary bg-primary/5 shadow-sm"
-                              : "border-border"
-                            }`}
-                        >
-                          <div className="flex items-start gap-3">
-                            <RadioGroupItem
-                              value={zon.areaName}
-                              id={`zone-${index}`}
-                              className="mt-1"
-                            />
-                            <Label
-                              htmlFor={`zone-${index}`}
-                              className="flex flex-col cursor-pointer items-start flex-1"
+                                  ? "border-primary bg-primary/5 shadow-sm"
+                                  : "border-border"
+                                }`}
                             >
-                              <p className="font-medium text-left">{zon.areaName}</p>
+                              <div className="flex items-start gap-3">
+                                <RadioGroupItem
+                                  value={zon.areaName}
+                                  id={`zone-${index}`}
+                                  className="mt-1"
+                                />
+                                <Label
+                                  htmlFor={`zone-${index}`}
+                                  className="flex flex-col cursor-pointer items-start flex-1"
+                                >
+                                  <p className="font-medium text-left">{zon.areaName}</p>
 
 
 
-                              <p className="text-sm font-semibold text-primary mt-1">
-                                Delivery Fee: {CURRENCY}{zon.fee}
-                              </p>
-                            </Label>
-                          </div>
-                        </div>
-                      ))}
+                                  <p className="text-sm font-semibold text-primary mt-1">
+                                    Delivery Fee: {CURRENCY}{zon.fee}
+                                  </p>
+                                </Label>
+                              </div>
+                            </div>
+                          ))}
 
 
 
-                    </RadioGroup>
-                  </div>
+                        </RadioGroup>
+                      </div> :
+                      <div className="p-4 rounded-md bg-muted border border-border">Free Delivery</div>
+                  }
 
 
 

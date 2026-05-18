@@ -85,18 +85,29 @@ export default function Header() {
           {/* Right side icons */}
           <div className="flex items-center gap-2 md:gap-4">
             {/* User Account */}
-           
-              <Button
+
+            {
+              user?._id ? <Button
                 variant="default"
                 className="hidden md:flex items-center h-10 px-5 gap-2"
                 type="button"
-                onClick={() => dispatch(setLoginModalOpen({ isOpen: true }))}
+                onClick={() => router.push( user?.role === 'Admin' ? '/admin' : '/dashboard' )}
               >
                 <User className="h-5 w-5" />
-                <span>Login</span> / 
-                <span>Register</span>
-              </Button>
-          
+                <span>{user?.role === 'Admin' ?  "Admin Dashboard":"Profile"}</span>
+              </Button> :
+                <Button
+                  variant="default"
+                  className="hidden md:flex items-center h-10 px-5 gap-2"
+                  type="button"
+                  onClick={() => dispatch(setLoginModalOpen({ isOpen: true }))}
+                >
+                  <User className="h-5 w-5" />
+                  <span>Login</span> /
+                  <span>Register</span>
+                </Button>
+            }
+
 
             {/* Cart */}
             <Button

@@ -83,9 +83,12 @@ const RightBar = ({ deliveryCharge, selectedMethod, form, isLoading }: Props) =>
 
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Delivery Charge</span>
-            <Badge variant={'outline'}>
-              {CURRENCY}{deliveryCharge}
-            </Badge>
+            {
+              deliveryCharge === 0 ? "Free" :
+                <Badge variant={'outline'}>
+                  {CURRENCY}{deliveryCharge}
+                </Badge>
+            }
           </div>
 
           <div className="flex justify-between text-sm">

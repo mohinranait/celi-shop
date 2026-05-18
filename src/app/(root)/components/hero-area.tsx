@@ -10,12 +10,13 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 import { useGetSlidersQuery } from '@/redux/service/sliders';
 import { useGetAppSettingQuery } from '@/redux/service/setting';
 
 const HeroSection = () => {
   const { data } = useGetSlidersQuery(`page=1&limit=10&isDelete=false&status=true`);
-  const {data:appSetting} = useGetAppSettingQuery();
+  const { data: appSetting } = useGetAppSettingQuery();
   const isBanner = appSetting?.features?.bannerSlider;
 
   //  Filter valid sliders only ===
@@ -39,11 +40,17 @@ const HeroSection = () => {
 
 
 
-  return isBanner &&  (
+  return isBanner && (
     <section>
       <div className="container px-2 md:px-0 pt-1 lg:pt-4 mx-auto">
         <div className="relative">
           <Carousel
+            plugins={[
+              Autoplay({
+                delay: 3000,
+                stopOnInteraction: false,
+              }),
+            ]}
             opts={{
               align: "start",
               loop: true,
@@ -89,8 +96,8 @@ const HeroSection = () => {
                   <CarouselItem key={slide._id}>
                     <div
                       className={`relative h-40 md:h-64 lg:h-72 xl:h-125 flex items-center rounded-xl overflow-hidden
-                        ${isWithImage 
-                          ? 'bg-cover bg-center' 
+                        ${isWithImage
+                          ? 'bg-cover bg-center'
                           : 'bg-linear-to-r from-foreground/87 to-primary/90'}`}
                       style={
                         isWithImage && slide.image

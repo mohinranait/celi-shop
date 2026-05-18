@@ -22,6 +22,7 @@ export interface ICartItem {
   productType: TProductType
   selectedVariants?: Record<string, string>;
   variationId?: string | null;
+  freeShipping?: boolean;
 }
 
 
