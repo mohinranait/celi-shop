@@ -1,3 +1,4 @@
+import { getAllDescendantIds } from "@/lib/category-utils";
 import connectDB from "@/lib/db";
 import Product from "@/models/product";
 import { NextRequest, NextResponse } from "next/server";
@@ -7,6 +8,7 @@ export async function GET(req: NextRequest) {
     await connectDB();
      const { searchParams } = new URL(req.url);
 
+    const category  = searchParams.get("category");
     const search = searchParams.get("search") || "";
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "10");
@@ -78,6 +80,15 @@ export async function GET(req: NextRequest) {
 
       case "freeshipping":
         query["shipping.isFreeShipping"] = true;
+        sortOption = { createdAt: -1 };
+        break;
+
+      case "related":
+      if (!category) {
+        throw new Error("Category is required");
+      }
+        const categoryIds = await getAllDescendantIds(category);
+        query.category = { $in: categoryIds };
         sortOption = { createdAt: -1 };
         break;
 

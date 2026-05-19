@@ -13,8 +13,8 @@ interface Props {
 export default function SectionHeader({
   title,
   description,
-  seeAllLink = '#',
-  seeAllText = 'See All',
+  seeAllLink ,
+  seeAllText ,
   className
 }: Props) {
   return (
@@ -34,6 +34,9 @@ export default function SectionHeader({
         )}
 
         {/* See All Button */}
+        {
+
+           seeAllLink && seeAllText  && 
         <Link
           href={seeAllLink}
           className="mt-1 md:mt-2"
@@ -44,6 +47,7 @@ export default function SectionHeader({
           <span className="group-hover:translate-x-1  transition-transform duration-300">→</span>
           </Button>
         </Link>
+        }
       </div>
     </div>
   );

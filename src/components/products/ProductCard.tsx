@@ -178,6 +178,33 @@ const ProductCard = ({ product }: Props) => {
   }
 
 
+  const getHoverImage = () => {
+    // Gallery second image
+    if (gallery?.length > 1 && gallery[1]) {
+      return gallery[1];
+    }
+
+    // Variant second image
+    if (variations?.length) {
+      for (const variant of variations) {
+        if (variant?.images?.length > 1 && variant.images[1]) {
+          return variant.images[1];
+        }
+
+        // fallback first variant image if multiple not available
+        if (variant?.images?.length && variant.images[0]) {
+          return variant.images[0];
+        }
+      }
+    }
+
+    // fallback primary image
+    return getProductImage();
+  };
+
+  const hoverImage = getHoverImage();
+
+
   const isStockOut = () => {
     let isNotAvailable = false;
 
@@ -218,13 +245,34 @@ const ProductCard = ({ product }: Props) => {
         }
         {
           productImage &&
-          <Link href={`/${slug}`} className="rounded-md  bg-red-800">
+          <Link href={`/${slug}`} className="block w-full h-full relative">
             <Image
               width={600}
               height={400}
               src={productImage}
               alt={name}
-              className={cn("w-full h-full  object-contain rounded-md  transition-transform duration-500 group-hover:scale-105", )}
+              className="
+        absolute inset-0
+        w-full h-full object-contain rounded-md
+        transition-all duration-500
+        opacity-100 group-hover:opacity-0
+        scale-100 group-hover:scale-105
+      "
+            />
+
+            {/* Hover image */}
+            <Image
+              width={600}
+              height={400}
+              src={hoverImage}
+              alt={name}
+              className="
+        absolute inset-0
+        w-full h-full object-contain rounded-md
+        transition-all duration-500
+        opacity-0 group-hover:opacity-100
+        scale-105 group-hover:scale-100
+      "
             />
           </Link>
         }

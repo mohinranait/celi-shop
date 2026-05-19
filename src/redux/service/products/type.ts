@@ -34,6 +34,8 @@ export interface IProductBase {
   shipping: {
     isFreeShipping: boolean;
   },
+  category: string,
+  brand?: string,
   price?:number,
   discountPrice?:number,
   discountParcent?: number;
