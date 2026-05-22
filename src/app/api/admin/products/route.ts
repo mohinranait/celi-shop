@@ -14,8 +14,9 @@ export async function POST(req: Request) {
     }
     const product = await Product.create({...body, stock: productStock });
     return NextResponse.json({ success: true, data: product }, { status: 201 });
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 400 });
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+    return NextResponse.json({ success: false, error: errorMessage }, { status: 400 });
   }
 }
 
@@ -29,6 +30,7 @@ export async function GET(req: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "10");
 
     const status = searchParams.get("status"); // true / false / all
+    const isFeatured = searchParams.get("isFeatured"); // true / false / all
     const isDelete = searchParams.get("isDelete"); // true / false / all
     const date = searchParams.get("date");
 
@@ -45,6 +47,7 @@ export async function GET(req: NextRequest) {
         $lte?: Date;
       };
       status?: boolean;
+      isFeatured?: boolean;
       isDelete?: boolean;
        $or?: {
         name?: { $regex: string; $options: string };
@@ -68,7 +71,10 @@ export async function GET(req: NextRequest) {
     if (isDelete === "true") query.isDelete = true;
     if (isDelete === "false") query.isDelete = false;
 
-    
+    //  FEATURED FILTER
+    if (isFeatured === "true") query.isFeatured = true;
+    if (isFeatured === "false") query.isFeatured = false;
+
     // date filter
     if (date) {
       const start = new Date(date);
@@ -94,7 +100,8 @@ export async function GET(req: NextRequest) {
         limit,
         totalPages: Math.ceil(total / limit),
       }, });
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+    return NextResponse.json({ success: false, error: errorMessage }, { status: 500 });
   }
 }

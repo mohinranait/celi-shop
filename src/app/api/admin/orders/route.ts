@@ -84,7 +84,7 @@ export async function POST(req: Request) {
         }
 
         const variation = product.variations.find(
-          (v: any) => v._id.toString() === variationId.toString()
+          (v: { _id: mongoose.Types.ObjectId }) => v._id.toString() === variationId.toString()
         );
 
         if (!variation) {
@@ -195,12 +195,13 @@ export async function POST(req: Request) {
       { status: 201 }
     );
 
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error instanceof Error ? error : new Error("An unknown error occurred");
     await session.abortTransaction();
     return NextResponse.json(
       {
         success: false,
-        message: error.message || "Failed to create order",
+        message: err.message || "Failed to create order",
       },
       { status: 400 }
     );
@@ -273,18 +274,19 @@ export async function GET(req: Request) {
     return NextResponse.json({
       success: true,
       data: orders,
-      pagination: {
+      meta: {
         total: totalOrders,
         page,
         limit,
         totalPages: Math.ceil(totalOrders / limit),
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err= error instanceof Error ? error : new Error("An unknown error occurred");
     return NextResponse.json(
       {
         success: false,
-        message: error.message || "Failed to fetch orders",
+        message: err.message || "Failed to fetch orders",
       },
       { status: 500 }
     );

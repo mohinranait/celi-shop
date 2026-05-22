@@ -7,7 +7,7 @@ const AdminDashboard = () => {
     <>
       <Navbar fixed></Navbar>
       <Main>
-        Dashboard
+        Coming Soon - Dashboard
       </Main>
     </>
   )

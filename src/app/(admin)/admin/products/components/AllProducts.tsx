@@ -8,16 +8,17 @@ import tableColumns from './columns';
 import { useGetProductsQuery } from '@/redux/service/products';
 import { useRouter } from 'next/navigation';
 import Pagination from '@/components/shared/Pagination';
+import Filters from './filters';
 
 const AllProducts = () => {
   const router = useRouter()
   const [filter, setFilter] = useState<"active" | "deleted">("active");
   const [isParams, setIsParams] = useState('')
-   const [pagination, setPagination] = useState({ page: 1, limit: 20 })
+  const [pagination, setPagination] = useState({ page: 1, limit: 20 })
   const columns = tableColumns({ type: filter });
   const { data } = useGetProductsQuery(`page=${pagination?.page}&limit=${pagination?.limit}&isDelete=${filter === 'active' ? 'false' : "true"}&${isParams}`)
   const products = data?.data || [];
-    const meta = data?.meta;
+  const meta = data?.meta;
 
 
 
@@ -39,7 +40,7 @@ const AllProducts = () => {
       </div>
 
 
-      {/* <Filters setParams={setIsParams}  /> */}
+      <Filters setParams={setIsParams}  />
 
       <div className="flex gap-2">
 
@@ -77,18 +78,15 @@ const AllProducts = () => {
       </Card>
 
       <Pagination
-            page={meta?.page || 1}
-            totalPages={meta?.totalPages || 1}
-            onPageChange={(page) =>
-              setPagination((prev) => ({
-                ...prev,
-                page,
-              }))
-            }
-          />
-
-      {/* MODAL */}
-      {/* <BrandForm isOpen={isOpen} setIsOpen={setIsOpen} /> */}
+        page={meta?.page || 1}
+        totalPages={meta?.totalPages || 1}
+        onPageChange={(page) =>
+          setPagination((prev) => ({
+            ...prev,
+            page,
+          }))
+        }
+      />
     </div>
   )
 }

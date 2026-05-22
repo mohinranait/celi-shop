@@ -385,30 +385,41 @@ export default function AddProductForm() {
 
 
 
-           <div className="flex gap-2 items-center">
-             <FormField
-              label="feature"
-              hint="Auto-generated from product name. You can edit it."
-            >
-              <div className="flex items-center">
-                <Switch
-                  checked={form.watch("isFeatured") || false}
-                  onCheckedChange={(value) => form.setValue("isFeatured", value, { shouldValidate: true })}
-                />
-              </div>
-            </FormField>
-             <FormField
-              label="Free Delivery"
-              hint="Auto-generated from product name. You can edit it."
-            >
-              <div className="flex items-center">
-                <Switch
-                  checked={form.watch("shipping.isFreeShipping") || false}
-                  onCheckedChange={(value) => form.setValue("shipping.isFreeShipping", value, { shouldValidate: true })}
-                />
-              </div>
-            </FormField>
-           </div>
+            <div className="flex gap-2 items-center">
+              <FormField
+                label="feature"
+                hint="Its will appear in the featured section on the homepage."
+              >
+                <div className="flex items-center">
+                  <Switch
+                    checked={form.watch("isFeatured") || false}
+                    onCheckedChange={(value) => form.setValue("isFeatured", value, { shouldValidate: true })}
+                  />
+                </div>
+              </FormField>
+              <FormField
+                label="Free Delivery"
+                hint="If enabled, this product will be marked as eligible for free delivery."
+              >
+                <div className="flex items-center">
+                  <Switch
+                    checked={form.watch("shipping.isFreeShipping") || false}
+                    onCheckedChange={(value) => form.setValue("shipping.isFreeShipping", value, { shouldValidate: true })}
+                  />
+                </div>
+              </FormField>
+               <FormField
+                label="Status"
+                hint="Product will be visible to customers."
+              >
+                <div className="flex items-center">
+                  <Switch
+                    checked={form.watch("status") || false}
+                    onCheckedChange={(value) => form.setValue("status", value, { shouldValidate: true })}
+                  />
+                </div>
+              </FormField>
+            </div>
 
             <FormField label="Description">
               <Textarea
@@ -475,12 +486,12 @@ export default function AddProductForm() {
                 )}
               </div>
               <FormField label="Product Video URL (Optional)" >
-              <Input
-                {...register("videoUrl")}
-                placeholder="Youtube Video URL"
-                className="h-9 text-sm"
-              />
-            </FormField>
+                <Input
+                  {...register("videoUrl")}
+                  placeholder="Youtube Video URL"
+                  className="h-9 text-sm"
+                />
+              </FormField>
             </div>
           </SectionCard>
 

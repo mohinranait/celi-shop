@@ -7,7 +7,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
-import { PRODUCT_IMG } from "@/lib/default-import";
 import { CURRENCY } from "@/lib/envSecret";
 import { cn } from "@/lib/utils";
 import { ICartItem } from "@/redux/service/orders/type";
@@ -15,6 +14,9 @@ import { useAppDispatch } from "@/hooks/hooks";
 import { addToCart } from "@/redux/features/cartSlice";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import findProductImage from "@/hooks/useFindProductImage";
+import { getPriceRange, getSingleProductPrice } from "@/hooks/useGerPrice";
+import { showTwoDecimals } from "@/lib/helpers";
 
 type Props = {
   product: IProduct;
@@ -29,97 +31,14 @@ const ProductCard = ({ product }: Props) => {
     productType,
     gallery,
     variations,
-    price,
-    discountPrice,
   } = product || {};
 
-  /**
-   * =================================
-   * Product Image
-   * =================================
-   */
 
-  const getProductImage = () => {
-    // 1. Gallery image first
-    if (gallery?.length && gallery[0]) {
-      return gallery[0];
-    }
-
-    // 2. Variant image
-    if (variations?.length) {
-      const variantWithImage = variations.find(
-        (variant) => variant?.images?.length && variant.images[0]
-      );
-
-      if (variantWithImage?.images?.[0]) {
-        return variantWithImage.images[0];
-      }
-    }
-
-    // 3. Default image
-    return `/${PRODUCT_IMG}`;
-  };
-
-  const productImage = getProductImage();
-
-  /**
-   * =================================
-   * Price Logic
-   * =================================
-   */
-
-  const getPriceRange = () => {
-    // SINGLE PRODUCT
-
-
-    // VARIANT PRODUCT
-    if (
-      productType === "variant" &&
-      variations?.length
-    ) {
-      const prices = variations.map((variant) => {
-        const originalPrice =
-          variant.price || 0;
-
-        const discount =
-          variant.offerPriceFixed || 0;
-
-        const finalPrice =
-          originalPrice - discount;
-
-        return finalPrice > 0
-          ? finalPrice
-          : 0;
-      });
-
-      const minPrice = Math.min(...prices);
-      const maxPrice = Math.max(...prices);
-
-      // same price
-      if (minPrice === maxPrice) {
-        return `${CURRENCY}${minPrice}`;
-      }
-
-      return `${CURRENCY}${minPrice} - ${CURRENCY}${maxPrice}`;
-    }
-
-    return `${CURRENCY}0`;
-  };
-
-
-  const getSinglePrice = () => {
-    if (productType === "single") {
-      const originalPrice = price || 0;
-      const discount = discountPrice || 0;
-
-      const finalPrice =
-        originalPrice - discount;
-
-      return { finalPrice, price: originalPrice };
-    }
-  }
-
-  const productPrice = getPriceRange();
+  // Find product image
+  const productImage = findProductImage({ product });
+  // Calculate price
+  const singleProductPrice = getSingleProductPrice(product);
+  const productPrice = getPriceRange(product);
 
 
   const handleAddToCart = (action: 'cart' | 'buy' = 'cart') => {
@@ -137,8 +56,8 @@ const ProductCard = ({ product }: Props) => {
       sku: sku || 'N/A',
       quantity: 1,
       productType: 'single',
-      price: (getSinglePrice()?.price || 0),
-      salePrice: (getSinglePrice()?.finalPrice || 0),
+      price: (singleProductPrice?.price || 0),
+      salePrice: (singleProductPrice?.finalPrice || 0),
       productImage: productImage,
       freeShipping: product?.shipping?.isFreeShipping
     }
@@ -159,8 +78,8 @@ const ProductCard = ({ product }: Props) => {
   const getOfferCar = (): number => {
     let discount = 0;
     if (productType === "single") {
-      const price = getSinglePrice()?.price
-      const finalPrice = getSinglePrice()?.finalPrice
+      const price = singleProductPrice?.price
+      const finalPrice = singleProductPrice?.finalPrice
       discount = (price || 0) - (finalPrice || 0)
     }
     else if (productType === 'variant') {
@@ -199,7 +118,7 @@ const ProductCard = ({ product }: Props) => {
     }
 
     // fallback primary image
-    return getProductImage();
+    return findProductImage({ product });
   };
 
   const hoverImage = getHoverImage();
@@ -305,11 +224,11 @@ const ProductCard = ({ product }: Props) => {
           {
             productType === 'single' ? <div className="flex gap-2 items-center">
               <span className="text-sm md:text-base lg:text-lg  font-bold text-primary">
-                {CURRENCY}{getSinglePrice()?.finalPrice}
+                {CURRENCY}{showTwoDecimals(singleProductPrice?.finalPrice || 0)}
               </span>
               {
-                (getSinglePrice()?.price || 0) - (getSinglePrice()?.finalPrice || 0) > 0 &&
-                <del className="text-sm md:text-base lg:text-lg text-muted-foreground">{CURRENCY}{(getSinglePrice()?.price || 0) - (getSinglePrice()?.finalPrice || 0)}</del>
+                (singleProductPrice?.price || 0) - (singleProductPrice?.finalPrice || 0) > 0 &&
+                <del className="text-sm md:text-base lg:text-lg text-muted-foreground">{CURRENCY}{showTwoDecimals((singleProductPrice?.price || 0) - (singleProductPrice?.finalPrice || 0))}</del>
               }
             </div> :
               <span className="text-sm md:text-base lg:text-lg font-bold text-primary">

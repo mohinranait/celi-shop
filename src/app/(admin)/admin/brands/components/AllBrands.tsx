@@ -18,7 +18,7 @@ const AllBrands = () => {
   const [isParams, setIsParams] = useState('')
   const [isOpen, setIsOpen] = useState(false);
 
-  const [pagination, setPagination] = useState({ page: 1, limit: 20 })
+  const [pagination, setPagination] = useState({ page: 1, limit: 2 })
 
   const columns = tableColumns({ type: filter });
 
@@ -49,7 +49,7 @@ const AllBrands = () => {
       </div>
 
 
-      <Filters setParams={setIsParams}  />
+      <Filters setParams={setIsParams} />
 
       <div className="flex gap-2">
 
@@ -70,7 +70,7 @@ const AllBrands = () => {
       </div>
 
 
-      
+
 
       {/* TABLE CARD */}
       <Card className="p-0 rounded-md">
@@ -86,16 +86,16 @@ const AllBrands = () => {
         </CardContent>
       </Card>
 
-          <Pagination
-            page={meta?.page || 1}
-            totalPages={meta?.totalPages || 1}
-            onPageChange={(page) =>
-              setPagination((prev) => ({
-                ...prev,
-                page,
-              }))
-            }
-          />
+      <Pagination
+        page={meta?.page || 1}
+        totalPages={meta?.totalPages || 1}
+        onPageChange={(page) =>
+          setPagination((prev) => ({
+            ...prev,
+            page,
+          }))
+        }
+      />
 
       {/* MODAL */}
       <BrandForm isOpen={isOpen} setIsOpen={setIsOpen} />

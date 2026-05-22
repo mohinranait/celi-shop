@@ -11,12 +11,12 @@ export async function middleware(request: NextRequest) {
   const {pathname} = request.nextUrl;
 
   if (!token) {
-    return NextResponse.redirect(new URL('/', request.url))
+    return NextResponse.redirect(new URL('/user-auth', request.url))
   }
 
   try {
     const {payload} = await jwtVerify(token, new TextEncoder().encode(jwtSecret));
-    console.log({payload});
+    // console.log({payload});
     const role = payload.role;
 
      // Protect admin route
@@ -31,7 +31,7 @@ export async function middleware(request: NextRequest) {
 
     return NextResponse.next()
   } catch (error) {
-    return NextResponse.redirect(new URL('/', request.url))
+    return NextResponse.redirect(new URL('/user-auth', request.url))
   }
 
  

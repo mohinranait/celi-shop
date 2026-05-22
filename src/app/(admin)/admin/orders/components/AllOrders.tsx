@@ -14,12 +14,11 @@ const AllOrders = () => {
   const router = useRouter()
   const [filter, setFilter] = useState<"active" | "deleted">("active");
   const [isParams, setIsParams] = useState('')
-   const [pagination, setPagination] = useState({ page: 1, limit: 20 })
+  const [pagination, setPagination] = useState({ page: 1, limit: 15 })
   const columns = tableColumns({ type: filter });
   const { data } = useGetAdminOrdersQuery(`page=${pagination?.page}&limit=${pagination?.limit}&isDelete=${filter === 'active' ? 'false' : "true"}&${isParams}`)
   const orders = data?.data || [];
-    const meta = data?.meta;
-
+  const meta = data?.meta;
 
 
   return (
@@ -40,7 +39,7 @@ const AllOrders = () => {
       </div>
 
 
-      <Filters setParams={setIsParams}  />
+      <Filters setParams={setIsParams} />
 
       <div className="flex gap-2">
 
@@ -78,17 +77,16 @@ const AllOrders = () => {
       </Card>
 
       <Pagination
-            page={meta?.page || 1}
-            totalPages={meta?.totalPages || 1}
-            onPageChange={(page) =>
-              setPagination((prev) => ({
-                ...prev,
-                page,
-              }))
-            }
-          />
+        page={meta?.page || 1}
+        totalPages={meta?.totalPages || 1}
+        onPageChange={(page) =>
+          setPagination((prev) => ({
+            ...prev,
+            page,
+          }))
+        }
+      /> 
 
-     
     </div>
   )
 }

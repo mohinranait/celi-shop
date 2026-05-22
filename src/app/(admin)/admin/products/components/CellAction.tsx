@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from '@/components/ui/button';
-import { Pen, RotateCcw, Trash2 } from 'lucide-react';
+import { Pen, RotateCcw, } from 'lucide-react';
 import React, { useState } from 'react';
 
 import { toast } from 'sonner';
@@ -18,11 +18,11 @@ type Props = {
 
 const CellAction = ({ data, type }: Props) => {
   const router = useRouter()
-  const [isOpen, setIsOpen] = useState(false);
+ 
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const [softDeleteProduct, { isLoading }] = useSoftDeleteProductMutation();
-  const [deleteProduct, { isLoading: deleteLoading }] = useDeleteProductMutation();
+  const [deleteProduct] = useDeleteProductMutation();
 
 
   // Soft delete
@@ -87,13 +87,13 @@ const CellAction = ({ data, type }: Props) => {
       </Button>
 
       {/* DELETE BUTTON */}
-      <Button
+      {/* <Button
         size="icon"
         variant="destructive"
         onClick={() => setIsDeleteOpen(true)}
       >
         <Trash2 />
-      </Button>
+      </Button> */}
 
       {/* DELETE CONFIRM MODAL (STATE CONTROLLED) */}
       <DeleteAlert isDeleteOpen={isDeleteOpen} setIsDeleteOpen={setIsDeleteOpen} callBack={handleDelete} isLoading={isLoading}
