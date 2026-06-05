@@ -32,7 +32,7 @@ export interface ICartItem {
 /*                               ORDER ITEM TYPE                              */
 /* -------------------------------------------------------------------------- */
 
-interface IOrderItem extends Omit<ICartItem, "productType"> {
+export interface IOrderItem extends Omit<ICartItem, "productType"> {
   _id: string;
   categoryName?: string;
   brandName?: string;

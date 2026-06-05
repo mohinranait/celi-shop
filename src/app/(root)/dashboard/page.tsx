@@ -1,237 +1,219 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
-  User, Package, Star, Settings, LogOut, Edit3, Eye
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
+import {
+  Package,
+  ShoppingCart,
+  CreditCard,
+  TrendingUp,
+  Eye,
+  Calendar,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { CURRENCY } from "@/lib/envSecret";
+import { useGetAdminOrdersQuery } from "@/redux/service/orders";
+import { TOrderStatus } from "@/redux/service/orders/type";
 
-type Order = {
-  id: string;
-  date: string;
-  status: "Delivered" | "Processing" | "Cancelled" | "Shipped";
-  total: number;
-  items: number;
+const statusStyles: Record<TOrderStatus, string> = {
+  PENDING: "bg-yellow-100 text-yellow-800 border-yellow-300",
+  PROCESSING: "bg-blue-100 text-blue-800 border-blue-300",
+  SHIPPED: "bg-purple-100 text-purple-800 border-purple-300",
+  DELIVERED: "bg-green-100 text-green-800 border-green-300",
+  CANCELLED: "bg-red-100 text-red-800 border-red-300",
+  RETURNED: "bg-sky-100 text-sky-800 border-sky-300",
+  CONFIRMED: "bg-sky-100 text-sky-800 border-sky-300",
 };
 
-const orders: Order[] = [
-  { id: "ORD-78492", date: "2026-05-02", status: "Delivered", total: 12500, items: 3 },
-  { id: "ORD-78491", date: "2026-04-28", status: "Shipped", total: 8900, items: 2 },
-  { id: "ORD-78490", date: "2026-04-15", status: "Delivered", total: 2450, items: 1 },
-];
+export default function Dashboard() {
+  // const [orders, setOrders] = useState<TOrder[]>([]);
+  const {data:getData} = useGetAdminOrdersQuery(`page=1&limit=10&isDelete=false`)
+const orders = getData?.data;
+  // const totalCosts = orders?.reduce((accu, cur) => accu + cur.totalAmount, 0);
+  // const pendingOrders = orders?.filter((order) => order.status === "Pending");
 
-export default function CustomerDashboard() {
-  const [activeTab, setActiveTab] = useState("profile");
+  const stats = [
+    {
+      title: "Total Orders",
+      value: orders?.length || 0,
+      description: "+20.1% last month",
+      icon: Package,
+      color: "text-blue-600",
+      bgColor: "bg-blue-100",
+    },
+    {
+      title: "Total cost",
+      value: `${CURRENCY} 10`,
+      description: "+15% last month",
+      icon: CreditCard,
+      color: "text-green-600",
+      bgColor: "bg-green-100",
+    },
+    {
+      title: "Pending Orders",
+      value:  0,
+      description: "Processing is in progress.",
+      icon: ShoppingCart,
+      color: "text-orange-600",
+      bgColor: "bg-orange-100",
+    },
+    {
+      title: "Savings",
+      value: "$0.00",
+      description: "From discount",
+      icon: TrendingUp,
+      color: "text-purple-600",
+      bgColor: "bg-purple-100",
+    },
+  ];
+
+  // const getAllOrders = async () => {
+  //   try {
+  //     const response = await getAllOrdersByAuthUser();
+  //     console.log({ response });
+  //     setOrders(response?.payload?.orders || []);
+  //   } catch (error) {
+  //     console.error("Error fetching orders:", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (typeof window === "undefined") return;
+  //   getAllOrders();
+  // }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="flex flex-col md:flex-row gap-8">
-          {/* Sidebar */}
-          <div className="w-full md:w-72">
-            <Card>
-              <CardContent className="pt-8">
-                <div className="flex flex-col items-center text-center mb-8">
-                  <Avatar className="w-24 h-24 mb-4">
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>ME</AvatarFallback>
-                  </Avatar>
-                  <h2 className="font-semibold text-xl">Md. Ebrahim</h2>
-                  <p className="text-sm text-slate-500">ebrahim@gmail.com</p>
-                </div>
-
-                <nav className="space-y-1">
-                  {[
-                    { id: "profile", label: "My Profile", icon: User },
-                    { id: "orders", label: "Order History", icon: Package },
-                    { id: "reviews", label: "My Reviews", icon: Star },
-                    { id: "settings", label: "Settings", icon: Settings },
-                  ].map((item) => (
-                    <button
-                      key={item.id}
-                      onClick={() => setActiveTab(item.id)}
-                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all ${
-                        activeTab === item.id
-                          ? "bg-slate-900 text-white"
-                          : "hover:bg-slate-100"
-                      }`}
-                    >
-                      <item.icon className="w-5 h-5" />
-                      {item.label}
-                    </button>
-                  ))}
-
-                  <Separator className="my-4" />
-
-                  <Button
-                    variant="destructive"
-                    className="w-full gap-2"
-                    onClick={() => alert("Logged out successfully")}
-                  >
-                    <LogOut className="w-4 h-4" />
-                    Logout
-                  </Button>
-                </nav>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Main Content */}
-          <div className="flex-1">
-            {/* Profile Tab */}
-            {activeTab === "profile" && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <User className="w-5 h-5" /> Profile Information
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <Label>Full Name</Label>
-                      <Input defaultValue="Md. Ebrahim" className="mt-2" />
-                    </div>
-                    <div>
-                      <Label>Phone Number</Label>
-                      <Input defaultValue="01XXXXXXXXX" className="mt-2" />
-                    </div>
-                    <div className="md:col-span-2">
-                      <Label>Address</Label>
-                      <Textarea defaultValue="Mirpur-10, Dhaka, Bangladesh" className="mt-2" />
-                    </div>
-                  </div>
-
-                  <Button className="gap-2">
-                    <Edit3 className="w-4 h-4" /> Save Changes
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Orders Tab */}
-            {activeTab === "orders" && (
-              <div>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Order History</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {orders.map((order) => (
-                        <div key={order.id} className="flex items-center justify-between p-5 border rounded-2xl hover:bg-slate-50 transition">
-                          <div>
-                            <p className="font-semibold">{order.id}</p>
-                            <p className="text-sm text-slate-500">{order.date}</p>
-                          </div>
-                          <div className="text-center">
-                            <p className="text-sm text-slate-500">Items</p>
-                            <p className="font-medium">{order.items}</p>
-                          </div>
-                          <div>
-                            <Badge
-                              variant={order.status === "Delivered" ? "default" : "secondary"}
-                            >
-                              {order.status}
-                            </Badge>
-                          </div>
-                          <div className="text-right">
-                            <p className="font-semibold">৳{order.total.toLocaleString()}</p>
-                          </div>
-                          <Button variant="outline" size="sm" className="gap-2">
-                            <Eye className="w-4 h-4" /> View Details
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            )}
-
-            {/* Reviews Tab */}
-            {activeTab === "reviews" && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>My Reviews</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-6">
-                    <div className="border rounded-2xl p-6">
-                      <div className="flex justify-between">
-                        <div>
-                          <p className="font-medium">Nike Air Max 270</p>
-                          <p className="text-sm text-slate-500">Reviewed on 2026-04-20</p>
-                        </div>
-                        <div className="flex text-yellow-500">★★★★☆</div>
-                      </div>
-                      <p className="mt-3 text-slate-600">
-                        Very comfortable and stylish. Delivery was fast.
-                      </p>
-                      <Button variant="outline" size="sm" className="mt-4">
-                        Edit Review
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Settings Tab */}
-            {activeTab === "settings" && (
-              <div className="space-y-6">
-                {/* Update Profile */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Update Profile</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-5">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label>Full Name</Label>
-                        <Input defaultValue="Md. Ebrahim" />
-                      </div>
-                      <div>
-                        <Label>Email</Label>
-                        <Input type="email" defaultValue="ebrahim@gmail.com" />
-                      </div>
-                    </div>
-                    <Button>Update Profile</Button>
-                  </CardContent>
-                </Card>
-
-                {/* Change Password */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Change Password</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-5">
-                    <div>
-                      <Label>Current Password</Label>
-                      <Input type="password" />
-                    </div>
-                    <div>
-                      <Label>New Password</Label>
-                      <Input type="password" />
-                    </div>
-                    <div>
-                      <Label>Confirm New Password</Label>
-                      <Input type="password" />
-                    </div>
-                    <Button>Update Password</Button>
-                  </CardContent>
-                </Card>
-              </div>
-            )}
-          </div>
+    <div className="flex-1 space-y-4 px-4 md:px-4 ">
+      <div className="flex items-center justify-between space-y-2">
+        <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+        <div className="flex items-center space-x-2">
+          <Calendar className="h-4 w-4" />
+          <span className="text-sm text-muted-foreground">
+            Today - {format(new Date(), "MMM dd, yyyy")}
+          </span>
         </div>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {stats.map((stat, index) => (
+          <Card key={index}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                {stat.title}
+              </CardTitle>
+              <div className={`p-2 rounded-full ${stat.bgColor}`}>
+                <stat.icon className={`h-4 w-4 ${stat.color}`} />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stat.value}</div>
+              <p className="text-xs text-muted-foreground">
+                {stat.description}
+              </p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        {/* Recent Orders */}
+        <Card className="lg:col-span-4">
+          <CardHeader>
+            <CardTitle>Recent orders</CardTitle>
+            <CardDescription>List of your recent orders</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {orders?.slice(0, 3)?.map((order, index) => (
+                <div
+                  key={index}
+                  className="flex md:items-center flex-col md:flex-row justify-between p-4 border rounded-lg"
+                >
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium uppercase leading-none">
+                      #{order.invoiceNumber}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {format(
+                        new Date(order.createdAt),
+                        "dd MMM yyyy, hh:mm a"
+                      )}{" "}
+                      • {order?.items?.length} Items
+                    </p>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <span
+                      className={cn(
+                        "inline-block text-xs font-semibold px-3 py-[2px] rounded-full border",
+                        statusStyles[order.orderStatus]
+                      )}
+                    >
+                      {order.orderStatus}
+                    </span>
+                    <span className="font-medium">
+                      {CURRENCY}
+                      {order.pricing?.total}
+                    </span>
+                    <Link href={`/dashboard/orders/${order?.invoiceNumber}`}>
+                      <Button variant="ghost" size="sm">
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4">
+              <Link href="/dashboard/orders">
+                <Button variant="outline" className="w-full">
+                  See all orders
+                  <ShoppingCart className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Quick Actions */}
+        <Card className="lg:col-span-3">
+          <CardHeader>
+            <CardTitle>দ্রুত অ্যাকশন</CardTitle>
+            <CardDescription>সাধারণ কাজগুলো দ্রুত করুন</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Button className="w-full justify-start" variant="outline">
+              <Package className="mr-2 h-4 w-4" />
+              অর্ডার ট্র্যাক করুন
+            </Button>
+            <Button className="w-full justify-start" variant="outline">
+              <CreditCard className="mr-2 h-4 w-4" />
+              পেমেন্ট হিস্টরি
+            </Button>
+            <Button className="w-full justify-start" variant="outline">
+              <ShoppingCart className="mr-2 h-4 w-4" />
+              নতুন অর্ডার করুন
+            </Button>
+
+            <div className="pt-4 border-t">
+              <h4 className="text-sm font-medium mb-2">সাপোর্ট</h4>
+              <p className="text-sm text-muted-foreground mb-2">
+                কোন সমস্যা? আমাদের সাথে যোগাযোগ করুন
+              </p>
+              <Button variant="outline" size="sm" className="w-full">
+                সাপোর্ট টিমের সাথে চ্যাট
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
