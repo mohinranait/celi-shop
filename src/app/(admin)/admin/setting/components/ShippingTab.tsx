@@ -18,7 +18,7 @@ type Props = {
 
 const ShippingTab = ({ shipping, onChange }: Props) => {
 
-  console.log({shipping});
+  // console.log({shipping});
   
   if (!shipping) return <p>Loading...</p>;
 

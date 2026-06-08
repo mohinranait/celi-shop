@@ -82,6 +82,9 @@ export default function SettingsComponent() {
 
       let obj = next;
       for (let i = 0; i < keys.length - 1; i++) {
+        if (obj[keys[i]] === undefined || obj[keys[i]] === null) {
+          obj[keys[i]] = {};
+        }
         obj = obj[keys[i]];
       }
 
@@ -95,7 +98,7 @@ export default function SettingsComponent() {
     try {
       console.log({ settings });
 
-      await updateSettings({ ...settings, socialLinks: {} }).unwrap();
+      await updateSettings({ ...settings }).unwrap();
       toast.success('Settings saved successfully');
       setIsDirty(false);
     } catch (err) {
@@ -143,7 +146,7 @@ export default function SettingsComponent() {
 
             {/* ==================== GENERAL ==================== */}
             {activeTab === 'general' && (
-             <GeneralTab settings={settings} callBack={(key:string, value:string | boolean) =>  setValue(key, value)} />
+              <GeneralTab settings={settings} callBack={(key: string, value: string | boolean) => setValue(key, value)} />
             )}
 
             {/* ==================== CONTACT ==================== */}
@@ -250,7 +253,7 @@ export default function SettingsComponent() {
                       />
                     )}
                   </div>
-                  
+
 
                   <Separator />
 
@@ -333,12 +336,12 @@ export default function SettingsComponent() {
 
             {/* ==================== FEATURES ==================== */}
             {activeTab === 'features' && (
-             <FeaturesTab settings={settings} callBack={(key:string, value:boolean) => setValue(key, value) } />
+              <FeaturesTab settings={settings} callBack={(key: string, value: boolean) => setValue(key, value)} />
             )}
 
             {/* ==================== Layouts ==================== */}
-             {activeTab === 'layouts' && (
-             <LayoutTab settings={settings} callBack={(key:string, value: number) => setValue(key, value) } />
+            {activeTab === 'layouts' && (
+              <LayoutTab settings={settings} callBack={(key: string, value: number) => setValue(key, value)} />
             )}
 
           </div>

@@ -92,7 +92,7 @@ export interface IAppSettings extends Document {
   },
 
   // Social
-  socialLinks: {
+  socialLinks?: {
     facebook?: string;
     instagram?: string;
     youtube?: string;

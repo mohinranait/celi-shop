@@ -10,7 +10,7 @@ const WhatsAppButton = () => {
   
 
   return (
-    <Link
+    appSetting?.contactPhone ? <Link
       href= {`https://wa.me/+88${appSetting?.contactPhone}`}
       className={` hidden 
         cursor-pointer
@@ -26,7 +26,7 @@ const WhatsAppButton = () => {
       aria-label="WhatsApp"
     >
       <WhatsAppIcon className="text-primary"  />
-    </Link>
+    </Link>: null
   );
 };
 
