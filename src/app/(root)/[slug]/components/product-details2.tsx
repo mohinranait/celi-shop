@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Plus, Minus, ShoppingCart, Heart, Share2, Check, Star, Handbag } from 'lucide-react'
+import { Plus, Minus, ShoppingCart, Heart,  Check, Star, Handbag, Repeat2 } from 'lucide-react'
 import { IProduct, IProductVariant } from '@/redux/service/products/type'
 import ImageGallary from './image-gallary'
 import Breadcrumb from './Breadcrumb'
@@ -16,6 +16,7 @@ import { useRouter } from 'next/navigation'
 import VideoSection from './VideoSection'
 import SectionHeader from '@/components/shared/SectionHeader'
 import ProductList from '../../components/ProductList'
+import RequestQuote from './RequestQuote'
 
 
 
@@ -327,13 +328,8 @@ export function ProductDetailss({ product }: { product: IProduct }) {
                   </Button>
 
                 </div>
-                <Button
-                  variant="outline"
-                  className="w-full h-12 text-base font-semibold border-slate-300"
-                >
-                  <Share2 className="w-5 h-5 mr-2" />
-                  Share Product
-                </Button>
+                <RequestQuote image={product?.gallery[0]} title={product?.name} productId={product?._id}  />
+               
               </div>
             </div>
 

@@ -136,6 +136,10 @@ export const sidebarData: SidebarData = {
               title: "Attributes",
               url: "/admin/attributes",
             },
+             {
+              title: "Request Quotes",
+              url: "/admin/request-quotes",
+            },
             {
               title: "Comments",
               url: "/admin/comments",
