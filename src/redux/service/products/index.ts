@@ -1,5 +1,5 @@
 
-import { ISoftDelete } from "@/global";
+import { ISoftDelete } from "@/types/common.type";
 import {  baseApi } from "..";
 import { IProduct, IProductDetailsResponse, IProductListResponse } from "./type";
 import { TProductFormType } from "@/components/validations/product";

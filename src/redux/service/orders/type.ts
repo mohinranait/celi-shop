@@ -1,4 +1,5 @@
-import { IMetaPagination } from "@/global"
+
+import { IMetaPagination } from "@/types/common.type";
 import { TProductType } from "../products/type"
 import { TCheckoutForm } from "@/components/validations/checkout"
 

@@ -1,4 +1,5 @@
-import { IMetaPagination } from "@/global";
+import { IMetaPagination } from "@/types/common.type";
+
 
 // Base brand
 export interface IBrandBase {

@@ -1,4 +1,5 @@
-import { IMetaPagination } from "@/global";
+import { IMetaPagination } from "@/types/common.type";
+
 
 export interface IBaseCategory {
   name: string;

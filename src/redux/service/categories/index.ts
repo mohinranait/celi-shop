@@ -2,7 +2,7 @@
 import { TBrandInput } from "@/components/validations/brands";
 import {  baseApi } from "..";
 import { ICategory, ICategoryListResponse } from "./type";
-import { ISoftDelete } from "@/global";
+import { ISoftDelete } from "@/types/common.type";
 
 export const categoryApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

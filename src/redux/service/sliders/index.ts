@@ -1,7 +1,7 @@
 
 import { TSliderInput } from "@/components/validations/slider";
 import {  baseApi } from "..";
-import { ISoftDelete } from "@/global";
+import { ISoftDelete } from "@/types/common.type";
 import { ISlider, ISliderResponse } from "./type";
 
 export const sliderApi = baseApi.injectEndpoints({

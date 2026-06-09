@@ -1,4 +1,4 @@
-import { IMetaPagination } from "@/global";
+import { IMetaPagination } from "@/types/common.type";
 import { IProduct } from "../products/type";
 
 export interface IBaseRequestQuote {

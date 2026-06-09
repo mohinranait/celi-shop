@@ -1,7 +1,8 @@
 
+import { ISoftDelete } from "@/types/common.type";
 import {  baseApi } from "..";
 import { IAttribute, IAttributeResponse } from "./type";
-import { ISoftDelete } from "@/global";
+
 import { TAttributeInput } from "@/components/validations/attributes";
 
 export const attributeApi = baseApi.injectEndpoints({

@@ -1,6 +1,6 @@
 
 import { baseApi } from "..";
-import { ISoftDelete } from "@/global";
+import { ISoftDelete } from "@/types/common.type";
 import { ICehckoutForm, IOrder, IOrderListResponse } from "./type";
 import { IOrderUpdaeView } from "@/app/(admin)/admin/order/components/OrderUpdateForm";
 

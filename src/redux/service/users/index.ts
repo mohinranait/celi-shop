@@ -1,7 +1,7 @@
 
 import {  baseApi } from "..";
 import { IUser, IUserResponse } from "./type";
-import { ISoftDelete } from "@/global";
+import { ISoftDelete } from "@/types/common.type";
 import { TUserInput } from "@/components/validations/user.schema";
 
 export const userApi = baseApi.injectEndpoints({

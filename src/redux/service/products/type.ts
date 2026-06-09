@@ -1,4 +1,4 @@
-import { IMetaPagination } from "@/global";
+import { IMetaPagination } from "@/types/common.type";
 
 interface IProductSelectedVariant {
   attributeId: string,
