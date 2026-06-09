@@ -15,6 +15,8 @@ import {
   GitPullRequest,
   Network,
   Users,
+  ArrowUpAZ,
+  Columns2,
 } from "lucide-react";
 
 export interface SidebarNavItem {
@@ -179,7 +181,12 @@ export const sidebarData: SidebarData = {
         {
           title: "Sliders",
           url: "/admin/sliders",
-          icon: Image,
+          icon: Columns2 ,
+        },
+        {
+          title: "Faqs",
+          url: "/admin/faqs",
+          icon: ArrowUpAZ ,
         },
         {
           title: "Setting",

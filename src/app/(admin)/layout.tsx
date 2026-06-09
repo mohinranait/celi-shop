@@ -1,5 +1,5 @@
 
-"use client";
+
 import AdminMainLayout from "@/components/layouts/MainAdminLayout";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import React, { Suspense } from "react";

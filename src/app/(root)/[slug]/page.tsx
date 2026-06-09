@@ -1,26 +1,85 @@
 
-'use client';
-
-import React from 'react'
-import { useParams } from 'next/navigation';
-import { useGetProductBySlugQuery } from '@/redux/service/products';
 import { ProductDetailss } from './components/product-details2';
-import { ProductDetailsSkeleton } from './components/ProductDetailsSkeletion';
+import { IProduct, IProductDetailsResponse } from '@/redux/service/products/type';
+import { fetchData } from '@/lib/fetch-data';
+import { Metadata } from 'next';
+import { BASE_URL } from '@/lib/envSecret';
 
-const ProductDetails = () => {
-  const params = useParams();
-  const slug = params.slug;
+type Props = {
+  params: Promise<{ slug: string }>;
+};
 
-  const { data, isLoading } = useGetProductBySlugQuery(String(slug), {
-    skip: !slug,
-  })
+export async function generateMetadata({
+  params,
+}: Props): Promise<Metadata> {
+  const { slug } = await params;
 
-  if(isLoading) return <ProductDetailsSkeleton />
+  const data = await fetchData<IProductDetailsResponse>({
+    api: `client/products/${slug}`,
+  });
 
-  if (!data?.data) return;
+  const product = data?.data as IProduct;
+  
+
+  if (!product) {
+    return {
+      title: "Product Not Found",
+    };
+  }
+
+  const image = product?.gallery[0] ||'';
+
+  const title = product?.name;
+  const description ="";
+
+  return {
+    title,
+    description,
+    keywords: product?.tags.join(',') || '',
+
+    alternates: {
+      canonical: `${BASE_URL}/${slug}`,
+    },
+
+    openGraph: {
+      title,
+      description,
+      url: `${BASE_URL}/${slug}`,
+      type: "website",
+
+      images: [
+        {
+          url: image,
+          width: 1200,
+          height: 630,
+          alt: product?.name,
+        },
+      ],
+    },
+
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
+    },
+  };
+}
+
+const ProductDetails = async ({ params }: { params: Promise<{ slug: string }> }) => {
+  const { slug } = await params;
+
+  const data = await fetchData<IProductDetailsResponse>({
+    api: `client/products/${slug}`,
+    // revalidate: 3600,
+  });
+
+  const product = data?.data as IProduct;
+
+  if (!product) return;
   return (
     <div>
-      <ProductDetailss product={data?.data} />
+      <ProductDetailss product={product} />
       {/* <ProductDetails1 product={data?.data} /> */}
     </div>
   )

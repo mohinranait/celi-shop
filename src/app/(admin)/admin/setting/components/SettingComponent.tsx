@@ -22,7 +22,9 @@ import {
   ToggleLeft,
   Save,
   Globe,
-  LayoutTemplate
+  LayoutTemplate,
+  Plus,
+  X
 } from 'lucide-react';
 import LeftBar from './LeftBar';
 import { IAppSettings } from '@/models/app-setting';
@@ -30,6 +32,8 @@ import ShippingTab from './ShippingTab';
 import FeaturesTab from './FeaturesTab';
 import LayoutTab from './LayoutTab';
 import GeneralTab from './GeneralTab';
+import MediaModal from '../../media/components/MediaModal';
+import Image from 'next/image';
 
 export const tabs = [
   { id: 'general', label: 'General', icon: Settings },
@@ -57,6 +61,7 @@ const platforms: SocialPlatform[] = [
 
 
 export default function SettingsComponent() {
+  const [mediaOpen, setMediaOpen] = useState(false);
   const { data: serverData, isLoading } = useGetAppSettingQuery();
   const [updateSettings, { isLoading: isSaving }] = useUpdateAppSettingMutation();
 
@@ -323,12 +328,46 @@ export default function SettingsComponent() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label>OG Image (Social Share)</Label>
+                    <Label>Meta Keywords (Separate by comma)</Label>
                     <Input
-                      value={settings.ogImage || ''}
-                      onChange={e => setValue('ogImage', e.target.value)}
-                      placeholder="https://yourdomain.com/og-image.jpg"
+                      value={settings.metaKeyword || ''}
+                      onChange={e => setValue('metaKeyword', e.target.value)}
+                      placeholder="Keyword seperate with comma (,)"
                     />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>OG Image (Social Share)</Label>
+                    <div className="flex gap-3">
+
+                      {
+                        settings?.ogImage && <span
+                          className="w-24 h-24 rounded-md border-2 border-dashed  
+                                 flex flex-col items-center justify-center gap-1 
+                                  transition-all relative"
+                        >
+                          <Image width={100} height={100} alt="Image" src={settings?.ogImage} />
+                          <button className="text-[10px] w-5 h-5 rounded-full flex items-center justify-center border text-gray-500 absolute top-1 right-1"><X size={14} /></button>
+                        </span>
+                      }
+
+
+                      <Button
+                        type="button"
+                        variant={'outline'}
+                        onClick={() => {
+                          setMediaOpen(true);
+                        }}
+                        className="w-24 h-24 rounded-md border-2 border-dashed  
+                                 flex flex-col items-center justify-center gap-1 
+                                  transition-all"
+                      >
+                        <Plus className="w-5 h-5 text-gray-500" />
+                        <span className="text-[10px] text-gray-500">Upload</span>
+                      </Button>
+
+                    </div>
+
                   </div>
                 </CardContent>
               </Card>
@@ -347,6 +386,15 @@ export default function SettingsComponent() {
           </div>
         </div>
       </div>
+
+
+      <MediaModal
+        open={mediaOpen}
+        setOpen={setMediaOpen}
+        onSelect={(url) => {
+          setValue('ogImage', url[0])
+        }}
+      />
     </div>
   );
 }

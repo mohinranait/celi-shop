@@ -1,13 +1,16 @@
+
 import { Navbar } from '@/components/shared/NavBar'
 import { Main } from '@/components/ui/main'
-import React from 'react'
+import DashboardComponent from './components/DashboardComponent';
 
 const AdminDashboard = () => {
+
+
   return (
     <>
       <Navbar fixed></Navbar>
       <Main>
-        Coming Soon - Dashboard
+        <DashboardComponent />
       </Main>
     </>
   )

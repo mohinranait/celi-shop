@@ -98,26 +98,6 @@ const shippingAddressSchema = new Schema(
       trim: true,
     },
 
-    // email: {
-    //   type: String,
-    //   default: "",
-    //   trim: true,
-    // },
-
-    // division: {
-    //   type: String,
-    //   required: true,
-    // },
-
-    // district: {
-    //   type: String,
-    //   required: true,
-    // },
-
-    // area: {
-    //   type: String,
-    //   required: true,
-    // },
 
     address: {
       type: String,

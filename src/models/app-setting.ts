@@ -22,6 +22,7 @@ export interface IAppSettings extends Document {
   // SEO
   metaTitle: string;
   metaDescription: string;
+  metaKeyword: string;
   ogImage: string;
 
   // Currency & Localization
@@ -127,6 +128,7 @@ const appSettingsSchema = new Schema<IAppSettings>(
 
     metaTitle: String,
     metaDescription: String,
+    metaKeyword: String,
     ogImage: String,
 
     currency: {
