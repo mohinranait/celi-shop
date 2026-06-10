@@ -1,3 +1,4 @@
+'use client';
 import ProductCard from '@/components/products/ProductCard';
 import { useGetClientProductsQuery } from '@/redux/client/products';
 import React from 'react'

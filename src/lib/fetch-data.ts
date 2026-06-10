@@ -15,11 +15,11 @@ export async function fetchData<T>(
   const apiPath = `${API_BASE_URL}/${config.api}`;
 
   try {
-    // const controller = new AbortController();
-    // const timeout = setTimeout(() => controller.abort(), 0);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 0);
 
     const res = await fetch(apiPath, {
-      // signal: controller.signal,
+      signal: controller.signal,
       next: {
         revalidate: config.revalidate ?? 0,
       },
@@ -29,7 +29,7 @@ export async function fetchData<T>(
       // },
     });
 
-    // clearTimeout(timeout);
+    clearTimeout(timeout);
 
     if (!res.ok) {
       throw new Error(`API Error: ${res.status}`);

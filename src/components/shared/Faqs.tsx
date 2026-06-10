@@ -1,4 +1,5 @@
 
+'use client';
 
 import { useGetFaqsQuery } from "@/redux/service/faqs";
 import {

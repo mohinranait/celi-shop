@@ -1,19 +1,28 @@
-'use client';
+
 import HeroSection from './components/hero-area'
 import Categories from './components/categories'
 import SliderCategories from './components/SliderCategories'
-import { useGetAppSettingQuery } from '@/redux/service/setting'
 import SectionHeader from '@/components/shared/SectionHeader';
 import NewProducts from './components/NewProducts';
 import TopSelling from './components/TopSelling';
 import FeatureProducts from './components/FeatureProducts';
 import OfferProducts from './components/OfferProducts';
 import FaqComponent from '@/components/shared/Faqs';
-import { HelpCircle } from 'lucide-react';
+import ContactUsComponent from './contact-us/components/ContactUsComponent';
+import { fetchData } from '@/lib/fetch-data';
+import { IAppSettings } from '@/models/app-setting';
 
-const HomePage = () => {
-  const { data: appSetting } = useGetAppSettingQuery()
+const HomePage = async () => {
+  
+  const appSetting = await fetchData<IAppSettings>({
+    api: "admin/setting",
+    revalidate: 3600,
+    
+  },1);
+  
   const enableCategory = appSetting?.layouts?.categorySection || 1;
+
+
   return (
     <div>
       <HeroSection />
@@ -88,6 +97,10 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+
+
+
+      <ContactUsComponent />
 
 
     </div>
