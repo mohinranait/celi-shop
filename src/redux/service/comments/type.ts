@@ -1,8 +1,9 @@
 import { Types } from "mongoose";
+import { IProduct } from "../products/type";
+import { IUser } from "@/models/user.model";
 
 export interface IBaseComment {
-  productId: Types.ObjectId,
-  userId: Types.ObjectId,
+
   comment: string,
   rating: number,
   isApproved: boolean,
@@ -10,6 +11,8 @@ export interface IBaseComment {
 
 export interface IComment extends IBaseComment {
   _id: string;
+  productId: IProduct,
+  userId: IUser,
   createdAt: string;
 
 }

@@ -6,7 +6,8 @@ import mongoose, { Schema, Model, Document, Types } from "mongoose";
 // TypeScript interface
 // =======================
 export interface IComment extends IBaseComment, Document {
-  isDelete: boolean;
+  productId: Types.ObjectId,
+  userId: Types.ObjectId,
 }
 
 // =======================

@@ -17,6 +17,7 @@ import VideoSection from './VideoSection'
 import SectionHeader from '@/components/shared/SectionHeader'
 import ProductList from '../../components/ProductList'
 import RequestQuote from './RequestQuote'
+import ReviewTabs from './ReviewTabs'
 
 
 
@@ -400,6 +401,7 @@ export function ProductDetailss({ product }: { product: IProduct }) {
 
 
       </div>
+      <ReviewTabs product={product} />
         <div className=" py-4 lg:py-10 px-2">
           <SectionHeader title='Related Products' description="Explore your related products, you can buy here." className='pb-4' />
           <ProductList catId={product?.category} />
