@@ -1,5 +1,4 @@
 
-import React from "react";
 import OrderDetailsComponent from "./components/OrderDetailsComponent";
 
 const OrderDetailsPage = async ({
@@ -8,12 +7,7 @@ const OrderDetailsPage = async ({
   params: Promise<{ orderId: string }>;
 }) => {
   // Order UID
-  const {orderId} = await params;
-
-  console.log({orderId});
-  
-
-
+  const { orderId } = await params;
 
   return <OrderDetailsComponent orderId={orderId} />;
 };

@@ -63,8 +63,16 @@ export const orderApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['orders'],
     }),
+
+
+
+    // for client
+     getClientOrders: builder.query<IOrderListResponse, string>({
+      query: (params) => `/client/orders?${params}`,
+      providesTags: ['orders'],
+    }),
   })
 })
 
 
-export const { useGetAdminOrdersQuery, useGetOrderByIdAdminQuery, useUpdateOrderByIdAdminMutation, useCreateOrderMutation, useGetOrderByTrackingNumberQuery } = orderApi;
+export const { useGetAdminOrdersQuery, useGetOrderByIdAdminQuery, useUpdateOrderByIdAdminMutation, useCreateOrderMutation, useGetOrderByTrackingNumberQuery, useGetClientOrdersQuery } = orderApi;

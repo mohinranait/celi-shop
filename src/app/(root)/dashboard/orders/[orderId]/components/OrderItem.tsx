@@ -1,15 +1,18 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useAppDispatch } from "@/hooks/hooks";
 import { CURRENCY } from "@/lib/envSecret";
-import {  IOrderItem } from "@/redux/service/orders/type";
-import { Eye, MessageSquareText, RotateCcw } from "lucide-react";
+import { setCommentModal } from "@/redux/features/uiSlice";
+import { IOrderItem } from "@/redux/service/orders/type";
+import {   MessageSquareText } from "lucide-react";
 import Image from "next/image";
-import React from "react";
 
 type Props = {
   item: IOrderItem;
 };
 const OrderItem = ({ item }: Props) => {
+
+  const dispatch = useAppDispatch()
 
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border rounded-lg">
@@ -65,26 +68,18 @@ const OrderItem = ({ item }: Props) => {
       </div>
 
       <div className="flex mt-3 sm:mt-0 items-center gap-2">
+
        
         <Button
-          // onClick={() => viewProductByModal(item?.product)}
-          type="button"
-          title="View Item"
-          variant="outline"
-          size="sm"
-        >
-          <Eye className="h-4 w-4 mr-1" />
-        </Button>
-        <Button
-          // onClick={() => {
-          //   dispatch(
-          //     setCommentModal({
-          //       name: item?.name,
-          //       pId: item?.product,
-          //       image: item?.image,
-          //     })
-          //   );
-          // }}
+          onClick={() => {
+            dispatch(
+              setCommentModal({
+                name: item?.productName,
+                pId: item?.productId,
+                image: item?.productImage,
+              })
+            );
+          }}
           title="Review"
           variant="outline"
           size="sm"

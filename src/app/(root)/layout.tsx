@@ -1,4 +1,5 @@
 
+import CommentModal from '@/components/modals/CommentModal'
 import EcommerceCartDrawer from '@/components/shared/CartDroware'
 import Footer from '@/components/shared/Footer'
 import Header from '@/components/shared/Header'
@@ -48,6 +49,7 @@ const MyRootLayout = ({ children }: Props) => {
       <WhatsAppButton />
       <MessengerButton />
       <FloatingCartButton />
+        <CommentModal />
     </main>
   )
 }

@@ -1,12 +1,14 @@
- 
+
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { TRatingModal } from "@/components/modals/CommentModal";
 
 
 type TUiState = {
-  loginModal:{
+  loginModal: {
     isOpen: boolean;
     tabValue: "login" | "register";
   };
+  commentModalOpen: null | TRatingModal,
 };
 
 const initialState: TUiState = {
@@ -14,6 +16,7 @@ const initialState: TUiState = {
     isOpen: false,
     tabValue: "login",
   },
+  commentModalOpen: null,
 };
 
 const uiSlice = createSlice({
@@ -28,8 +31,13 @@ const uiSlice = createSlice({
       const { tabValue } = action.payload;
       state.loginModal.tabValue = tabValue;
     },
+
+    setCommentModal: (state, action: PayloadAction<null | TRatingModal>) => {
+      state.commentModalOpen = action.payload ? action?.payload : null;
+    },
+
   },
 });
 
-export const { setLoginModalOpen, setLoginModalTab } = uiSlice.actions;
+export const { setLoginModalOpen, setLoginModalTab, setCommentModal } = uiSlice.actions;
 export default uiSlice.reducer;

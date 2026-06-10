@@ -42,6 +42,7 @@ export type TMethodList = {
 
 export default function CheckoutPage() {
   const router = useRouter()
+  const {user} = useAppSelector(state => state.auth)
   const { data: appSetting } = useGetAppSettingQuery();
   const [createOrder, { isLoading }] = useCreateOrderMutation()
   const { carts, } = useAppSelector(state => state.cart)
@@ -129,6 +130,7 @@ export default function CheckoutPage() {
     }
     const payload = {
       ...data,
+      userId: user?._id || null,
       items: carts,
       pricing: {
         shippingCharge: deliveryCharge
@@ -159,8 +161,8 @@ export default function CheckoutPage() {
   }, [paymentMethod])
 
 
-  console.log(getValues());
-  console.log(errors);
+  // console.log(getValues());
+  // console.log(errors);
 
 
 
