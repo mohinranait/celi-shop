@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 import { IProduct } from "../products/type";
 import { IUser } from "@/models/user.model";
+import { IMetaPagination } from "@/types/common.type";
 
 export interface IBaseComment {
 
@@ -18,5 +19,6 @@ export interface IComment extends IBaseComment {
 }
 
 export interface ICommentListResponse extends IComment {
-  data: IComment[]
+  data: IComment[];
+   meta: IMetaPagination;
 }

@@ -1,7 +1,54 @@
 import { getAuthUser } from "@/lib/authUser";
 import connectDB from "@/lib/db";
 import Comment from "@/models/comment";
+import "@/models/user.model";
+import "@/models/product"
 import { NextRequest, NextResponse } from "next/server";
+
+// get all comments
+export async function GET(req: NextRequest) {
+  try {
+    await connectDB();
+    const { searchParams } = new URL(req.url);
+    const search = searchParams.get("search");
+    const status = searchParams.get("isApproved");
+    const star = searchParams.get("rating");
+    const productId = searchParams.get("productId");
+    const page = parseInt(searchParams.get("page") || "1", 10);
+    const limit = parseInt(searchParams.get("limit") || "10", 10);
+
+    let query: any = {};
+    if (search) {
+      query.$or = [
+        { comment: { $regex: search, $options: "i" } },
+      ];
+    }
+    if (status) query.isApproved = status;
+    if (star) query.rating = parseInt(star);
+    if (productId) query.productId = productId;
+
+    const total = await Comment.countDocuments(query);
+    const comments = await Comment.find(query)
+      .populate("productId", "name")
+      .populate("userId", "name")
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    return NextResponse.json({
+      data:comments,
+      totalPages: Math.ceil(total / limit),
+      currentPage: page,
+    });
+  } catch (error) {
+    console.error("Error fetching comments:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch comments" },
+      { status: 500 },
+    );
+  }
+}
+
 
 export async function POST(req: NextRequest) {
   try {
