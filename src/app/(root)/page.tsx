@@ -26,6 +26,11 @@ const HomePage = async () => {
   const enableCategory = appSetting?.layouts?.categorySection || 1;
 
 
+  const d = appSetting?.features?.latestSection
+
+  if(!appSetting) return <div>Loading...</div>
+  console.log({d});
+  
   return (
     <div>
       <HeroSection />

@@ -1,4 +1,3 @@
-// import { getLocale } from "next-intl/server";
 
 import { API_BASE_URL } from "./envSecret";
 
@@ -15,21 +14,13 @@ export async function fetchData<T>(
   const apiPath = `${API_BASE_URL}/${config.api}`;
 
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 0);
 
     const res = await fetch(apiPath, {
-      signal: controller.signal,
       next: {
-        revalidate: config.revalidate ?? 0,
+        revalidate: config.revalidate ?? 3000,
       },
-      // headers: {
-      //   AmsPublickey: process.env.AMS_PUBLIC_KEY!,
-      //   lang: config.locale || (await getLocale()),
-      // },
     });
 
-    clearTimeout(timeout);
 
     if (!res.ok) {
       throw new Error(`API Error: ${res.status}`);
