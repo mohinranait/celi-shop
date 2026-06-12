@@ -9,16 +9,12 @@ import FloatingCartButton from '@/components/shared/PriceCartButton'
 import ScrollToTop from '@/components/shared/ScrollToTop'
 import WhatsAppButton from '@/components/shared/WhatsAppButton'
 import { BASE_URL } from '@/lib/envSecret'
-import { fetchData } from '@/lib/fetch-data'
-import { IAppSettings } from '@/models/app-setting'
+import { getAppSetting } from '@/lib/get-app-setting'
 import { Metadata } from 'next'
 import React from 'react'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await fetchData<IAppSettings>({
-    api: "admin/setting",
-    revalidate: 3600,
-  });
+  const settings = await getAppSetting();
 
   return {
     title: settings?.metaTitle || settings?.siteName || "My ecommerce Website",

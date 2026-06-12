@@ -3,4 +3,8 @@ export const JWT_SECRET = process.env.JWT_SECRET!
 export const NODE_ENV = process.env.NODE_ENV || 'production'
 export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL 
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL 
-export const CURRENCY = "৳"
+export let CURRENCY = "ss"
+
+export const setCurrency = (currency: string) => {
+  CURRENCY = currency;
+};

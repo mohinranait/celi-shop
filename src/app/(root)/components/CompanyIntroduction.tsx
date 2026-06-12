@@ -1,52 +1,74 @@
 import { Button } from "@/components/ui/button";
+import { fetchData } from "@/lib/fetch-data";
+import { ISiteContentResponse } from "@/redux/service/site-content/type";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
-export default function CompanyIntroduction() {
+export default async function CompanyIntroduction() {
+  const fetchsiteContent = await fetchData<ISiteContentResponse>({
+    api: "admin/site-content",
+    revalidate: 3000,
+  }, 1);
+
+  const siteContent = fetchsiteContent?.data;
+  const company = siteContent?.companyIntroduction;
+
+
   return (
     <section className="py-20">
       <div className="container mx-auto grid lg:grid-cols-2 gap-12 items-center">
 
         {/* Image */}
         <div>
-          <Image
-            src="https://cdn.prod.website-files.com/605826c62e8de87de744596e/6298b33e6aafa619b517757c_Blog-Coverasdfghjs.jpg"
-            alt="Company"
-            width={450}
-            height={450}
-            className="w-full h-112.5 object-cover rounded-2xl"
-          />
+          {
+            company?.image?.url ?
+              <Image
+                src={company?.image?.url}
+                alt={company?.image?.alt || 'Image'}
+                width={450}
+                height={450}
+                className="w-full h-112.5 object-cover rounded-2xl"
+              /> : <div className="w-full h-112.5 bg-gray-100 flex items-center justify-center">Need image here</div>
+          }
         </div>
 
 
         {/* Content */}
         <div>
           <p className="text-primary font-semibold mb-3">
-            About Our Company
+            {company?.title || "About our company"}
           </p>
 
           <h2 className="text-4xl font-bold mb-6 leading-tight">
-            17+ Years of Excellence in Delivering Premium Industrial Products
+            {company?.heading || "Excellence"}
           </h2>
 
 
-          <p className="text-muted-foreground mb-4">
-            We are a trusted supplier of high-quality industrial equipment,
-            machinery and solutions serving customers worldwide.
-          </p>
+          {
+            company?.description1 &&
+            <p className="text-muted-foreground mb-4">
+              {company?.description1}
+            </p>
+          }
+          {
+            company?.description2 &&
+            <p className="text-muted-foreground mb-8">
+              {company?.description2}
+            </p>
+          }
 
 
-          <p className="text-muted-foreground mb-8">
-            With more than 17 years of experience, we focus on innovation,
-            reliability, and customer satisfaction to deliver products that
-            exceed industry standards.
-          </p>
 
-
-          <Button>
-            Learn More
-            <ArrowRight className="ml-2 h-4 w-4"/>
-          </Button>
+          {
+            (company?.buttonLink && company?.buttonText) &&
+            <Link href={company?.buttonLink} >
+              <Button>
+                {company?.buttonText}
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          }
         </div>
 
       </div>

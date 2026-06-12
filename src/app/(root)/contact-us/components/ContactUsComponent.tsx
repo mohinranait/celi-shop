@@ -12,19 +12,12 @@ import {
   Clock,
 } from "lucide-react";
 import ContactForm from "./ContactUsForm";
-import { fetchData } from "@/lib/fetch-data";
-import { IAppSettings } from "@/models/app-setting";
+import { getAppSetting } from "@/lib/get-app-setting";
 
 const ContactUsComponent = async () => {
 
 
-   const settings = await fetchData<IAppSettings>({
-      api: "admin/setting",
-      revalidate: 3600,
-      
-    },1);
-
-  //   console.log({settings});
+  const settings = await getAppSetting();
     
 
   return (

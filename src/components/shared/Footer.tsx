@@ -1,14 +1,9 @@
 import Link from "next/link";
 import FooterLogo from "./FooterLogo";
-import { fetchData } from "@/lib/fetch-data";
-import { IAppSettings } from "@/models/app-setting";
+import { getAppSetting } from "@/lib/get-app-setting";
 
 const Footer = async () => {
-    const appSetting = await fetchData<IAppSettings>({
-      api: "admin/setting",
-      revalidate: 3600,
-      
-    },1);
+    const appSetting = await getAppSetting();
 
     const {siteName,footerLogo, siteDescription} = appSetting || {};
 
@@ -25,7 +20,28 @@ const Footer = async () => {
           }
         </div>
         <div>
-          <h4 className="font-bold mb-4">Shop</h4>
+          <h4 className="font-bold mb-4">Quick Access</h4>
+          <ul className="space-y-2 text-sm">
+            <li>
+              <Link href="/" className="hover:opacity-75">
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link href="/offers" className="hover:opacity-75">
+                Offer Products
+              </Link>
+            </li>
+            <li>
+              <Link href="/free-shipping" className="hover:opacity-75">
+                Free Shipping 
+              </Link>
+            </li>
+           
+          </ul>
+        </div>
+        <div>
+          <h4 className="font-bold mb-4">Help</h4>
           <ul className="space-y-2 text-sm">
             <li>
               <Link href="/shop" className="hover:opacity-75">
@@ -33,45 +49,13 @@ const Footer = async () => {
               </Link>
             </li>
             <li>
-              <Link href="/shop?category=mens" className="hover:opacity-75">
-                Men
-              </Link>
-            </li>
-            <li>
-              <Link href="/shop?category=womens" className="hover:opacity-75">
-                Women
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/shop?category=accessories"
-                className="hover:opacity-75"
-              >
-                Accessories
-              </Link>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h4 className="font-bold mb-4">Help</h4>
-          <ul className="space-y-2 text-sm">
-            <li>
               <Link href="/contact-us" className="hover:opacity-75">
                 Contact Us
               </Link>
             </li>
+            
             <li>
-              <Link href="#" className="hover:opacity-75">
-                Shipping Info
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="hover:opacity-75">
-                Returns
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="hover:opacity-75">
+              <Link href="/faqs" className="hover:opacity-75">
                 FAQ
               </Link>
             </li>

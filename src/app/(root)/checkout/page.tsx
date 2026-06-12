@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { ShoppingCart, MapPin, } from "lucide-react";
-import { useAppSelector } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { CURRENCY } from "@/lib/envSecret";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -20,6 +20,7 @@ import { useGetAppSettingQuery } from "@/redux/service/setting";
 import RightBar from "./components/RightBar";
 import PaymentMethod from "./components/PaymentMethod";
 import { TPaymentMethod } from "@/redux/service/orders/type";
+import { clearShoppingCarts } from "@/redux/features/cartSlice";
 type TPaymentMethodType = {
   cod: boolean;
   bKash: {
@@ -41,6 +42,7 @@ export type TMethodList = {
 }
 
 export default function CheckoutPage() {
+  const dispatch = useAppDispatch()
   const router = useRouter()
   const {user} = useAppSelector(state => state.auth)
   const { data: appSetting } = useGetAppSettingQuery();
@@ -115,9 +117,8 @@ export default function CheckoutPage() {
     register,
     handleSubmit,
     watch,
-    getValues,
     setValue,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = form
 
   const paymentMethod = watch("payment.method");
@@ -140,6 +141,7 @@ export default function CheckoutPage() {
     try {
       const { data } = await createOrder(payload).unwrap();
       toast.success("Order Placed Successfully!")
+      dispatch(clearShoppingCarts())
       router.push(`/order/success?oid=${data?.trackingNumber}`)
     } catch (error) {
       console.log(error);
@@ -160,9 +162,6 @@ export default function CheckoutPage() {
 
   }, [paymentMethod])
 
-
-  // console.log(getValues());
-  // console.log(errors);
 
 
 

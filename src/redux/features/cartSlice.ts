@@ -99,8 +99,15 @@ const cartSlice = createSlice({
       state.totalItems = calculateTotalQuantity(state.carts)
       state.subtotal = calculateSubtotal(state.carts);
     },
+
+    clearShoppingCarts: (state) => {
+      state.carts = []
+      state.totalItems = 0
+      state.subtotal = 0
+      state.discount = 0
+    }
   },
 });
 
-export const { addToCart, removeToCart, toggleCartDroware, updateCartQuantity } = cartSlice.actions;
+export const { addToCart, removeToCart, toggleCartDroware, updateCartQuantity,clearShoppingCarts } = cartSlice.actions;
 export default cartSlice.reducer;
