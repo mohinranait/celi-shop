@@ -11,6 +11,9 @@ import FaqComponent from '@/components/shared/Faqs';
 import ContactUsComponent from './contact-us/components/ContactUsComponent';
 import { fetchData } from '@/lib/fetch-data';
 import { IAppSettings } from '@/models/app-setting';
+import CompanyIntroduction from './components/CompanyIntroduction';
+import WhyChooseUs from './components/WhyChooseUs';
+import CustomerReviews from './components/CustomerReviews';
 
 const HomePage = async () => {
   
@@ -26,6 +29,16 @@ const HomePage = async () => {
   return (
     <div>
       <HeroSection />
+
+
+      <CompanyIntroduction />
+
+      <WhyChooseUs />
+
+    
+
+
+
       {
         enableCategory === 1 ?
           <SliderCategories /> :
@@ -99,6 +112,7 @@ const HomePage = async () => {
       </section>
 
 
+  <CustomerReviews />
 
       <ContactUsComponent />
 

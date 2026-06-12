@@ -9,14 +9,12 @@ import {
   LucideIcon,
   Settings,
   Image,
-  Notebook,
-  NotebookPen,
   Bolt,
-  GitPullRequest,
   Network,
   Users,
   ArrowUpAZ,
   Columns2,
+  FileUser,
 } from "lucide-react";
 
 export interface SidebarNavItem {
@@ -184,6 +182,11 @@ export const sidebarData: SidebarData = {
           icon: Columns2 ,
         },
         {
+          title: "Contact Querys",
+          url: "/admin/contact-query",
+          icon: FileUser  ,
+        },
+         {
           title: "Faqs",
           url: "/admin/faqs",
           icon: ArrowUpAZ ,

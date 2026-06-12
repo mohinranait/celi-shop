@@ -1,13 +1,8 @@
-'use client';
-import { useGetAppSettingQuery } from '@/redux/service/setting'
+
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react'
 
-const FooterLogo = () => {
-  const {data:appSetting} = useGetAppSettingQuery()
-  const logo = appSetting?.footerLogo;
-  const siteName = appSetting?.siteName;
+const FooterLogo = ({logo,siteName}:{logo?:string;siteName?:string}) => {
   return (
     <Link href={'/'}>
     {

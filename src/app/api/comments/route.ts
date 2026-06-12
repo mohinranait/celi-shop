@@ -37,8 +37,12 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       data:comments,
-      totalPages: Math.ceil(total / limit),
-      currentPage: page,
+       meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
     });
   } catch (error) {
     console.error("Error fetching comments:", error);

@@ -1,9 +1,10 @@
 
 import {  baseApi } from "..";
+import { IContactListResponse } from "./type";
 
 export const contactApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getContacts: builder.query({
+    getContacts: builder.query<IContactListResponse, string>({
       query: (params) => `/contacts?${params}`,
       providesTags: ['contacts'],
     }),
