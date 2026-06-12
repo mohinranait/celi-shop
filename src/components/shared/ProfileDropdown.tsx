@@ -10,12 +10,23 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAppSelector } from "@/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import { userLogout } from "@/redux/features/authSlice";
+import { useLogoutMutation } from "@/redux/service/auth";
 import { ChevronDown, LogOut, Settings, User } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export function ProfileDropdown() {
+  const router = useRouter()
+  const [logoutUser] = useLogoutMutation()
     const {user} = useAppSelector(state => state.auth)
+  const dispatch = useAppDispatch()
+  const handleLogout = () => {
+    logoutUser()
+    dispatch(userLogout())
+    router.push('/user-auth')
+  }
 
   return (
     <DropdownMenu modal={false}>
@@ -51,30 +62,25 @@ export function ProfileDropdown() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link href="/settings">
+            <Link href={`/admin/users/${user?._id}`}>
               <User />
               Profile
               <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
             </Link>
           </DropdownMenuItem>
+         
           <DropdownMenuItem asChild>
-            <Link href="/settings">
-              Billing
-              <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link href="/settings">
+            <Link href="/admin/setting">
               <Settings />
               Settings
               <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>New Team</DropdownMenuItem>
+         
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          // onClick={() => signOut()}
+          onClick={() => handleLogout()}
           className="bg-red-100 text-red-500"
         >
           <LogOut />

@@ -17,12 +17,14 @@ import { toast } from "sonner";
 import findProductImage from "@/hooks/useFindProductImage";
 import { getPriceRange, getSingleProductPrice } from "@/hooks/useGerPrice";
 import { showTwoDecimals } from "@/lib/helpers";
+import { useGetAppSettingQuery } from "@/redux/service/setting";
 
 type Props = {
   product: IProduct;
 };
 
 const ProductCard = ({ product }: Props) => {
+  const { data: appSetting } = useGetAppSettingQuery()
   const dispatch = useAppDispatch();
   const router = useRouter();
   const {
@@ -205,19 +207,22 @@ const ProductCard = ({ product }: Props) => {
           </h4>
         </Link>
 
-        <div className="flex items-center gap-2 mb-1 md:mb-2">
-          <div className="flex items-center">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} className={`w-3 md:w-4 h-3 md:h-4 ${i < Math.floor(product.ratings.average)
-                ? 'text-yellow-400'
-                : 'text-muted-foreground'
-                }`} />
-            ))}
+        {
+          appSetting?.features?.review &&
+          <div className="flex items-center gap-2 mb-1 md:mb-2">
+            <div className="flex items-center">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className={`w-3 md:w-4 h-3 md:h-4 ${i < Math.floor(product.ratings.average)
+                  ? 'text-yellow-400 fill-yellow-200'
+                  : 'text-muted-foreground'
+                  }`} />
+              ))}
+            </div>
+            <span className="text-sm text-accent-foreground">
+              ({product.ratings.totalReviews})
+            </span>
           </div>
-          <span className="text-sm text-accent-foreground">
-            ({product.ratings.totalReviews})
-          </span>
-        </div>
+        }
 
         {/* Price + Variant */}
         <div className="flex items-center justify-between flex-wrap mb-1 lg:mb-3">

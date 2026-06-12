@@ -1,5 +1,7 @@
 
 import CommentModal from '@/components/modals/CommentModal'
+import CallButton from '@/components/shared/CallButton'
+
 import EcommerceCartDrawer from '@/components/shared/CartDroware'
 import Footer from '@/components/shared/Footer'
 import Header from '@/components/shared/Header'
@@ -46,6 +48,7 @@ const MyRootLayout = ({ children }: Props) => {
       <MessengerButton />
       <FloatingCartButton />
         <CommentModal />
+        <CallButton />
     </main>
   )
 }

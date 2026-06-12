@@ -16,7 +16,7 @@ import { getAppSetting } from '@/lib/get-app-setting';
 
 const HomePage = async () => {
 
-  const appSetting =  await getAppSetting();
+  const appSetting = await getAppSetting();
 
   const enableCategory = appSetting?.layouts?.categorySection || 1;
 
@@ -24,11 +24,24 @@ const HomePage = async () => {
 
   return (
     <div>
-      <HeroSection />
+      {
+        appSetting?.features?.bannerSlider &&
+        <HeroSection />
+      }
 
-      <CompanyIntroduction />
 
-      <WhyChooseUs />
+      {
+        appSetting?.features?.aboutCompany &&
+        <CompanyIntroduction />
+      }
+
+
+      {
+        appSetting?.features?.whyChooseUs &&
+        <WhyChooseUs />
+      }
+
+
 
 
       {
@@ -77,13 +90,20 @@ const HomePage = async () => {
         </section>
       }
 
-
+      {
+        appSetting?.features?.faq &&
       <FaqPageComponent />
+      }
 
-
+       {
+        appSetting?.features?.review &&
       <CustomerReviews />
+      }
 
+       {
+        appSetting?.features?.contact &&
       <ContactUsComponent />
+      }
 
 
     </div>

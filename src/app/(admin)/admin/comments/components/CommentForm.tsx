@@ -64,10 +64,10 @@ export default function CommentForm({
   useEffect(() => {
     if (previousData) {
       form.reset({
-        productId: previousData.productId.toString() || "",
+        productId: previousData.productId?._id || "",
         userId: previousData.userId?._id.toString() || "",
         comment: previousData.comment || "",
-        isApproved: previousData.isApproved ? previousData.isApproved : true,
+        isApproved: previousData.isApproved || true ,
         rating: previousData.rating || 0,
       });
     }
@@ -124,7 +124,7 @@ export default function CommentForm({
             <div className="flex items-center justify-between border p-3 rounded-lg">
               <p className="text-sm font-medium">Active Status</p>
               <Switch
-                checked={field.value}
+                checked={field.value === true}
                 onCheckedChange={field.onChange}
               />
             </div>

@@ -19,7 +19,7 @@ const commentSchema = new Schema<IComment>(
     userId: { type: Types.ObjectId, ref: 'User', required: true },
     comment: { type: String, required: true },
     rating: { type: Number, min: 1, max: 5, default: 5 },
-    isApproved: { type: Boolean, default: false },
+    isApproved: { type: Boolean, default: true },
   },
   { timestamps: true },
 );

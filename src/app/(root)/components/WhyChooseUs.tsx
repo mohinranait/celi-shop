@@ -18,7 +18,7 @@ export default async function WhyChooseUs() {
   return (
     <section className="bg-muted/40 py-20">
 
-      <div className="container mx-auto">
+      <div className="container px-4 lg:px-0 mx-auto">
 
         <div className="text-center mb-14">
 
@@ -27,7 +27,7 @@ export default async function WhyChooseUs() {
           </p>
 
 
-          <h2 className="text-4xl font-bold mt-3">
+          <h2 className=" text-2xl lg:text-4xl font-bold mt-3">
              {data?.heading}
           </h2>
 
@@ -47,7 +47,7 @@ export default async function WhyChooseUs() {
                   rounded-xl
                   p-6
                   border
-                  hover:shadow-lg
+                  hover:shadow
                   transition
                 "
               >

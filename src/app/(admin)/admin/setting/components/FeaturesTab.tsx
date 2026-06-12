@@ -7,27 +7,35 @@ type FeatureKey =
   | "productReview"
   | "couponSystem"
   | "flashSale"
-  | "multiVendor"
-  | "blog"
   | "bannerSlider"
   | "guestOrder"
   | "latestSection"
   | "offerSection"
   | "featureSection"
-  | "bestSelling";
+  | "bestSelling"
+  | "faq"
+  | "review"
+  | "contact"
+  | "whyChooseUs"
+  | "aboutCompany";
+
+
 const featureList: { key: FeatureKey; label: string }[] = [
   { key: "wishlist", label: "Wishlist System" },
   { key: "productReview", label: "Product Reviews" },
   { key: "couponSystem", label: "Coupon System" },
   { key: "flashSale", label: "Flash Sale" },
-  { key: "multiVendor", label: "Multi-Vendor Support" },
-  { key: "blog", label: "Blog System" },
   { key: "bannerSlider", label: "Banner Slider" },
   { key: "guestOrder", label: "Guest Order" },
   { key: "latestSection", label: "Latest Section" },
   { key: "offerSection", label: "Offer Section" },
   { key: "featureSection", label: "Feature Section" },
   { key: "bestSelling", label: "Best Selling" },
+  { key: "faq", label: "FAQ Section" },
+  { key: "review", label: "Review System" },
+  { key: "contact", label: "Contact Section" },
+  { key: "whyChooseUs", label: "Why Choose US section" },
+  { key: "aboutCompany", label: "About Company Section" },
 ];
 
 

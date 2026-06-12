@@ -22,7 +22,7 @@ export default function SectionHeader({
       <div className="flex flex-col items-center text-center">
         
         {/* Title */}
-        <h2 className=" text-base lg:text-lg  xl:text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white tracking-tight">
+        <h2 className=" text-xl  xl:text-3xl md:text-4xl font-semibold text-gray-900 dark:text-white tracking-tight">
           {title}
         </h2>
 

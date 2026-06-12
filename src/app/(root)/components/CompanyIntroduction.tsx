@@ -17,7 +17,7 @@ export default async function CompanyIntroduction() {
 
   return (
     <section className="py-20">
-      <div className="container mx-auto grid lg:grid-cols-2 gap-12 items-center">
+      <div className="container px-4 lg:px-0 mx-auto grid lg:grid-cols-2 gap-12 items-center">
 
         {/* Image */}
         <div>
@@ -40,7 +40,7 @@ export default async function CompanyIntroduction() {
             {company?.title || "About our company"}
           </p>
 
-          <h2 className="text-4xl font-bold mb-6 leading-tight">
+          <h2 className="text-2xl lg:text-4xl font-bold mb-6 leading-tight">
             {company?.heading || "Excellence"}
           </h2>
 

@@ -5,7 +5,6 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { ProfileDropdown } from "./ProfileDropdown";
 import NotificationDropdown from "./NotificationDropdown";
-import ThemeButton from "./ThemeButton";
 
 interface HeaderProps {
   fixed?: boolean;
@@ -17,8 +16,6 @@ interface HeaderProps {
 export const Navbar = ({
   className,
   fixed,
-  children,
-  titleIcon,
   ...props
 }: HeaderProps) => {
   const [offset, setOffset] = useState(0);
@@ -55,7 +52,7 @@ export const Navbar = ({
 
         <div className=" justify-between items-center space-x-4">
           <div className="flex items-center space-x-4">
-            <ThemeButton />
+            {/* <ThemeButton /> */}
             <NotificationDropdown />
             <ProfileDropdown />
           </div>

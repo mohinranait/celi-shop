@@ -76,14 +76,17 @@ export interface IAppSettings extends Document {
     productReview: boolean;
     couponSystem: boolean;
     flashSale: boolean;
-    multiVendor: boolean;
-    blog: boolean;
     bannerSlider: boolean;
     guestOrder: boolean;
     latestSection: boolean;
     offerSection: boolean;
     featureSection: boolean;
     bestSelling: boolean;
+    faq: boolean,
+    review: boolean,
+    contact: boolean,
+    whyChooseUs: boolean,
+    aboutCompany: boolean,
   };
 
 
@@ -190,14 +193,18 @@ const appSettingsSchema = new Schema<IAppSettings>(
       productReview: { type: Boolean, default: true },
       couponSystem: { type: Boolean, default: true },
       flashSale: { type: Boolean, default: true },
-      multiVendor: { type: Boolean, default: false },
-      blog: { type: Boolean, default: true },
       bannerSlider: { type: Boolean, default: true },
       guestOrder: { type: Boolean, default: true },
       latestSection: { type: Boolean, default: true },
       offerSection: { type: Boolean, default: true },
       featureSection: { type: Boolean, default: true },
       bestSelling: { type: Boolean, default: true },
+      faq: { type: Boolean, default: true },
+      review: { type: Boolean, default: true },
+      contact: { type: Boolean, default: true },
+      whyChooseUs: { type: Boolean, default: true },
+      aboutCompany: { type: Boolean, default: true },
+
     },
 
     socialLinks: {

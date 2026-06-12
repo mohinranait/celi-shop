@@ -93,7 +93,7 @@ export async function PATCH(
       );
     }
 
-    const { comment, rating } = body;
+    const { comment } = body;
 
 
 
@@ -130,7 +130,7 @@ export async function PATCH(
 
     }
 
-    const commentUpdate = await Comment.findByIdAndUpdate(commentId, { comment, rating }, { new: true, runValidators: true });
+    const commentUpdate = await Comment.findByIdAndUpdate(commentId, {...body}, { new: true, runValidators: true });
 
     if (!commentUpdate) {
       return NextResponse.json(

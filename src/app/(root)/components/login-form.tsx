@@ -12,8 +12,10 @@ import { setLoginModalOpen } from "@/redux/features/uiSlice";
 import React, { useState } from "react";
 import { Phone, Lock, Eye, EyeOff, LogIn } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
+  const router = useRouter();
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
@@ -34,6 +36,13 @@ const LoginForm = () => {
       });
       dispatch(setUser({ user: response.payload }));
       dispatch(setLoginModalOpen({ isOpen: false }));
+
+      if(response.payload.role === 'Admin'){
+        router.push('/admin')
+      }else{
+        router.push('/dashboard')
+      }
+
     } catch (err) {
       console.error("Failed to login:", err);
     }

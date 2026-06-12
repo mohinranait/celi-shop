@@ -144,7 +144,7 @@ const ImageGallery = ({ product, images, stock }: Props) => {
     <>
       <div className="flex flex-col gap-3">
 
-        <div className="sticky top-48">
+        <div className="sticky top-24">
           {/* ------------------------------------------------------------------- */}
           {/*                            MAIN IMAGE                               */}
           {/* ------------------------------------------------------------------- */}

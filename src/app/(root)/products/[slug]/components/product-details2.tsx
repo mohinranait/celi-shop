@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Plus, Minus, ShoppingCart, Heart,  Check, Star, Handbag, Repeat2 } from 'lucide-react'
+import { Plus, Minus, ShoppingCart, Heart, Check, Star, Handbag } from 'lucide-react'
 import { IProduct, IProductVariant } from '@/redux/service/products/type'
 import ImageGallary from './image-gallary'
 import Breadcrumb from './Breadcrumb'
@@ -165,21 +165,25 @@ export function ProductDetailss({ product }: { product: IProduct }) {
                     <h1 className="text-3xl md:text-4xl font-bold text-accent-foreground mb-2">
                       {product.name}
                     </h1>
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center">
-                        {[...Array(5)].map((_, i) => (
-                          <Star key={i} className={`w-5 h-5 ${i < Math.floor(product.ratings.average)
-                            ? 'text-yellow-400'
-                            : 'text-muted-foreground'
-                            }`} />
-                        ))}
+                    {
+                      appSetting?.features?.review &&
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center">
+                          {[...Array(5)].map((_, i) => (
+                            <Star key={i} className={`w-5 h-5 ${i < Math.floor(product.ratings.average)
+                              ? 'text-yellow-400 fill-yellow-200'
+                              : 'text-muted-foreground'
+                              }`} />
+                          ))}
+                        </div>
+                        <span className="text-sm text-accent-foreground">
+                          ({product.ratings.totalReviews} reviews)
+                        </span>
                       </div>
-                      <span className="text-sm text-accent-foreground">
-                        ({product.ratings.totalReviews} reviews)
-                      </span>
-                    </div>
+                    }
                   </div>
                   <button
+                    disabled
                     onClick={() => setIsWishlisted(!isWishlisted)}
                     className="p-3 rounded-full bg-background border border-border  transition-colors"
                   >
@@ -329,8 +333,8 @@ export function ProductDetailss({ product }: { product: IProduct }) {
                   </Button>
 
                 </div>
-                <RequestQuote image={product?.gallery[0]} title={product?.name} productId={product?._id}  />
-               
+                <RequestQuote image={product?.gallery[0]} title={product?.name} productId={product?._id} />
+
               </div>
             </div>
 
@@ -402,10 +406,10 @@ export function ProductDetailss({ product }: { product: IProduct }) {
 
       </div>
       <ReviewTabs product={product} />
-        <div className=" py-4 lg:py-10 px-2">
-          <SectionHeader title='Related Products' description="Explore your related products, you can buy here." className='pb-4' />
-          <ProductList catId={product?.category} />
-        </div>
+      <div className=" py-4 lg:py-10 px-2">
+        <SectionHeader title='Related Products' description="Explore your related products, you can buy here." className='pb-4' />
+        <ProductList catId={product?.category} />
+      </div>
     </div>
   )
 }

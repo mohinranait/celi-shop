@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X, ShoppingBag, Search, LayoutGrid, Shirt,  Watch, Tag, Heart, Package, LogIn, UserPlus, Store, Gift, Dices, Phone } from "lucide-react";
+import { Menu, LayoutGrid, Shirt, Package, LogIn, UserPlus, Store, Gift, Dices, Phone, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -12,6 +12,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import HeaderLogo from "./HeaderLogo";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -79,14 +80,14 @@ const shopItems: NavItem[] = [
 
 const accountItems: NavItem[] = [
   {
-    href: "/wishlist",
-    label: "Wishlist",
-    icon: <Heart size={17} />,
+    href: "/dashboard",
+    label: "Dashboard",
+    icon: <LayoutDashboard size={17} />,
     iconBg: "bg-muted",
     iconColor: "text-muted-foreground",
   },
   {
-    href: "/orders",
+    href: "/dashboard/orders",
     label: "My Orders",
     icon: <Package size={17} />,
     iconBg: "bg-muted",
@@ -193,7 +194,7 @@ export function MobileMenu({ user }: MobileMenuProps) {
           {/* Header */}
           <SheetHeader className="flex-row items-center justify-between px-5 py-4 border-b">
             <SheetTitle className="text-xl font-semibold tracking-tight">
-              CeliShop
+                <HeaderLogo />
             </SheetTitle>
            
           </SheetHeader>
