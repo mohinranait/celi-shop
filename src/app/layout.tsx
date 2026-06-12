@@ -5,9 +5,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "sonner";
 import ReduxProvider from "@/providers/ReduxProvider";
 import { cn } from "@/lib/utils";
-import { getAppSetting } from "@/lib/get-app-setting";
-import { setCurrency } from "@/lib/envSecret";
-// import { ThemeProvider } from "@/components/theme-provider";
 
 const roboto = Roboto({subsets:['latin'],variable:'--font-sans'})
 
@@ -27,8 +24,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
 
-  const settings = await getAppSetting();
-  setCurrency(settings?.currency?.symbol || "৳");
+ 
   return (
     <html
       lang="en"

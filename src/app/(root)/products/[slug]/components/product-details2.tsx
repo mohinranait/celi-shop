@@ -15,7 +15,7 @@ import { useGetAppSettingQuery } from '@/redux/service/setting'
 import { useRouter } from 'next/navigation'
 import VideoSection from './VideoSection'
 import SectionHeader from '@/components/shared/SectionHeader'
-import ProductList from '../../components/ProductList'
+import ProductList from '../../../components/ProductList'
 import RequestQuote from './RequestQuote'
 import ReviewTabs from './ReviewTabs'
 
