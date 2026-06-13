@@ -111,6 +111,11 @@ const GeneralTab = ({ callBack, settings }: Props) => {
             <Textarea value={settings.siteDescription} onChange={e => callBack('siteDescription', e.target.value)} />
           </div>
 
+          <div className="space-y-2">
+            <Label>Global Marque Info</Label>
+            <Textarea value={settings.marque} onChange={e => callBack('marque', e.target.value)} />
+          </div>
+
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label>Language</Label>

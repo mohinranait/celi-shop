@@ -54,6 +54,7 @@ import { Card } from "@/components/ui/card";
 import { ProductFormSkeleton } from "./skeletion";
 import { Switch } from "@/components/ui/switch";
 import NestedCategorySelector from "./NextedCategorySelector";
+import QuillEditor from "@/components/shared/QuilEditor";
 
 
 
@@ -98,7 +99,6 @@ export default function AddProductForm() {
   // Local state
   const [mediaOpen, setMediaOpen] = useState(false);
   const [selectedConfigs, setSelectedConfigs] = useState<IAttributeConfig[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [productImages, setProductImages] = useState<string[]>([]);
   const [tags, setTags] = useState<string>('')
 
@@ -204,7 +204,7 @@ export default function AddProductForm() {
   // Submit
   // ---------------------------------------------------------------------------
   const onSubmit = async (data: TProductFormType) => {
-    setIsSubmitting(true);
+
     try {
       const payload = {
         ...data,
@@ -230,13 +230,11 @@ export default function AddProductForm() {
       toast.success("Successfully!");
     } catch {
       toast.error("Something went wrong.");
-    } finally {
-      setIsSubmitting(false);
-    }
+    } 
   };
 
 
-  console.log({ errors });
+  // console.log({ errors });
 
 
 
@@ -335,10 +333,10 @@ export default function AddProductForm() {
 
           <Button
             onClick={handleSubmit(onSubmit)}
-            disabled={isSubmitting}
+            disabled={ createLoading || updateLoading }
             className="h-8 text-xs gap-1.5 "
           >
-            {isSubmitting ? (
+            {(createLoading || updateLoading) ? (
               <Loader2 size={13} className="animate-spin" />
             ) : (
               <Sparkles size={13} />
@@ -408,7 +406,7 @@ export default function AddProductForm() {
                   />
                 </div>
               </FormField>
-               <FormField
+              <FormField
                 label="Status"
                 hint="Product will be visible to customers."
               >
@@ -421,14 +419,20 @@ export default function AddProductForm() {
               </FormField>
             </div>
 
-            <FormField label="Description">
+            <FormField label="Short Description">
               <Textarea
-                {...register("description")}
-                placeholder="Describe your product..."
+                {...register("shortDescription")}
+                placeholder="Short description your product..."
                 className="text-sm min-h-25 resize-none"
               />
             </FormField>
+
+
+
           </SectionCard>
+
+
+
 
           <div className="space-y-1">
             <Label>Select Category</Label>
@@ -651,6 +655,34 @@ export default function AddProductForm() {
               </div>
             )}
           </SectionCard>
+
+
+
+          <SectionCard
+            icon={<Package size={15} />}
+            title="Product Description"
+            description="Write details about your product"
+          >
+
+            <FormField label="Description">
+              
+              <div className="border border-gray-200 rounded-lg ">
+                <QuillEditor
+                  value={form.watch("description") || ""}
+                  callBack={(value) =>
+                    form.setValue("description", value, {
+                      shouldValidate: true,
+                      shouldDirty: true,
+                    })
+                  }
+                />
+              </div>
+            </FormField>
+
+
+
+          </SectionCard>
+
         </div>
 
         {/* ── Right column ── */}
@@ -774,24 +806,25 @@ export default function AddProductForm() {
             <Button
               className="w-full text-xs gap-1.5 "
               onClick={handleSubmit(onSubmit)}
-              disabled={isSubmitting}
+              disabled={createLoading || updateLoading}
             >
-              {isSubmitting ? (
+              {(createLoading || updateLoading) ? (
                 <Loader2 size={13} className="animate-spin" />
               ) : (
                 <Sparkles size={13} />
               )}
-              {isSubmitting ? "Publishing..." : "Publish Product"}
+              {(createLoading || updateLoading) ? "Publishing..." : "Publish Product"}
             </Button>
             <Button
               variant="outline"
               className="w-full text-xs"
               type="button"
+              
               onClick={() => {
                 // setValue("status", "draft");
                 handleSubmit(onSubmit)();
               }}
-              disabled={isSubmitting}
+              disabled={createLoading || updateLoading}
             >
               Save as Draft
             </Button>

@@ -1,3 +1,5 @@
+'use client';
+import ViewHTML from "@/components/shared/html-viewer/HTMLView";
 import StarRating from "@/components/shared/StarRating";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetCommentByProductIdQuery } from "@/redux/service/comments";
@@ -64,12 +66,9 @@ const ReviewTabs = ({ product }: Props) => {
               <p className="font-semibold text-lg mb-2 text-gray-900">
                 Product details of {product?.name}
               </p>
-              {/* {product?.details && (
-                  <div
-                    className="quill-content"
-                    dangerouslySetInnerHTML={{ __html: product?.details }}
-                  />
-                )} */}
+
+              <ViewHTML htmlText={product?.description || ''} />
+        
             </div>
           </TabsContent>
 

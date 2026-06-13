@@ -20,6 +20,7 @@ const commentSchema = new Schema<IComment>(
     comment: { type: String, required: true },
     rating: { type: Number, min: 1, max: 5, default: 5 },
     isApproved: { type: Boolean, default: true },
+    isFeature: { type: Boolean, default: false },
   },
   { timestamps: true },
 );

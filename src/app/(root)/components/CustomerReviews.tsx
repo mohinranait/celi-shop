@@ -1,37 +1,25 @@
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+'use client';
+import Autoplay from "embla-carousel-autoplay";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 import {
   Star,
   Quote,
 } from "lucide-react";
+import { useGetCommentsQuery } from "@/redux/service/comments";
 
 
-const reviews = [
-  {
-    name: "John Smith",
-    company: "ABC Industries",
-    message:
-      "Excellent product quality and professional service. We have been working together for years.",
-  },
-  {
-    name: "Michael Lee",
-    company: "Global Engineering",
-    message:
-      "Reliable supplier with outstanding customer support and fast delivery.",
-  },
-  {
-    name: "David Wilson",
-    company: "Tech Solutions",
-    message:
-      "Their products consistently meet our expectations and quality requirements.",
-  },
-];
+
 
 
 export default function CustomerReviews() {
+
+  const { data } = useGetCommentsQuery(`page=1&limit=10&isFeature=true&isApproved=true`);
+
+  const comments = data?.data || [];
+
+
+
   return (
     <section className="py-20">
 
@@ -51,56 +39,75 @@ export default function CustomerReviews() {
         </div>
 
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="relative">
+          <Carousel
+            plugins={[
+              Autoplay({
+                delay: 3000,
+                stopOnInteraction: false,
+              }),
+            ]}
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+
+            className="w-full"
+          >
+            <CarouselContent className="-ml-2 py-1 md:-ml-3">
+              {comments.map((review, idx) => (
+                <CarouselItem
+                  key={idx}
+                  className="pl-2   md:basis-1/2  xl:basis-1/3 "
+                >
+                  <div className="relative min-h-62 bg-white border border-border mx-1 rounded-md">
+
+                    <div className="p-6">
+
+                      <Quote className="  text-primary/30  mb-4  "   />
+
+                      <p className="text-muted-foreground mb-5">
+                        {review.comment}
+                      </p>
 
 
-          {reviews.map((review) => (
-            <Card key={review.name} className="relative">
+                      <div className="flex mb-4">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className={`w-3 md:w-4 h-3 md:h-4 ${i < Math.floor(review.rating)
+                            ? 'text-yellow-400 fill-yellow-200'
+                            : 'text-muted-foreground'
+                            }`} />
+                        ))}
 
-              <CardContent className="p-6">
-
-                <Quote
-                  className="
-                    text-primary/30
-                    mb-4
-                  "
-                />
-
-                <p className="text-muted-foreground mb-5">
-                  {review.message}
-                </p>
+                      </div>
 
 
-                <div className="flex mb-4">
-                  {[1,2,3,4,5].map((star)=>(
-                    <Star
-                      key={star}
-                      size={16}
-                      fill="currentColor"
-                    />
-                  ))}
-                </div>
+                      <div>
+                        <h4 className="font-bold">
+                          {review?.userId?.name}
+                        </h4>
+
+                        <p className="text-sm text-muted-foreground">
+                          Customer
+                        </p>
+                      </div>
 
 
-                <div>
-                  <h4 className="font-bold">
-                    {review.name}
-                  </h4>
-
-                  <p className="text-sm text-muted-foreground">
-                    {review.company}
-                  </p>
-                </div>
+                    </div>
 
 
-              </CardContent>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
 
-
-            </Card>
-          ))}
-
-
+            <CarouselPrevious className=" bg-primary w-8 h-8 text-white lg:w-10 lg:h-10  flex left-2  lg:left-2" />
+            <CarouselNext className=" bg-primary w-8 h-8 text-white lg:w-10 lg:h-10  flex right-2  lg:right-2" />
+          </Carousel>
         </div>
+
+
+
 
       </div>
 

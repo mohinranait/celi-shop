@@ -7,8 +7,6 @@ import { Search, User, ShoppingBag } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { setLoginModalOpen } from "@/redux/features/uiSlice";
-import { useLogoutMutation } from "@/redux/service/auth";
-import { userLogout } from "@/redux/features/authSlice";
 import LoginModal from "./login-modal";
 import NavigationMenus from "./NavigationMenus";
 import { toggleCartDroware } from "@/redux/features/cartSlice";
@@ -17,6 +15,7 @@ import { toggleCartDroware } from "@/redux/features/cartSlice";
 import { MobileMenu } from "./MobileMenu";
 import HeaderLogo from "./HeaderLogo";
 import { cn } from "@/lib/utils";
+import MarqueText from "./MarqueText";
 
 export default function Header() {
   const [isMobileSearch, setIsMobileSearch] = useState(false)
@@ -24,7 +23,6 @@ export default function Header() {
   const { user } = useAppSelector((state) => state.auth);
   const { totalItems } = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
-  const [logout] = useLogoutMutation();
   const router = useRouter();
 
   const [isSticky, setIsSticky] = useState(false);
@@ -48,23 +46,12 @@ export default function Header() {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await logout().unwrap();
-      dispatch(userLogout());
-    } catch (error) {
-      console.error("Logout failed", error);
-    }
-  };
 
   return (
     <header className=" z-50 w-full bg-white border-b border-border">
       {/* Top bar */}
-      <div className="bg-foreground  text-background py-2 px-4 text-sm">
-        <div className="max-w-7xl mx-auto text-center">
-          Free shipping on orders over $100
-        </div>
-      </div>
+      <MarqueText />
+     
 
       {/* Main header */}
       <div className={cn(

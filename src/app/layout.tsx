@@ -29,16 +29,15 @@ export default async function RootLayout({
     <html
       lang="en"
       className={cn("antialiased", fontMono.variable, "font-sans", roboto.variable)}
-      suppressHydrationWarning
+      // suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
         <ReduxProvider>
           {/* <ThemeProvider> */}
 
-          <TooltipProvider>
+       
             <Toaster />
             {children}
-          </TooltipProvider>
           {/* </ThemeProvider> */}
         </ReduxProvider>
       </body>

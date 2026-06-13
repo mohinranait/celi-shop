@@ -46,6 +46,7 @@ export interface IProductBase {
     average: number,
     totalReviews: number;
   },
+  shortDescription?: string;
   description?: string;
   logo?: string;
   stock: number,

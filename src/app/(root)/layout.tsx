@@ -47,8 +47,8 @@ const MyRootLayout = ({ children }: Props) => {
       <WhatsAppButton />
       <MessengerButton />
       <FloatingCartButton />
-        <CommentModal />
-        <CallButton />
+      <CommentModal />
+      <CallButton />
     </main>
   )
 }

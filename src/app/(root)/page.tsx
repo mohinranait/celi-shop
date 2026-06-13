@@ -13,6 +13,8 @@ import WhyChooseUs from './components/WhyChooseUs';
 import CustomerReviews from './components/CustomerReviews';
 import { FaqPageComponent } from './components/FaqComponent';
 import { getAppSetting } from '@/lib/get-app-setting';
+import { Suspense } from 'react';
+import ProductsSkeleton from './components/ProductsSkeleton';
 
 const HomePage = async () => {
 
@@ -20,7 +22,7 @@ const HomePage = async () => {
 
   const enableCategory = appSetting?.layouts?.categorySection || 1;
 
-  if (!appSetting) return <div>Loading...</div>
+  // if (!appSetting) return <div>Loading...</div>
 
   return (
     <div>
@@ -55,7 +57,9 @@ const HomePage = async () => {
         appSetting?.features?.latestSection &&
         <section className=" py-4 lg:py-10 px-2">
           <SectionHeader title='New Products' description="Explore your popular products, you can buy here." seeAllLink='/shop' seeAllText='All Products' className='pb-4' />
-          <NewProducts />
+          <Suspense fallback={<ProductsSkeleton />}>
+            <NewProducts />
+          </Suspense>
         </section>
       }
 
@@ -66,7 +70,9 @@ const HomePage = async () => {
         appSetting?.features?.bestSelling &&
         <section className=" py-10 px-2">
           <SectionHeader title='Best Selling Products' description="Explore your popular products, you can buy here." seeAllLink='/shop' seeAllText='All Products' className='pb-4' />
-          <TopSelling />
+          <Suspense fallback={<ProductsSkeleton />}>
+            <TopSelling />
+          </Suspense>
         </section>
       }
 
@@ -76,7 +82,9 @@ const HomePage = async () => {
         appSetting?.features?.featureSection &&
         <section className=" py-10 px-2">
           <SectionHeader title='Features Products' description="Explore your popular products, you can buy here." seeAllLink='/shop' seeAllText='All Products' className='pb-4' />
-          <FeatureProducts />
+          <Suspense fallback={<ProductsSkeleton />}>
+            <FeatureProducts />
+          </Suspense>
         </section>
       }
 
@@ -86,23 +94,25 @@ const HomePage = async () => {
         appSetting?.features?.offerSection &&
         <section className=" py-10 px-2">
           <SectionHeader title='Offer Products' description="Explore your popular products, you can buy here." seeAllLink='/shop' seeAllText='All Products' className='pb-4' />
-          <OfferProducts />
+          <Suspense fallback={<ProductsSkeleton />}>
+            <OfferProducts />
+          </Suspense>
         </section>
       }
 
       {
         appSetting?.features?.faq &&
-      <FaqPageComponent />
+        <FaqPageComponent />
       }
 
-       {
+      {
         appSetting?.features?.review &&
-      <CustomerReviews />
+        <CustomerReviews />
       }
 
-       {
+      {
         appSetting?.features?.contact &&
-      <ContactUsComponent />
+        <ContactUsComponent />
       }
 
 

@@ -126,7 +126,7 @@ ProductSchema.index({ name: "text", slug: 1 });
 ProductSchema.index({ category: 1 });
 ProductSchema.index({ brand: 1 });
 ProductSchema.index({ "ratings.average": -1 });
-ProductSchema.index({ "variations.sku": 1 });
+// ProductSchema.index({ "variations.sku": 1 });
 
 const Product =
   mongoose.models.Product || mongoose.model("Product", ProductSchema);

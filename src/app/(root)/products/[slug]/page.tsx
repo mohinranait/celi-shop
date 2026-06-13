@@ -30,7 +30,7 @@ export async function generateMetadata({
   const image = product?.gallery[0] ||'';
 
   const title = product?.name;
-  const description ="";
+  const description = product?.shortDescription ||"";
 
   return {
     title,

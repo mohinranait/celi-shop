@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { GlobalModal } from "@/components/shared/GlobalModal";
 
 import { toast } from "sonner";
-import { Bandage, Loader,  } from "lucide-react";
+import { Bandage, Loader, } from "lucide-react";
 
 import { IComment } from "@/redux/service/comments/type";
 import { commentSchema, TCommentFormData } from "@/components/validations/comment";
@@ -58,7 +58,7 @@ export default function CommentForm({
     }
   };
 
-  const isDisable =  updateLoading;
+  const isDisable = updateLoading;
 
 
   useEffect(() => {
@@ -67,7 +67,8 @@ export default function CommentForm({
         productId: previousData.productId?._id || "",
         userId: previousData.userId?._id.toString() || "",
         comment: previousData.comment || "",
-        isApproved: previousData.isApproved || true ,
+        isApproved: previousData.isApproved ?? true,
+        isFeature: previousData.isFeature ?? false,
         rating: previousData.rating || 0,
       });
     }
@@ -77,7 +78,7 @@ export default function CommentForm({
     <GlobalModal
       open={isOpen}
       onOpenChange={setIsOpen}
-      title={ "Update comment information"}
+      title={"Update comment information"}
       description="Fill the form below to update comment"
       icon={<Bandage />}
       maxHeight="max-w-5xl"
@@ -105,8 +106,8 @@ export default function CommentForm({
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-4"
       >
-      
-      
+
+
         {/* Description */}
         <div className="space-y-1">
           <Label>Comment</Label>
@@ -122,7 +123,28 @@ export default function CommentForm({
           name="isApproved"
           render={({ field }) => (
             <div className="flex items-center justify-between border p-3 rounded-lg">
-              <p className="text-sm font-medium">Active Status</p>
+              <div>
+               <p className="text-sm font-medium">Active Status </p>
+               <p className="text-xs font-normal">This commnet will be show product details page</p>
+             </div>
+              <Switch
+                checked={field.value === true}
+                onCheckedChange={field.onChange}
+              />
+            </div>
+          )}
+        />
+
+
+        <Controller
+          control={control}
+          name="isFeature"
+          render={({ field }) => (
+            <div className="flex items-center justify-between border p-3 rounded-lg">
+             <div>
+               <p className="text-sm font-medium">Feature Comment </p>
+               <p className="text-xs font-normal">This comment will be show home page review slider</p>
+             </div>
               <Switch
                 checked={field.value === true}
                 onCheckedChange={field.onChange}
@@ -132,7 +154,7 @@ export default function CommentForm({
         />
       </form>
 
-      
+
     </GlobalModal>
   );
 }

@@ -20,6 +20,8 @@ export const appSettingsSchema = z.object({
   metaTitle: z.string().optional(),
   metaDescription: z.string().optional(),
   ogImage: z.string().optional(),
+  
+  marque: z.string().optional(),
 
   currency: z.object({
     code: z.string(),
@@ -56,14 +58,17 @@ export const appSettingsSchema = z.object({
     productReview: z.boolean(),
     couponSystem: z.boolean(),
     flashSale: z.boolean(),
-    multiVendor: z.boolean(),
-    blog: z.boolean(),
     bannerSlider: z.boolean(),
     guestOrder: z.boolean(),
     latestSection: z.boolean(),
     offerSection: z.boolean(),
     featureSection: z.boolean(),
     bestSelling: z.boolean(),
+    faq: z.boolean(),
+    review: z.boolean(),
+    contact: z.boolean(),
+    whyChooseUs: z.boolean(),
+    aboutCompany: z.boolean(),
   }),
 
   layouts: z.object({

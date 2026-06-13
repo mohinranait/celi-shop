@@ -1,0 +1,172 @@
+.view-html {
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+  padding: 4px;
+  line-height: 1.6;
+}
+
+@media screen and (max-width:768px) {
+  .view-html{
+
+    padding: 2px 3px;
+  }
+}
+
+/* Paragraph */
+.view-html p {
+  margin: 1rem 0;
+  font-size: 1rem;
+  color: hsl(var(--muted-foreground));
+}
+
+/* Headings */
+.view-html h1 {
+  font-size: 2rem;
+}
+
+.view-html h2 {
+  margin: 1.5rem 0 1rem;
+  font-weight: bold;
+  line-height: 1.4;
+  font-size: 1.8rem;
+  position: relative;
+}
+
+
+
+.view-html h3 {
+  font-size: 1.5rem;
+}
+
+.view-html h4 {
+  font-size: 1.2rem;
+}
+
+/* Links */
+.view-html a {
+  color: #007bff;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.view-html a:hover {
+  color: #0056b3;
+}
+
+/* Bold and Italic */
+.view-html strong {
+  font-weight: bold;
+  color: hsl(var(--accent-foreground));
+}
+
+.view-html em {
+  font-style: italic;
+  color: #555;
+}
+
+/* Lists */
+.view-html ul,
+.view-html ol {
+  margin: 1rem 0;
+  padding-left: 2rem;
+}
+
+.view-html ul li,
+.view-html ol li {
+  margin-bottom: 0.5rem;
+}
+
+.view-html ul li::before {
+  content: "•";
+  display: inline-block;
+  margin-right: 0.5rem;
+  color: hsl(var(--accent-foreground));
+}
+
+.view-html ol li {
+  list-style: decimal;
+}
+
+.view-html ol li::before {
+  content: none;
+}
+
+/* Table */
+.view-html table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 1rem;
+}
+
+.view-html table th,
+.view-html table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.view-html table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.view-html table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.view-html table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .view-html {
+    padding: 10px;
+  }
+
+  .view-html h1 {
+    font-size: 1.8rem;
+  }
+
+  .view-html h2 {
+    font-size: 1.6rem;
+  }
+
+  .view-html h3 {
+    font-size: 1.4rem;
+  }
+
+  .view-html h4 {
+    font-size: 1.1rem;
+  }
+
+  .view-html p,
+  .view-html ul,
+  .view-html ol {
+    font-size: 0.9rem;
+  }
+
+  .view-html table {
+    font-size: 0.9rem;
+  }
+
+  .view-html table th,
+  .view-html table td {
+    padding: 8px;
+  }
+}
+
+
+.prose p,
+.prose span,
+.prose div {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+.prose p span, .prose p strong{
+  background-color: transparent importent;
+  color: hsl(var(--accent-foreground));
+}

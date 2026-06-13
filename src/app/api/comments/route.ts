@@ -12,6 +12,7 @@ export async function GET(req: NextRequest) {
     await connectDB();
     const { searchParams } = new URL(req.url);
     const search = searchParams.get("search");
+    const isFeature = searchParams.get("isFeature");
     const status = searchParams.get("isApproved");
     const star = searchParams.get("rating");
     const productId = searchParams.get("productId");
@@ -25,6 +26,7 @@ export async function GET(req: NextRequest) {
       ];
     }
     if (status) query.isApproved = status;
+    if (isFeature) query.isFeature = isFeature;
     if (star) query.rating = parseInt(star);
     if (productId) query.productId = productId;
 

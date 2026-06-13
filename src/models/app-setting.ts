@@ -25,6 +25,10 @@ export interface IAppSettings extends Document {
   metaKeyword: string;
   ogImage: string;
 
+
+
+  marque: string;
+
   // Currency & Localization
   currency: {
     code: string;
@@ -133,6 +137,9 @@ const appSettingsSchema = new Schema<IAppSettings>(
     metaDescription: String,
     metaKeyword: String,
     ogImage: String,
+
+
+    marque: String,
 
     currency: {
       code: { type: String, default: "BDT" },

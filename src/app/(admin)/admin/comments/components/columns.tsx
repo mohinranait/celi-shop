@@ -47,6 +47,22 @@ export   const columns: ColumnDef<IComment>[] = [
       }
     },
 
+    {
+      accessorKey: "isFeature",
+      header: "Feature Comment",
+      cell: ({ row }) => {
+        return <Badge
+          className={
+            row.original.isFeature
+              ? "bg-green-500/10 text-green-600"
+              : "bg-red-500/10 text-red-600"
+          }
+        >
+          {row.original.isApproved ? "Is Feature" : "Not Feature"}
+        </Badge>
+      }
+    },
+
        {
       header: "Rating",
       accessorKey: "rating",
