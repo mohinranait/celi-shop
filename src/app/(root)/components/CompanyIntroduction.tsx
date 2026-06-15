@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { fetchData } from "@/lib/fetch-data";
+import { cn } from "@/lib/utils";
 import { ISiteContentResponse } from "@/redux/service/site-content/type";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
@@ -20,7 +21,7 @@ export default async function CompanyIntroduction() {
       <div className="container px-4 lg:px-0 mx-auto grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
 
         {/* Image */}
-        <div>
+        <div className={cn("", !company?.image?.url && "hidden lg:block")}>
           {
             company?.image?.url ?
               <Image
@@ -53,7 +54,7 @@ export default async function CompanyIntroduction() {
           }
           {
             company?.description2 &&
-            <p className="text-muted-foreground mb-8">
+            <p className={cn("text-muted-foreground ", company?.buttonLink && company?.buttonText && 'mb-6')}>
               {company?.description2}
             </p>
           }

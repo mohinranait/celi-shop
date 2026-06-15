@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-import { Award, Headphones, Plus, ShieldCheck, Trash, Truck } from "lucide-react";
+import { Award, Headphones, Plus,  ShieldCheck,  Trash, Truck } from "lucide-react";
 
 import {
   useGetSiteContentQuery,
@@ -221,7 +221,7 @@ export default function WhyChooseUsForm() {
                   </div>
 
 
-                  <Input
+                  {/* <Input
                     placeholder="Icon name (ShieldCheck)"
                     value={feature.icon}
                     onChange={(e) =>
@@ -231,7 +231,7 @@ export default function WhyChooseUsForm() {
                         e.target.value
                       )
                     }
-                  />
+                  /> */}
 
                   <Select
                     value={feature.icon}

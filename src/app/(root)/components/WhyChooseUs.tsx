@@ -15,6 +15,9 @@ export default async function WhyChooseUs() {
   const features = data?.items || [];
 
 
+  
+
+
   return (
     <section className="bg-muted/40 py-6 lg:py-16">
 
@@ -28,20 +31,22 @@ export default async function WhyChooseUs() {
 
 
           <h2 className=" text-2xl lg:text-4xl font-bold mt-3">
-             {data?.heading}
+            {data?.heading}
           </h2>
 
         </div>
 
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
 
-          {features.map((item) => {
-          const Icon = iconMap[item.icon];
+          {features.map((item,idx) => {
+            const Icon = iconMap[item.icon];
+
+            
 
             return (
               <div
-                key={item.title}
+                key={idx}
                 className="
                   bg-background
                   rounded-xl

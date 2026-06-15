@@ -21,21 +21,16 @@ export default function CustomerReviews() {
 
 
   return (
-    <section className="py-20">
-
+    <section className=" py-6 lg:py-16">
       <div className="container mx-auto">
-
-        <div className="text-center mb-14">
-
+        <div className="text-center mb-10">
           <p className="text-primary font-semibold">
             Customer Reviews
           </p>
 
-
           <h2 className="text-4xl font-bold mt-3">
             What Our Clients Say About Us
           </h2>
-
         </div>
 
 

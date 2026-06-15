@@ -1,4 +1,5 @@
 import FaqComponent from "@/components/shared/Faqs"
+import SectionHeader from "@/components/shared/SectionHeader"
 
 
 export const FaqPageComponent = () => {
@@ -13,16 +14,9 @@ export const FaqPageComponent = () => {
 
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-16">
-          <div className="text-center mb-12">
-
-            <h2 className="text-3xl md:text-4xl sm:text-5xl font-bold bg-linear-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent mb-2 leading-tight">
-              Frequently Asked Questions
-            </h2>
-            <p className=" text-gray-600 max-w-2xl mx-auto leading-relaxed">
-              Quick answers to common questions about our emergency patient
-              transport services.
-            </p>
-          </div>
+          <SectionHeader className="mb-3" title="Frequently Asked Questions" description="Quick answers to common questions about our emergency patient
+              transport services." />
+         
           <FaqComponent />
         </div>
       </div>

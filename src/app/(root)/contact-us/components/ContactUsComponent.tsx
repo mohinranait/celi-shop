@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import ContactForm from "./ContactUsForm";
 import { getAppSetting } from "@/lib/get-app-setting";
+import SectionHeader from "@/components/shared/SectionHeader";
 
 const ContactUsComponent = async () => {
 
@@ -25,18 +26,10 @@ const ContactUsComponent = async () => {
 
       <div className="max-w-7xl mx-auto px-4">
 
-        <div className="text-center mb-12">
+       
 
-          <h1 className="text-4xl font-bold mb-3">
-            Contact Our Support Team
-          </h1>
-
-          <p className="text-slate-600 max-w-2xl mx-auto">
-            Have questions about your order, shipping,
-            returns, or products? We are here to help.
-          </p>
-
-        </div>
+        <SectionHeader className="mb-6" title={"Contact Our Support Team"} description="Have questions about your order, shipping,
+            returns, or products? We are here to help." />
 
 
         <div className="grid lg:grid-cols-2 gap-8">

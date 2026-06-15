@@ -15,6 +15,7 @@ import {
   ArrowUpAZ,
   Columns2,
   FileUser,
+  Webhook,
 } from "lucide-react";
 
 export interface SidebarNavItem {
@@ -195,6 +196,11 @@ export const sidebarData: SidebarData = {
           title: "Setting",
           url: "/admin/setting",
           icon: Settings,
+        },
+        {
+          title: "Site Content",
+          url: "/admin/site-content",
+          icon: Webhook ,
         },
        
          {
