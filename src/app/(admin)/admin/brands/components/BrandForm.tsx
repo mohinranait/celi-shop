@@ -107,7 +107,7 @@ export default function BrandForm({
       description="Fill the form below to create a new brand"
       icon={<Bandage />}
       maxHeight="max-w-5xl"
-      className="min-w-2xl"
+      className="lg:min-w-2xl"
       footer={
         <div className="flex justify-end gap-2 w-full">
           <Button variant="outline" onClick={() => setIsOpen(false)} disabled={isDisable}>

@@ -308,7 +308,7 @@ export default function AddProductForm() {
   return (
     <div className="min-h-screen ">
       {/* ── Top bar ── */}
-      <div className="sticky top-0 z-20  px-6 py-3 flex items-center justify-between">
+      <div className="sticky top-0 z-20  lg:px-6 py-3 lg:flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
@@ -347,7 +347,7 @@ export default function AddProductForm() {
       </div>
 
       {/* ── Body ── */}
-      <div className="max-w-7xl mx-auto px-6 py-8 grid grid-cols-[1fr_320px] gap-6 items-start">
+      <div className="max-w-7xl mx-auto lg:px-6 py-8 grid lg:grid-cols-[1fr_320px] gap-6 items-start">
         {/* ── Left column ── */}
         <div className="space-y-5">
           {/* Basic Info */}
@@ -390,7 +390,7 @@ export default function AddProductForm() {
               >
                 <div className="flex items-center">
                   <Switch
-                    checked={form.watch("isFeatured") || false}
+                    checked={form.watch("isFeatured") === true}
                     onCheckedChange={(value) => form.setValue("isFeatured", value, { shouldValidate: true })}
                   />
                 </div>
@@ -401,7 +401,7 @@ export default function AddProductForm() {
               >
                 <div className="flex items-center">
                   <Switch
-                    checked={form.watch("shipping.isFreeShipping") || false}
+                    checked={form.watch("shipping.isFreeShipping") === true }
                     onCheckedChange={(value) => form.setValue("shipping.isFreeShipping", value, { shouldValidate: true })}
                   />
                 </div>
@@ -412,7 +412,7 @@ export default function AddProductForm() {
               >
                 <div className="flex items-center">
                   <Switch
-                    checked={form.watch("status") || false}
+                    checked={form.watch("status") === true }
                     onCheckedChange={(value) => form.setValue("status", value, { shouldValidate: true })}
                   />
                 </div>

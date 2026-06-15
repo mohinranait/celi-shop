@@ -155,7 +155,7 @@ const ProductView = ({ product }: Props) => {
           <div className=''>
             <div className="flex items-start justify-between gap-4 mb-3">
               <div className="flex-1">
-                <h1 className="text-3xl md:text-4xl font-bold text-accent-foreground mb-2">
+                <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-accent-foreground mb-2">
                   {product.name}
                 </h1>
                 {
@@ -200,7 +200,7 @@ const ProductView = ({ product }: Props) => {
 
           <div>
             <div className="flex items-baseline gap-3 mb-4">
-              <span className="text-4xl font-bold text-accent-foreground">
+              <span className=" text-2xl lg:text-4xl font-bold text-accent-foreground">
                 {CURRENCY}{offerPrice}
               </span>
               {price > offerPrice && (

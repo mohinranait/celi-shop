@@ -41,7 +41,7 @@ const Filters = ({ setParams }: Props) => {
   }, [ debouncedSearch, setParams,date]);
 
   return (
-    <div className="flex gap-4">
+    <div className="flex flex-wrap gap-4">
       <Input
         type="search"
         placeholder="Search..."

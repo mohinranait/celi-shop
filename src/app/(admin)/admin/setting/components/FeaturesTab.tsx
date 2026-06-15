@@ -50,7 +50,7 @@ const FeaturesTab = ({ settings, callBack }: Props) => {
         <CardTitle>Feature Management</CardTitle>
         <CardDescription>Enable or disable website features</CardDescription>
       </CardHeader>
-      <CardContent className=" grid grid-cols-2 gap-4">
+      <CardContent className=" grid lg:grid-cols-2 gap-4">
         {featureList.map((f) => (
           <div key={f.key} className="flex items-center bg-muted justify-between py-2 rounded px-3  ">
             <p className="font-medium">{f.label}</p>

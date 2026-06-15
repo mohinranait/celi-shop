@@ -45,7 +45,7 @@ const ProductCard = ({ product }: Props) => {
 
   const handleAddToCart = (action: 'cart' | 'buy' = 'cart') => {
     if (product.productType !== 'single' && product.selectedAttributes && product.selectedAttributes.length > 0) {
-      router.push(`/${product?.slug}`)
+      router.push(`/products/${product?.slug}`)
       return;
     }
 

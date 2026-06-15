@@ -57,7 +57,7 @@ const ViewContactQuery = ({
         description="Show all contact query information"
         icon={<Bandage />}
         maxHeight="max-w-5xl"
-        className="min-w-2xl"
+        className="lg:min-w-2xl"
         footer={
           <div className="flex justify-end gap-2 w-full">
             <Button variant="outline" onClick={() => setIsOpen(false)}>

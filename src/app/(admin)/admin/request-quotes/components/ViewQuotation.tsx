@@ -36,7 +36,7 @@ export default function ViewQuotation({
       description="View customer quotation request information"
       icon={<Bandage />}
       maxHeight="max-w-5xl"
-      className="min-w-2xl"
+      className="lg:min-w-2xl"
       footer={<></>}
     >
       {!previousData ? null : (
@@ -48,7 +48,7 @@ export default function ViewQuotation({
               Product Information
             </h3>
 
-            <div className="flex gap-4">
+            <div className="flex flex-col lg:flex-row gap-4">
               <div className="relative w-28 h-28 rounded-lg overflow-hidden border">
                 <Image
                   src={previousData.productId.gallery?.[0]}

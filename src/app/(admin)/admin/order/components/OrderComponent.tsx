@@ -33,7 +33,7 @@ const OrderComponent = ({ orderId }: Props) => {
 
   return (
     <div className="max-w-7xl mx-auto space-y-4">
-      <div className="flex  justify-between items-center gap-3 mb-3">
+      <div className="flex flex-wrap justify-between items-center gap-3 mb-3">
         <div className="flex gap-2 items-start">
           <button
             onClick={() => {
@@ -77,7 +77,7 @@ const OrderComponent = ({ orderId }: Props) => {
         </div>
       </div>
       <Card className="p-0">
-        <div className="flex   rounded-md shadow">
+        <div className="flex flex-wrap  rounded-md shadow">
           <div className="p-4  ">
             <p className="text-gray-600 text-sm ">Order Status</p>
             <p className="text-center">
@@ -123,7 +123,7 @@ const OrderComponent = ({ orderId }: Props) => {
                 </p>
               </div>
             </div>
-            <div className="grid grid-cols-5 bg-muted p-2 rounded gap-2 ">
+            <div className="grid grid-cols-3 lg:grid-cols-5 bg-muted p-2 rounded gap-2 ">
               {<OrderStatusSection status={order?.orderStatus} />}
             </div>
           </Card>

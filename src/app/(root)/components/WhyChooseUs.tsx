@@ -16,11 +16,11 @@ export default async function WhyChooseUs() {
 
 
   return (
-    <section className="bg-muted/40 py-20">
+    <section className="bg-muted/40 py-6 lg:py-16">
 
       <div className="container px-4 lg:px-0 mx-auto">
 
-        <div className="text-center mb-14">
+        <div className="text-center mb-6 lg:mb-14">
 
           <p className="text-primary font-semibold">
             {data?.title}

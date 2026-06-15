@@ -16,8 +16,8 @@ export default async function CompanyIntroduction() {
 
 
   return (
-    <section className="py-20">
-      <div className="container px-4 lg:px-0 mx-auto grid lg:grid-cols-2 gap-12 items-center">
+    <section className=" py-6 lg:py-16">
+      <div className="container px-4 lg:px-0 mx-auto grid lg:grid-cols-2 gap-6 lg:gap-12 items-center">
 
         {/* Image */}
         <div>
@@ -29,7 +29,7 @@ export default async function CompanyIntroduction() {
                 width={450}
                 height={450}
                 className="w-full h-112.5 object-cover rounded-2xl"
-              /> : <div className="w-full h-112.5 bg-gray-100 flex items-center justify-center">Need image here</div>
+              /> : <div className="w-full h-48 lg:h-112.5 bg-gray-100 flex items-center justify-center">Need image here</div>
           }
         </div>
 

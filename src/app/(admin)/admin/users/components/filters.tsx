@@ -60,7 +60,7 @@ const Filters = ({ setParams }: Props) => {
   }, [status, debouncedSearch, setParams,date, role]);
 
   return (
-    <div className="flex gap-4">
+    <div className="flex flex-wrap gap-4">
       <Input
         type="search"
         placeholder="Search..."

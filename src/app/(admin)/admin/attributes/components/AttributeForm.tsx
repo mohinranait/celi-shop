@@ -98,7 +98,7 @@ export default function AttributeForm({ isOpen, setIsOpen, previousData }: Props
       description="Define product attributes like Color, Size, etc."
       icon={<Bandage />}
       maxHeight="max-w-5xl"
-      className="min-w-2xl"
+      className="lg:min-w-2xl"
       footer={
         <div className="flex justify-end gap-2 w-full">
           <Button variant="outline" onClick={() => setIsOpen(false)} disabled={isDisable}>
@@ -112,7 +112,7 @@ export default function AttributeForm({ isOpen, setIsOpen, previousData }: Props
       }
     >
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid lg:grid-cols-2 gap-4">
           {/* Internal Name */}
           <div className="space-y-1">
             <Label>Attribute Name (Internal) <span className="text-red-500">*</span></Label>

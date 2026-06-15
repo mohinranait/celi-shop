@@ -77,7 +77,7 @@ const ReviewTabs = ({ product }: Props) => {
               <p className=" text-sm font-semibold text-gray-700 px-5  ">
                 Ratings & Reviews of {product?.name}
               </p>
-              <div className="md:grid grid-cols-3 pb-5 gap-5  py-4 px-5">
+              <div className="md:grid grid-cols-3 pb-5 gap-5  py-4 lg:px-5">
                 <div className=" space-y-2 mb-6 lg:mb-0">
                   <div className="flex items-center gap-2">
                     <span className="text-3xl font-bold">
@@ -129,7 +129,7 @@ const ReviewTabs = ({ product }: Props) => {
               </div>
               <ul className="bg-white divide-y divide-gray-100">
                 {reviews?.map((review, index) => (
-                  <li className="py-3 px-5" key={index}>
+                  <li className="py-3 lg:px-5" key={index}>
                     <div className="mb-2">
                       <StarRating size={12} value={review?.rating} />
                       <div className="flex justify-between items-center">

@@ -56,7 +56,7 @@ export default function MediaModal({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="min-w-275 max-w-7xl h-[85vh] gap-0 flex flex-col p-0 overflow-hidden">
+      <DialogContent className="lg:min-w-275 max-w-7xl h-[85vh] gap-0 flex flex-col p-0 overflow-hidden">
         
         {/* Header */}
         <DialogHeader className="px-6 py-4 border-b">
@@ -78,13 +78,13 @@ export default function MediaModal({
             value="library" 
             className="flex-1 flex flex-col min-h-0 overflow-hidden "
           >
-            <div className="flex-1 overflow-y-auto p-6 pt-2 custom-scroll">
+            <div className="flex-1 overflow-y-auto px-2 lg:p-6 pt-2 custom-scroll">
               {isLoading ? (
                 <div className="h-full flex items-center justify-center">
                   <p className="text-lg">Loading media files...</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-5 gap-4 pb-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-2 lg:gap-4 pb-6">
                   {medias.map((item) => {
                     const isActive = selectedImages.some(
                       (img) => img._id === item._id

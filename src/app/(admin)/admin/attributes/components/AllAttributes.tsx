@@ -35,7 +35,7 @@ const AllAttributes = () => {
     <div className="max-w-7xl mx-auto  space-y-6">
 
       {/* HEADER */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-wrap justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold">All Attributes</h1>
           <p className="text-muted-foreground text-sm">

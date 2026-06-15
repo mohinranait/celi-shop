@@ -82,7 +82,7 @@ export default function CommentForm({
       description="Fill the form below to update comment"
       icon={<Bandage />}
       maxHeight="max-w-5xl"
-      className="min-w-125"
+      className="lg:min-w-125"
       footer={
         <div className="flex justify-end gap-2 w-full">
           <Button variant="outline" onClick={() => setIsOpen(false)} disabled={isDisable}>

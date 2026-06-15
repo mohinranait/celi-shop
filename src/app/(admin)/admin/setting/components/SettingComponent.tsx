@@ -117,17 +117,15 @@ export default function SettingsComponent() {
   if (!settings) return null;
 
   return (
-    <div className="flex h-[calc(100vh-100px)] px-10 border bg-background">
+    <div className="lg:flex lg:h-[calc(100vh-100px)] max-w-7xl mx-auto border bg-background">
       {/* Sidebar */}
-      <div className="w-72 border-r bg-card">
-
-
+      <div className="lg:w-72 border-r bg-card">
         <LeftBar activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="border-b bg-card px-8 py-4 flex items-center justify-between">
+        <div className="border-b bg-card px-8 py-4 flex items-center flex-wrap justify-between">
           <div>
             <h2 className="text-xl font-semibold">
               {tabs.find(t => t.id === activeTab)?.label} Settings
@@ -146,7 +144,7 @@ export default function SettingsComponent() {
           </Button>
         </div>
 
-        <div className="flex-1 overflow-auto p-8">
+        <div className="flex-1 overflow-auto p-1 lg:p-8 ">
           <div className="max-w-4xl mx-auto space-y-8">
 
             {/* ==================== GENERAL ==================== */}
@@ -162,7 +160,7 @@ export default function SettingsComponent() {
                   <CardDescription>Customer support and social media</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-8">
-                  <div className="grid grid-cols-2 gap-6">
+                  <div className="grid lg:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label>Contact Email</Label>
                       <Input type="email" value={settings.contactEmail || ''} onChange={e => setValue('contactEmail', e.target.value)} />
@@ -178,7 +176,7 @@ export default function SettingsComponent() {
                   <div>
                     <Label className="mb-3 block">Business Address</Label>
                     <Input placeholder="Street" value={settings.address?.street || ''} onChange={e => setValue('address.street', e.target.value)} />
-                    <div className="grid grid-cols-3 gap-4 mt-4">
+                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
                       <Input placeholder="City" value={settings.address?.city || ''} onChange={e => setValue('address.city', e.target.value)} />
                       <Input placeholder="State" value={settings.address?.state || ''} onChange={e => setValue('address.state', e.target.value)} />
                       <Input placeholder="ZIP Code" value={settings.address?.zipCode || ''} onChange={e => setValue('address.zipCode', e.target.value)} />
@@ -189,7 +187,7 @@ export default function SettingsComponent() {
 
                   <div>
                     <Label className="mb-3 block">Social Links</Label>
-                    <div className="grid grid-cols-2 gap-6">
+                    <div className="grid lg:grid-cols-2 gap-6">
                       {platforms.map(platform => (
                         <div key={platform} className="space-y-2">
                           <Label className="capitalize">{platform}</Label>

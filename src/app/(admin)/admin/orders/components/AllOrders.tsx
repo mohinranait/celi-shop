@@ -2,16 +2,13 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { DataTable } from '@/components/ui/data-table/Table';
-import { Plus } from 'lucide-react';
 import React, { useState } from 'react'
 import tableColumns from './columns';
-import { useRouter } from 'next/navigation';
 import Pagination from '@/components/shared/Pagination';
 import { useGetAdminOrdersQuery } from '@/redux/service/orders';
 import Filters from './filters';
 
 const AllOrders = () => {
-  const router = useRouter()
   const [filter, setFilter] = useState<"active" | "deleted">("active");
   const [isParams, setIsParams] = useState('')
   const [pagination, setPagination] = useState({ page: 1, limit: 15 })

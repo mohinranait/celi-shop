@@ -104,7 +104,7 @@ export default function SliderForm({
       description="Fill the form below to create a new slider"
       icon={<Bandage />}
       maxHeight="max-w-5xl"
-      className="min-w-2xl"
+      className="lg:min-w-2xl"
       footer={
         <div className="flex justify-end gap-2 w-full">
           <Button variant="outline" onClick={() => setIsOpen(false)} disabled={isDisable}>
@@ -140,7 +140,7 @@ export default function SliderForm({
         </div>
 
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="space-y-1">
             <Label>Button Name <span className="text-red-500">*</span></Label>
             <Input {...form.register("buttonName")} />
