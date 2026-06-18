@@ -22,7 +22,7 @@ const AllAttributes = () => {
 
   const columns = tableColumns({ type: filter });
 
-  const { data } = useGetAttributesQuery(`page=${pagination?.page}&limit=${pagination?.limit}&isDelete=${filter === 'active' ? 'false' : "true"}&${isParams}`);
+  const { data,isLoading } = useGetAttributesQuery(`page=${pagination?.page}&limit=${pagination?.limit}&isDelete=${filter === 'active' ? 'false' : "true"}&${isParams}`);
 
   const attributes = data?.data || [];
   const meta = data?.meta;
@@ -79,6 +79,7 @@ const AllAttributes = () => {
           <DataTable
             columns={columns}
             data={attributes}
+            loading={isLoading}
           />
 
 

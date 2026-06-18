@@ -12,7 +12,7 @@ import { IBrand } from "@/redux/service/brand/type";
 type TFilterProps = {
     categories: ICategory[];
     activeCat: string;
-    setActiveCat: (id: string) => void;
+    handleCatChange: (id: string) => void;
     brands: IBrand[];
     selectedBrands: string[];
     toggleBrand: (id: string) => void;
@@ -25,7 +25,7 @@ type TFilterProps = {
     onClearAll: () => void;
 }
 export function FilterSidebar({ 
-  categories, activeCat, setActiveCat,
+  categories, activeCat, handleCatChange,
   brands, selectedBrands, toggleBrand,
   minPrice, setMinPrice, maxPrice, setMaxPrice,
   activeRating, setActiveRating,
@@ -38,7 +38,7 @@ export function FilterSidebar({
       <CategoryTree
         categories={categories}
         activeCat={activeCat}
-        setActiveCat={setActiveCat}
+        handleCatChange={handleCatChange}
       />
 
       {/* Brands */}
@@ -106,7 +106,7 @@ export function FilterSidebar({
           Rating
         </p>
         <div className="flex gap-2 flex-wrap">
-          {[5, 4, 3].map((r) => (
+          {[5, 4, 3,2].map((r) => (
             <button
               key={r}
               onClick={() => setActiveRating(activeRating === r ? 0 : r)}
@@ -117,7 +117,7 @@ export function FilterSidebar({
                   : 'border-border text-muted-foreground hover:bg-muted'
               )}
             >
-              {r}★+
+              {r}★
             </button>
           ))}
         </div>

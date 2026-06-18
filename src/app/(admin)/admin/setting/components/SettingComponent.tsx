@@ -101,7 +101,7 @@ export default function SettingsComponent() {
 
   const handleSave = async () => {
     try {
-      console.log({ settings });
+      // console.log({ settings });
 
       await updateSettings({ ...settings }).unwrap();
       toast.success('Settings saved successfully');

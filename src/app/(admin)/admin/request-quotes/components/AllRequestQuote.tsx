@@ -18,7 +18,7 @@ const AllRequestQuotes = () => {
 
 
 
-  const { data } = useGetRequestQuotesQuery(`page=${pagination?.page}&limit=${pagination?.limit}&${isParams}`);
+  const { data, isLoading } = useGetRequestQuotesQuery(`page=${pagination?.page}&limit=${pagination?.limit}&${isParams}`);
 
   const requestQuotes = data?.data || [];
   const meta = data?.meta;
@@ -56,6 +56,7 @@ const AllRequestQuotes = () => {
           <DataTable
             columns={columns}
             data={requestQuotes}
+            loading={isLoading}
           />
 
 

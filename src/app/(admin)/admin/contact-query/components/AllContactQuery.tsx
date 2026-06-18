@@ -15,7 +15,7 @@ const AllContactQuery = () => {
   const [pagination, setPagination] = useState({ page: 1, limit: 2 })
 
 
-  const { data } = useGetContactsQuery(`page=${pagination?.page}&limit=${pagination?.limit}&${isParams}`);
+  const { data, isLoading } = useGetContactsQuery(`page=${pagination?.page}&limit=${pagination?.limit}&${isParams}`);
 
   const contacts = data?.data || [];
   const meta = data?.meta;
@@ -52,6 +52,7 @@ const AllContactQuery = () => {
           <DataTable
             columns={columns}
             data={contacts}
+            loading={isLoading}
           />
 
 

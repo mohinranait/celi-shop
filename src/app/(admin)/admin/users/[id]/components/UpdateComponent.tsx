@@ -85,7 +85,7 @@ function UpdateComponent({ userId }: Props) {
   /* -------------------------------------------------------------------------- */
 
   const onSubmit = async (values: TUserInput) => {
-    console.log(values);
+    // console.log(values);
 
     try {
       await updateUser({payload: values, id: userId}).unwrap();

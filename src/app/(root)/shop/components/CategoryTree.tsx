@@ -6,7 +6,7 @@ interface CategoryNodeProps {
   node: ICategory;
   all: ICategory[];
   activeCat: string;
-  setActiveCat: (id: string) => void;
+  handleCatChange: (id: string) => void;
 }
 
 function isDescendantActive(id: string, all: ICategory[], activeCat: string): boolean {
@@ -15,7 +15,7 @@ function isDescendantActive(id: string, all: ICategory[], activeCat: string): bo
 }
 
 
-function CategoryNode({ node, all, activeCat, setActiveCat }: CategoryNodeProps) {
+function CategoryNode({ node, all, activeCat, handleCatChange }: CategoryNodeProps) {
   const children = all.filter((c) => c.parentId === node._id);
   const hasKids = children.length > 0;
   const isActive = activeCat === node._id;
@@ -42,7 +42,7 @@ function CategoryNode({ node, all, activeCat, setActiveCat }: CategoryNodeProps)
 
         {/* Label — শুধু category select */}
         <button
-          onClick={() => setActiveCat(isActive ? '' : node._id)}
+          onClick={() => handleCatChange(isActive ? '' : node._id)}
           className={cn(
             'flex-1 text-left justify-between  px-2 py-1.5 rounded-lg transition-colors text-sm',
             isActive
@@ -63,7 +63,7 @@ function CategoryNode({ node, all, activeCat, setActiveCat }: CategoryNodeProps)
               node={child}
               all={all}
               activeCat={activeCat}
-              setActiveCat={setActiveCat}
+              handleCatChange={handleCatChange}
             />
           ))}
         </div>
@@ -76,11 +76,11 @@ function CategoryNode({ node, all, activeCat, setActiveCat }: CategoryNodeProps)
 export function CategoryTree({
   categories,
   activeCat,
-  setActiveCat,
+  handleCatChange,
 }: {
   categories: ICategory[];
   activeCat: string;
-  setActiveCat: (id: string) => void;
+  handleCatChange: (id: string) => void;
 }) {
   const roots = categories.filter((c) => c.parentId === null);
 
@@ -94,7 +94,7 @@ export function CategoryTree({
         <div className="flex items-center gap-0.5">
           <span className="w-6 shrink-0" />
           <button
-            onClick={() => setActiveCat('')}
+            onClick={() => handleCatChange('')}
             className={cn(
               'flex-1 text-left px-2 py-1.5 rounded-lg transition-colors text-sm',
               !activeCat
@@ -112,7 +112,7 @@ export function CategoryTree({
             node={root}
             all={categories}
             activeCat={activeCat}
-            setActiveCat={setActiveCat}
+            handleCatChange={handleCatChange}
           />
         ))}
       </div>

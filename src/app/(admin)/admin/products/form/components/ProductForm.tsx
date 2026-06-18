@@ -701,7 +701,7 @@ export default function AddProductForm() {
                   <Select
                     value={field.value}
                     onValueChange={(e) => {
-                      console.log({ e });
+                      // console.log({ e });
 
                       field.onChange(e)
                     }}

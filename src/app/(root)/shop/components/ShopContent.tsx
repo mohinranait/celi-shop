@@ -1,5 +1,5 @@
 'use client';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useMemo } from 'react';
 import { useGetCategoriesQuery } from '@/redux/service/categories';
 import { SlidersHorizontal, X, Filter } from 'lucide-react';
@@ -25,8 +25,9 @@ export function ShopContent() {
   const searchParams = useSearchParams();
 
   const search = searchParams.get('search');
+  const activeCat = searchParams.get('category') || '';
 
-  const [activeCat, setActiveCat] = useState(searchParams.get('category') || '');
+  // const [activeCat, setActiveCat] = useState(searchParams.get('category') || '');
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(0);
@@ -39,7 +40,7 @@ export function ShopContent() {
 
   const { data: brandData } = useGetBrandsByCategoryQuery(activeCat || undefined);
   const brands = brandData?.data || [];
-
+  const router = useRouter();
   const queryParams = useMemo((): IProductFilterParams => {
     const p: IProductFilterParams = { sort, page, limit: 20 };
     if (activeCat) p.category = activeCat;
@@ -61,13 +62,28 @@ export function ShopContent() {
     );
 
   const handleCatChange = (id: string) => {
-    setActiveCat(id);
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (id) {
+      params.set('category', id);
+    } else {
+      params.delete('category');
+    }
+
+    router.push(`/shop?${params.toString()}`);
+
     setSelectedBrands([]);
     setPage(1);
   };
 
+
   const clearAll = () => {
-    setActiveCat('');
+    const params = new URLSearchParams(searchParams.toString());
+
+    params.delete('category');
+
+    router.push(`/shop?${params.toString()}`);
+
     setSelectedBrands([]);
     setMinPrice(0);
     setMaxPrice(0);
@@ -95,7 +111,7 @@ export function ShopContent() {
   ].filter(Boolean) as { label: string; clear: () => void }[];
 
   const filterProps = {
-    categories, activeCat, setActiveCat: handleCatChange,
+    categories, activeCat, handleCatChange,
     brands, selectedBrands, toggleBrand,
     minPrice, setMinPrice, maxPrice, setMaxPrice,
     activeRating, setActiveRating,

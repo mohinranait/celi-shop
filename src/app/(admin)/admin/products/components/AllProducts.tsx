@@ -16,7 +16,7 @@ const AllProducts = () => {
   const [isParams, setIsParams] = useState('')
   const [pagination, setPagination] = useState({ page: 1, limit: 20 })
   const columns = tableColumns({ type: filter });
-  const { data } = useGetProductsQuery(`page=${pagination?.page}&limit=${pagination?.limit}&isDelete=${filter === 'active' ? 'false' : "true"}&${isParams}`)
+  const { data, isLoading } = useGetProductsQuery(`page=${pagination?.page}&limit=${pagination?.limit}&isDelete=${filter === 'active' ? 'false' : "true"}&${isParams}`)
   const products = data?.data || [];
   const meta = data?.meta;
 
@@ -70,6 +70,7 @@ const AllProducts = () => {
           <DataTable
             columns={columns}
             data={products}
+            loading={isLoading}
           />
 
 

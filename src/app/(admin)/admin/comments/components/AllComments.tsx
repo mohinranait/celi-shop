@@ -17,7 +17,7 @@ const AllComments = () => {
 
 
 
-  const { data } = useGetCommentsQuery(`page=${pagination?.page}&limit=${pagination?.limit}&${isParams}`);
+  const { data, isLoading } = useGetCommentsQuery(`page=${pagination?.page}&limit=${pagination?.limit}&${isParams}`);
 
   const comments = data?.data || [];
   const meta = data?.meta;
@@ -49,6 +49,7 @@ const AllComments = () => {
           <DataTable
             columns={columns}
             data={comments}
+            loading={isLoading}
           />
 
 

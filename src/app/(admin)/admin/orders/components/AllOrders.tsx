@@ -13,7 +13,7 @@ const AllOrders = () => {
   const [isParams, setIsParams] = useState('')
   const [pagination, setPagination] = useState({ page: 1, limit: 15 })
   const columns = tableColumns({ type: filter });
-  const { data } = useGetAdminOrdersQuery(`page=${pagination?.page}&limit=${pagination?.limit}&isDelete=${filter === 'active' ? 'false' : "true"}&${isParams}`)
+  const { data, isLoading } = useGetAdminOrdersQuery(`page=${pagination?.page}&limit=${pagination?.limit}&isDelete=${filter === 'active' ? 'false' : "true"}&${isParams}`)
   const orders = data?.data || [];
   const meta = data?.meta;
 
@@ -66,6 +66,7 @@ const AllOrders = () => {
           <DataTable
             columns={columns}
             data={orders}
+            loading={isLoading}
           />
 
 

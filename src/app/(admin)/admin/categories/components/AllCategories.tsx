@@ -20,7 +20,7 @@ const AllCategories = () => {
   const [pagination, setPagination] = useState({ page: 1, limit: 20 })
     const columns = tableColumns({ type: filter });
 
-  const { data } = useGetCategoriesQuery(`page=${pagination?.page}&limit=${pagination?.limit}&isDelete=${filter === 'active' ? 'false' : "true"}&${isParams}`);
+  const { data, isLoading } = useGetCategoriesQuery(`page=${pagination?.page}&limit=${pagination?.limit}&isDelete=${filter === 'active' ? 'false' : "true"}&${isParams}`);
 
   const categories = data?.data || [];
   const meta = data?.meta;
@@ -71,7 +71,7 @@ const AllCategories = () => {
       <Card className="p-0 rounded-md">
         <CardContent className="p-0">
 
-          <DataTable columns={columns} data={categories} />
+          <DataTable columns={columns} data={categories} loading={isLoading} />
 
 
         </CardContent>

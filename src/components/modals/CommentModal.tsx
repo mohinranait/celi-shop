@@ -23,7 +23,7 @@ const CommentModal = () => {
  const { user } = useAppSelector((state) => state.auth);
   const [placeNewComment, {isLoading: createLoading}] = useCreateCommentMutation()
   const [updateComment, {isLoading: updateLoading}] = useUpdateCommentMutation()
-  console.log({commentModalOpen});
+  // console.log({commentModalOpen});
   
   const {data:getComments, isLoading: getCommentLoading} = useGetCommentByProductIdQuery({ productId:commentModalOpen?.pId || '1', params: `accessMode=auth&userId=${user?._id}`}, {skip: !commentModalOpen?.pId})
   const comments = getComments?.data;

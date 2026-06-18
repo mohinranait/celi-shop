@@ -110,9 +110,9 @@ export default function CompanyForm() {
 
     try {
 
-      const res = await updateSiteData(payload).unwrap();
+       await updateSiteData(payload).unwrap();
 
-      console.log("Saved:", res);
+      // console.log("Saved:", res);
 
     } catch (error) {
 

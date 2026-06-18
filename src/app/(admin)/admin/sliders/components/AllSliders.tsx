@@ -22,7 +22,7 @@ const AllSliders = () => {
 
   const columns = tableColumns({ type: filter });
 
-  const { data } = useGetSlidersQuery(`page=${pagination?.page}&limit=${pagination?.limit}&isDelete=${filter === 'active' ? 'false' : "true"}&${isParams}`);
+  const { data, isLoading } = useGetSlidersQuery(`page=${pagination?.page}&limit=${pagination?.limit}&isDelete=${filter === 'active' ? 'false' : "true"}&${isParams}`);
 
   const sliders = data?.data || [];
   const meta = data?.meta;
@@ -79,6 +79,7 @@ const AllSliders = () => {
           <DataTable
             columns={columns}
             data={sliders}
+            loading={isLoading}
           />
 
 

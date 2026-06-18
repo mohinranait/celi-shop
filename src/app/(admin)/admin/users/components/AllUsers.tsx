@@ -18,7 +18,7 @@ const AllUsers = () => {
 
   const columns = tableColumns({ type: filter });
 
-  const { data } = useGetUsersQuery(`page=${pagination?.page}&limit=${pagination?.limit}&isDelete=${filter === 'active' ? 'false' : "true"}&${isParams}`);
+  const { data, isLoading } = useGetUsersQuery(`page=${pagination?.page}&limit=${pagination?.limit}&isDelete=${filter === 'active' ? 'false' : "true"}&${isParams}`);
 
   const users = data?.data || [];
   const meta = data?.meta;
@@ -75,6 +75,7 @@ const AllUsers = () => {
           <DataTable
             columns={columns}
             data={users}
+            loading={isLoading}
           />
 
 

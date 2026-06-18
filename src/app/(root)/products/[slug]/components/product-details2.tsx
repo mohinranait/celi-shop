@@ -11,7 +11,7 @@ import ProductsSkeleton from '@/app/(root)/components/ProductsSkeleton'
 
 export async function ProductDetailss({ product }: { product: IProduct }) {
 
-console.log({product});
+// console.log({product});
 
 
   return (

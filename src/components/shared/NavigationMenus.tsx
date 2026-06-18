@@ -29,7 +29,7 @@ const NavigationMenus = () => {
   const {data:getData} = useGetCategoriesQuery(``);
   const categoriess = getData?.data;
   const categoriesTree:ICategoryTree[] =  buildTree(categoriess || [])
-  console.log(categoriesTree);
+  // console.log(categoriesTree);
 
   return (
     <div className="hidden md:block bg-primary py-2">
@@ -107,7 +107,7 @@ const NavigationMenus = () => {
                 </div>
 
                 {/* Bottom Banner */}
-                <div className="mt-8 rounded-xl bg-linear-to-r from-primary/10 to-primary/5 p-6 flex items-center justify-between">
+                {/* <div className="mt-8 rounded-xl bg-linear-to-r from-primary/10 to-primary/5 p-6 flex items-center justify-between">
                   <div>
                     <h4 className="text-lg font-semibold">
                       New Summer Collection
@@ -124,7 +124,7 @@ const NavigationMenus = () => {
                   >
                     Shop Now
                   </Link>
-                </div>
+                </div> */}
               </Card>
             </div>
           </div>

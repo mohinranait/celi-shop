@@ -22,7 +22,7 @@ const AllBrands = () => {
 
   const columns = tableColumns({ type: filter });
 
-  const { data } = useGetBrandsQuery(`page=${pagination?.page}&limit=${pagination?.limit}&isDelete=${filter === 'active' ? 'false' : "true"}&${isParams}`);
+  const { data, isLoading } = useGetBrandsQuery(`page=${pagination?.page}&limit=${pagination?.limit}&isDelete=${filter === 'active' ? 'false' : "true"}&${isParams}`);
 
   const brands = data?.data || [];
   const meta = data?.meta;
@@ -79,6 +79,7 @@ const AllBrands = () => {
           <DataTable
             columns={columns}
             data={brands}
+            loading={isLoading}
           />
 
 

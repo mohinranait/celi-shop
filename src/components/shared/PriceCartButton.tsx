@@ -27,10 +27,10 @@ const FloatingCartButton = ({
   }
 
   return (
-    <Button
+    <button
       onClick={handleClick}
       className={cn(
-        `
+        ` cursor-pointer
         fixed right-0 top-1/2 -translate-y-1/2
         z-50 h-auto p-0 overflow-hidden
         rounded-l-lg rounded-r-none
@@ -82,7 +82,7 @@ const FloatingCartButton = ({
           {CURRENCY} {subtotal}
         </div>
       </div>
-    </Button>
+    </button>
   );
 };
 
