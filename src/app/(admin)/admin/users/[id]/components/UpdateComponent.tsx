@@ -18,7 +18,6 @@ import { Separator } from '@/components/ui/separator';
 import {
   Avatar,
   AvatarFallback,
-  AvatarImage,
 } from '@/components/ui/avatar';
 
 import {
@@ -54,7 +53,7 @@ function UpdateComponent({ userId }: Props) {
     handleSubmit,
     reset,
     control,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<TUserInput>({
     resolver: zodResolver(userSchema),
     defaultValues: {
@@ -357,10 +356,10 @@ function UpdateComponent({ userId }: Props) {
                 <Button
                   type="submit"
                   size="lg"
-                  disabled={isSubmitting || isLoading}
+                  disabled={updateLoading || isLoading}
                   className="min-w-45"
                 >
-                  {isSubmitting ? (
+                  {updateLoading ? (
                     'Saving Changes...'
                   ) : (
                     <>

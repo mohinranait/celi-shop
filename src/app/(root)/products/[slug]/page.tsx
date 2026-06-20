@@ -72,6 +72,7 @@ const ProductDetails = async ({ params }: { params: Promise<{ slug: string }> })
   const data = await fetchData<IProductDetailsResponse>({
     api: `client/products/${slug}`,
     // revalidate: 3600,
+     revalidate: 0,
   });
 
   const product = data?.data as IProduct;

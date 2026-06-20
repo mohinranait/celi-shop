@@ -238,35 +238,38 @@ export default function AddProductForm() {
 
 
 
-  const variations = watch("variations");
+  // const variations = watch("variations");
 
-  useEffect(() => {
-    variations?.forEach((item, index: number) => {
-      const price = Number(item.price) || 0;
-      const fixed = Number(item.offerPriceFixed);
-      const percent = Number(item.offerPriceParcent);
+  // useEffect(() => {
+  //   variations?.forEach((item, index: number) => {
+  //     const price = Number(item.price) || 0;
+  //     const fixed = Number(item.offerPriceFixed);
+  //     const percent = Number(item.offerPriceParcent);
 
-      // FIXED → PERCENT
-      if (fixed >= 0 && price > 0 && fixed <= price) {
-        const calculatedPercent = ((price - fixed) / price) * 100;
+  //     // FIXED → PERCENT
+  //     if (fixed >= 0 && price > 0 && fixed <= price) {
+  //       const calculatedPercent = ((price - fixed) / price) * 100;
 
-        setValue(
-          `variations.${index}.offerPriceParcent`,
-          Number(calculatedPercent.toFixed(2))
-        );
-      }
+  //       console.log({calculatedPercent});
+        
 
-      // PERCENT → FIXED
-      if (percent >= 0 && price > 0 && percent <= 100) {
-        const calculatedFixed = price - (price * percent) / 100;
+  //       setValue(
+  //         `variations.${index}.offerPriceParcent`,
+  //         Number(calculatedPercent.toFixed(2))
+  //       );
+  //     }
 
-        setValue(
-          `variations.${index}.offerPriceFixed`,
-          Number(calculatedFixed.toFixed(2))
-        );
-      }
-    });
-  }, [variations, setValue]);
+  //     // PERCENT → FIXED
+  //     if (percent >= 0 && price > 0 && percent <= 100) {
+  //       const calculatedFixed = price - (price * percent) / 100;
+
+  //       setValue(
+  //         `variations.${index}.offerPriceFixed`,
+  //         Number(calculatedFixed.toFixed(2))
+  //       );
+  //     }
+  //   });
+  // }, [variations, setValue]);
 
   const currentTags = watch("tags") || [];
 
@@ -512,7 +515,7 @@ export default function AddProductForm() {
               name="productType"
               render={({ field }) => (
                 <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
-                  <SelectTrigger>
+                  <SelectTrigger className="min-w-56">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -551,7 +554,7 @@ export default function AddProductForm() {
                           value={config.attributeId}
                           onValueChange={(val) => updateAttributeType(idx, val)}
                         >
-                          <SelectTrigger className="h-8 ">
+                          <SelectTrigger className="h-8 min-w-sm ">
                             <SelectValue placeholder="Select attribute..." />
                           </SelectTrigger>
                           <SelectContent>
