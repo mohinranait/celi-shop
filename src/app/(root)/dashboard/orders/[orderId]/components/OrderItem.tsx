@@ -18,16 +18,23 @@ const OrderItem = ({ item }: Props) => {
     <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border rounded-lg">
       <div className="flex items-center gap-4">
         <div className="relative">
-          <Image
+          {
+            item?.productImage ?  <div className="w-16 h-16">
+           <Image
             src={item?.productImage || "/placeholder.svg"}
             alt={item.productName}
             width={64}
             height={64}
             className="w-16 h-16 object-cover rounded-md border"
           />
+         </div> :  <div className="w-16 h-16 bg-slate-100 rounded">
+         
+         </div>
+          }
+        
           <Badge
-            className="absolute -top-2 -right-2 bg-main text-white text-xs px-2 py-1 rounded-full"
-            variant="secondary"
+            className="absolute -top-2 -right-2 bg-white text-xs px-2 py-1 rounded-full"
+            variant="outline"
           >
             Qty: {item.quantity}
           </Badge>

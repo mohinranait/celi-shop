@@ -5,15 +5,15 @@ import { NextRequest, NextResponse } from "next/server";
 // Get order by OrderID
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   await connectDB();
-  const {id}  = await params;
-  
+  const { id } = await params;
+
   try {
     const order = await Order.findById(id);
     if (!order) return NextResponse.json({ error: "Not Found" }, { status: 404 });
     return NextResponse.json({ data: order });
   } catch (error) {
-     console.error("Update order Error:", error);
-     return NextResponse.json({ success: false, message: "Internal Server Error", }, { status: 500 });
+    console.error("Update order Error:", error);
+    return NextResponse.json({ success: false, message: "Internal Server Error", }, { status: 500 });
   }
 }
 
@@ -21,15 +21,15 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: Promise< { id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
 
     const body = await req.json();
-    const { id } = await  params;
+    const { id } = await params;
 
-   
+
 
     //  check order exists
     const order = await Order.findById(id);
@@ -44,13 +44,30 @@ export async function PATCH(
       );
     }
 
-   
+    const { orderStatus, payment } = body
+    const { status } = payment;
+
+    console.log({ status, orderStatus });
+
 
     //  update order
+    // const updatedOrder = await Order.findByIdAndUpdate(
+    //   id,
+    //   { ...order, orderStatus, payment: {...order.payment, status } },
+    //   { new: true, runValidators: true }
+    // );
     const updatedOrder = await Order.findByIdAndUpdate(
       id,
-      { ...body },
-      { new: true, runValidators: true }
+      {
+        $set: {
+          orderStatus,
+          "payment.status": status,
+        },
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
     );
 
     return NextResponse.json(

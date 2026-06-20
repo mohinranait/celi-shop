@@ -116,17 +116,22 @@ const OrderItemTable = ({ order }: Props) => {
                   >
                     <div className="flex items-center gap-2">
                       <div>
-                        <div className="w-12.5 h-12.5">
-                          <Image
-                            src={
-                              item?.productImage ? item?.productImage : PRODUCT_IMG
-                            }
-                            width={50}
-                            height={50}
-                            alt="Image"
-                            className="w-12.5 h-12.5"
-                          />
-                        </div>
+                        {
+                          item?.productImage ? <div className="w-12.5 h-12.5 ">
+                            <Image
+                              src={
+                                item?.productImage ? item?.productImage : PRODUCT_IMG
+                              }
+                              width={50}
+                              height={50}
+                              alt="Image"
+                              className="w-12.5 h-12.5"
+                            />
+                          </div> : <div className="w-12.5 h-12.5 bg-slate-50">
+
+                          </div>
+                        }
+
                       </div>
                       <div>
                         <p className="text-gray-700">{item?.productName}</p>

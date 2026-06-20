@@ -20,7 +20,7 @@ const orderItemSchema = new Schema(
 
     productImage: {
       type: String,
-      required: true,
+      // required: true,
     },
 
     productSlug: {

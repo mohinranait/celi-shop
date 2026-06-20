@@ -22,17 +22,17 @@ const tableColumns = ({ type = 'active' }: { type: "active" | "deleted" }) => {
         </Badge>
       }
     },
-     {
-      accessorKey: "trackingNumber",
-      header: "Tracking No",
-      cell: ({ row }) => {
-        return <Badge
-          variant={'outline'}
-        >
-          #{row.original.trackingNumber}
-        </Badge>
-      }
-    },
+    //  {
+    //   accessorKey: "trackingNumber",
+    //   header: "Tracking No",
+    //   cell: ({ row }) => {
+    //     return <Badge
+    //       variant={'outline'}
+    //     >
+    //       #{row.original.trackingNumber}
+    //     </Badge>
+    //   }
+    // },
      {
       accessorKey: "pricing.total",
       header: "Total Price",

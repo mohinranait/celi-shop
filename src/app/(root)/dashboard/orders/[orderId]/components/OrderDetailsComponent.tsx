@@ -95,7 +95,7 @@ export default function OrderDetailsComponent({ orderId }: Props) {
               >
                 {order.orderStatus}
               </span>
-              <Button
+              {/* <Button
                 onClick={downloadInvoicePDF}
                 disabled={isDownloading}
                 variant="outline"
@@ -103,7 +103,7 @@ export default function OrderDetailsComponent({ orderId }: Props) {
               >
                 <Download className="h-4 w-4 mr-2" />
                 {isDownloading ? "Generating PDF..." : "Download Invoice"}
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>
@@ -217,7 +217,7 @@ export default function OrderDetailsComponent({ orderId }: Props) {
               </CardContent>
             </Card>
             {/* Payment Method */}
-           <Method payment={order?.payment} />
+            <Method payment={order?.payment} />
 
           </div>
         </div>

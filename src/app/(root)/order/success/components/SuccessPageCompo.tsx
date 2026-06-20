@@ -12,6 +12,7 @@ import { format } from "date-fns";
 import { PaymentStatusBadge } from "@/components/shared/render-status";
 import DeliveryTracker from "./DeliveryTracker";
 import { SuccessPageSkeleton } from "./SuccessSkeleton";
+import Link from "next/link";
 
 const SuccessPageCompo = () => {
   const params = useSearchParams();
@@ -77,9 +78,14 @@ const SuccessPageCompo = () => {
               {items?.map((item) => (
                 <div key={item._id}>
                   <div className="flex items-center gap-3 py-3">
-                    <div className="w-11 h-11 rounded-lg bg-muted border border-border flex items-center justify-center text-xl shrink-0">
+                    {
+                      item?.productImage ?   <div className="w-11 h-11 rounded-lg bg-muted border border-border flex items-center justify-center text-xl shrink-0">
                       <Image src={item?.productImage || PRODUCT_IMG} width={60} height={60} alt={item?.productName || ''} className="rounded-lg" />
+                    </div> :   <div className="w-11 h-11 rounded-lg bg-muted border border-border flex items-center justify-center text-xl shrink-0">
+                    
                     </div>
+                    }
+                  
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-accent-foreground truncate">{item?.productName}</p>
                       {item?.selectedVariants && (
@@ -208,14 +214,15 @@ const SuccessPageCompo = () => {
 
         {/* Action Buttons */}
         <div className="space-y-2.5">
-          <Button className="w-full gap-2" size="lg">
+          {/* <Button className="w-full gap-2" size="lg">
             <Truck className="w-4 h-4" />
             Track my order
-          </Button>
+          </Button> */}
+          <Link href={'/shop'}>
           <Button variant="outline" className="w-full gap-2" size="lg">
             <ShoppingBag className="w-4 h-4" />
             Continue shopping
-          </Button>
+          </Button></Link>
         </div>
 
       </div>

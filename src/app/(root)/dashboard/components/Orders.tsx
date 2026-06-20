@@ -59,7 +59,7 @@ const Orders = () => {
                       {CURRENCY}
                       {order.pricing?.total}
                     </span>
-                    <Link href={`/dashboard/orders/${order?.invoiceNumber}`}>
+                    <Link href={`/dashboard/orders/${order?._id}`}>
                       <Button variant="ghost" size="sm">
                         <Eye className="h-4 w-4" />
                       </Button>

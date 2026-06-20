@@ -19,8 +19,8 @@ const OrderStatusSection = ({ status = "PENDING" }: Props) => {
     },
     {
       _id: "3",
-      label: "Shipped",
-      title: "SHIPPED",
+      label: "SHIPPED",
+      title: "Shipped",
     },
     {
       _id: "4",
@@ -31,6 +31,11 @@ const OrderStatusSection = ({ status = "PENDING" }: Props) => {
       _id: "5",
       label: "CANCELLED",
       title: "Cancelled",
+    },
+    {
+      _id: "6",
+      label: "RETURNED",
+      title: "Returned",
     },
   ];
 

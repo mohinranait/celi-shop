@@ -25,7 +25,7 @@ import { statusStyles } from "@/components/shared/renderStatus";
 
 export default function MyOrders() {
 
-  const [pagination, setPagination] = useState({ page: 1, limit: 15 })
+  const [pagination, setPagination] = useState({ page: 1, limit: 10 })
   const { data: getData } = useGetClientOrdersQuery(`page=${pagination?.page}&limit=${pagination?.limit}`)
   const orders = getData?.data;
   const meta = getData?.meta;
@@ -106,15 +106,16 @@ export default function MyOrders() {
 
           <CardFooter className="py-2 justify-between  px-3 ">
 
-            {order?.payment?.method === "COD" &&
-              order?.payment.status !== "PAID" && (
-                <div className="flex items-center gap-2 ">
-                  <Button variant="outline" type="button" size="sm">
-                    <Banknote className="h-4 w-4 " />
-                    Payment
-                  </Button>
-                </div>
-              )}
+
+            <div className="flex items-center gap-2 ">
+              <Button variant="outline" type="button" size="sm">
+                <Banknote className="h-4 w-4 " />
+                {
+                  order?.payment.status 
+                }
+              </Button>
+            </div>
+
             <div>{order?.totalItems} items</div>
           </CardFooter>
         </Card>

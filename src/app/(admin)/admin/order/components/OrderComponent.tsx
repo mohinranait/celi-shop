@@ -123,7 +123,7 @@ const OrderComponent = ({ orderId }: Props) => {
                 </p>
               </div>
             </div>
-            <div className="grid grid-cols-3 lg:grid-cols-5 bg-muted p-2 rounded gap-2 ">
+            <div className="grid grid-cols-3 lg:grid-cols-6 bg-muted p-2 rounded gap-2 ">
               {<OrderStatusSection status={order?.orderStatus} />}
             </div>
           </Card>
@@ -165,7 +165,7 @@ const OrderComponent = ({ orderId }: Props) => {
                   <p className="text-sm font-medium text-gray-500">Shipping</p>
                   <p className="text-sm font-semibold text-black">
                     {CURRENCY}
-                    {order?.pricing?.tax?.toFixed(2)}
+                    {order?.pricing?.shippingCharge?.toFixed(2)}
                   </p>
                 </div>
               )}

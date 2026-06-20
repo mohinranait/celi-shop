@@ -13,7 +13,8 @@ export const orderApi = baseApi.injectEndpoints({
 
 
     getOrderByIdAdmin: builder.query<{ data: IOrder }, string>({
-      query: (orderId) => `/admin/orders/${orderId}`
+      query: (orderId) => `/admin/orders/${orderId}`,
+      providesTags:['order']
     }),
 
 
@@ -23,7 +24,7 @@ export const orderApi = baseApi.injectEndpoints({
         method: 'PATCH',
         body: payload,
       }),
-      invalidatesTags: ['orders'],
+      invalidatesTags: ['orders',"order"],
     }),
 
 
