@@ -19,7 +19,7 @@ export async function GET(
 
    
     //  check user exists
-    const existingUser = await User.findById(id);
+    const existingUser = await User.findById(id).select('-password');
 
     if (!existingUser) {
       return NextResponse.json(

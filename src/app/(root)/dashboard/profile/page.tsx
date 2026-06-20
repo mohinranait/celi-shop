@@ -1,12 +1,7 @@
 "use client";
 
-import {  useState } from "react";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import {  useEffect, useState } from "react";
+
 
 import {
   Card,
@@ -17,72 +12,36 @@ import {
 } from "@/components/ui/card";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  CalendarCheck,
   Camera,
-  LoaderCircle,
-  Pen,
-  Save,
+
   Shield,
-  X,
+
 } from "lucide-react";
 
-import { format } from "date-fns";
+
 import {  useAppSelector } from "@/hooks/hooks";
+import { useGetUserByIdQuery } from "@/redux/service/users";
+import ProfileForm from "./components/ProfileForm";
 
 export default function UpdateProfile() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const { user } = useAppSelector((state) => state.auth);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    dateOfBirth: new Date(),
-    gender: "Male",
-  });
+    const { user } = useAppSelector((state) => state.auth);
 
-  // useEffect(() => {
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     name: {
-  //       firstName: user?.name?.firstName || "",
-  //       lastName: user?.name?.lastName || "",
-  //     },
-  //     email: user?.email || "",
-  //     phone: user?.phone || "",
-  //     gender: user?.gender || "",
-  //     dateOfBirth: user?.dateOfBirth || new Date(Date.now()),
-  //   }));
-  // }, [user]);
+   const { data, isLoading:getUserLoading } = useGetUserByIdQuery(user?._id as string, {
+      skip: !user?._id,
+    });
 
-  const handleSave = async () => {
-    setIsLoading(true);
-    // try {
-    //   const res = await userUpdate(formData, user?._id as string);
-    //   if (res?.success) {
-    //     toast.success("Profile updated successfully");
-    //     dispatch(setUser(res?.payload));
-    //     setIsEditing(false);
-    //   }
-    // } catch (error) {
-    //   console.log({ error });
-    // }
-    setIsLoading(false);
-  };
+    const findUser = data?.data;
+
+    if(getUserLoading)return <div>Loading...</div> ;
+    if(!findUser) return;
+
+
+
 
   return (
     <div className="flex-1 space-y-4 px-4 md:px-8 ">
@@ -141,151 +100,7 @@ export default function UpdateProfile() {
             </Card>
 
             {/* Personal Information Form */}
-            <Card className="md:col-span-2">
-              <CardHeader className="flex items-center justify-between flex-row">
-                <div>
-                  <CardTitle>Personal information</CardTitle>
-                  <CardDescription>
-                    Update your personal information.
-                  </CardDescription>
-                </div>
-                <div className="flex gap-3 items-center">
-                  {!isEditing && (
-                    <Button
-                      onClick={() =>
-                        isEditing ? handleSave() : setIsEditing(true)
-                      }
-                      className="flex items-center gap-2"
-                    >
-                      <Pen className="h-4 w-4" />
-                      Edit
-                    </Button>
-                  )}
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">First Name</Label>
-                    <Input
-                      id="name"
-                      value={formData.name}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          name:e.target.value,
-                        })
-                      }
-                      disabled={!isEditing}
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      readOnly={true}
-                      value={formData.email}
-                      disabled={!isEditing}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Phone Number</Label>
-                    <Input
-                      id="phone"
-                      value={formData.phone}
-                      onChange={(e) =>
-                        setFormData({ ...formData, phone: e.target.value })
-                      }
-                      disabled={!isEditing}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="dob">Date of Birth</Label>
-                    <Popover open={open} onOpenChange={setOpen}>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          id="date"
-                          disabled={!isEditing}
-                          className="w-full justify-between font-normal"
-                        >
-                          {formData?.dateOfBirth
-                            ? format(formData?.dateOfBirth, "MMM dd, yyyy")
-                            : "Select date"}
-                          <CalendarCheck />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent
-                        className="w-auto overflow-hidden p-0"
-                        align="start"
-                      >
-                        <Calendar
-                          mode="single"
-                          selected={formData?.dateOfBirth}
-                          captionLayout="dropdown"
-                          onSelect={(date) => {
-                            setFormData({
-                              ...formData,
-                              dateOfBirth: date as unknown as Date,
-                            });
-                            setOpen(false);
-                          }}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="gender">Gender</Label>
-                    <Select
-                      value={formData.gender}
-                      onValueChange={(value) =>
-                        setFormData({ ...formData, gender: value })
-                      }
-                      disabled={!isEditing}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Male">Male</SelectItem>
-                        <SelectItem value="Female">Female</SelectItem>
-                        <SelectItem value="Other">Others</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                {isEditing && (
-                  <div className="flex items-center gap-3">
-                    <Button
-                      disabled={isLoading}
-                      onClick={() =>
-                        isEditing ? handleSave() : setIsEditing(true)
-                      }
-                      className="flex items-center gap-2"
-                    >
-                      {isLoading ? (
-                        <LoaderCircle className="animate-spin" />
-                      ) : (
-                        <Save className="h-4 w-4" />
-                      )}
-                      Save
-                    </Button>
-                    <Button
-                      disabled={isLoading}
-                      variant={"destructive"}
-                      type="button"
-                      onClick={() => setIsEditing(false)}
-                      className="flex items-center gap-2"
-                    >
-                      <X className="h-4 w-4" />
-                      Cancel
-                    </Button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+            <ProfileForm findUser={findUser} />
           </div>
         </TabsContent>
 

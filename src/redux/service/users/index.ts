@@ -14,7 +14,7 @@ export const userApi = baseApi.injectEndpoints({
 
     getUserById: builder.query<{data:IUser}, string>({
       query: (params) => `/admin/users/${params}`,
-      providesTags: ['users'],
+      providesTags: ['users',"user"],
     }),
 
 
@@ -37,7 +37,7 @@ export const userApi = baseApi.injectEndpoints({
         method: 'PATCH',
         body: payload,
       }),
-      invalidatesTags: ['users'],
+      invalidatesTags: ['users',"user"],
     }),
 
     softDeleteUser: builder.mutation<IUser, {id:string,payload:ISoftDelete}>({

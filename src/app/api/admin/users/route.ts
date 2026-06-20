@@ -72,6 +72,7 @@ export async function GET(req: NextRequest) {
     // DB QUERY
     // =========================
     const users = await User.find(query)
+    .select('-password')
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
