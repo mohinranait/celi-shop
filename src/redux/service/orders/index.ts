@@ -76,4 +76,4 @@ export const orderApi = baseApi.injectEndpoints({
 })
 
 
-export const { useGetAdminOrdersQuery, useGetOrderByIdAdminQuery, useUpdateOrderByIdAdminMutation, useCreateOrderMutation, useGetOrderByTrackingNumberQuery, useGetClientOrdersQuery } = orderApi;
+export const { useGetAdminOrdersQuery, useGetOrderByIdAdminQuery, useUpdateOrderByIdAdminMutation, useCreateOrderMutation, useGetOrderByTrackingNumberQuery, useGetClientOrdersQuery, useDeleteOrderMutation } = orderApi;

@@ -324,7 +324,10 @@ export default function AddProductForm() {
           <Separator orientation="vertical" className="h-4" />
           <div>
             <h1 className="text-sm font-semibold text-accent-foreground leading-none">
-              Add New Product
+              {
+                product ? "Update ": "Add New "
+              }
+               Product
             </h1>
             <p className="text-xs text-muted-foreground mt-0.5">
               Fill in the details to publish your product
@@ -686,6 +689,60 @@ export default function AddProductForm() {
 
           </SectionCard>
 
+
+            <SectionCard
+            icon={<Package size={15} />}
+            title="SEO Section"
+            description="Basic details for google search"
+          >
+            <FormField label="SEO Title" required error={errors.name?.message}>
+              <Input
+                {...register("seo.title")}
+                placeholder="Meta title"
+                className="h-9 text-sm"
+              />
+            </FormField>
+
+           
+
+
+
+            
+
+            <FormField label="Short Description">
+              <Textarea
+                {...register("seo.description")}
+                placeholder="Meta description"
+                className="text-sm min-h-25 resize-none"
+              />
+            </FormField>
+
+
+            <FormField label="Tags">
+               <div className="flex gap-1 flex-wrap">
+              {currentTags.map((val, index) => (
+                <Badge key={index} variant="secondary" className="flex items-center gap-1 px-2 py-1">
+                  {val}
+                  <span onClick={() => removeValue(val)}>
+                    <X className="w-3 h-3 cursor-pointer hover:text-red-500" />
+                  </span>
+                </Badge>
+              ))}
+            </div>
+            <Input
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
+              onKeyDown={handleValueTags}
+              placeholder="Seperate with comma"
+              className="h-9 text-sm"
+            />
+            <p className="text-[10px] text-slate-400">Separate tags with commas</p>
+            </FormField>
+
+
+
+          </SectionCard>
+
         </div>
 
         {/* ── Right column ── */}
@@ -760,32 +817,7 @@ export default function AddProductForm() {
             </FormField>
           </SectionCard>
 
-          {/* Product Tags */}
-          <SectionCard
-            icon={<Tag size={15} />}
-            title="Tags"
-            description="Optional product tags"
-            collapsible
-          >
-            <div className="flex gap-1 flex-wrap">
-              {currentTags.map((val, index) => (
-                <Badge key={index} variant="secondary" className="flex items-center gap-1 px-2 py-1">
-                  {val}
-                  <span onClick={() => removeValue(val)}>
-                    <X className="w-3 h-3 cursor-pointer hover:text-red-500" />
-                  </span>
-                </Badge>
-              ))}
-            </div>
-            <Input
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
-              onKeyDown={handleValueTags}
-              placeholder="Seperate with comma"
-              className="h-9 text-sm"
-            />
-            <p className="text-[10px] text-slate-400">Separate tags with commas</p>
-          </SectionCard>
+         
 
           {/* Quick Summary */}
           <Card className="rounded-xl border border-border p-4 space-y-3">

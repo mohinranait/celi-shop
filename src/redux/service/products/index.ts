@@ -44,7 +44,7 @@ export const productApi = baseApi.injectEndpoints({
         method: 'PATCH',
         body: payload,
       }),
-      invalidatesTags: ['products'],
+      invalidatesTags: ['products',"product"],
     }),
 
     softDeleteProduct: builder.mutation<{data:IProduct}, {id:string,payload:ISoftDelete}>({

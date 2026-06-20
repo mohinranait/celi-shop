@@ -221,16 +221,14 @@ export async function GET(req: Request) {
     const limit = parseInt(searchParams.get("limit") || "10");
     const userId = searchParams.get("userId");
     const status = searchParams.get("status");
-    const isDelete = searchParams.get("isDelete");
+    const method = searchParams.get("method");
     const date = searchParams.get("date");
 
     const skip = (page - 1) * limit;
 
     /* ----------------------------- FILTER QUERY ---------------------------- */
 
-    const filter: any = {
-      isDeleted: false,
-    };
+    const filter: any = {};
 
     if (userId) {
       filter.userId = userId;
@@ -240,10 +238,9 @@ export async function GET(req: Request) {
       filter.orderStatus = status;
     }
 
-
-    // SOFT DELETE FILTER
-    if (isDelete === "true") filter.isDeleted = true;
-    if (isDelete === "false") filter.isDeleted = false;
+    if (method) {
+      filter['payment.method'] = method;
+    }
 
 
     if (date) {

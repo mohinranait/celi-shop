@@ -12,7 +12,7 @@ const AllContactQuery = () => {
   const [isParams, setIsParams] = useState('')
  
 
-  const [pagination, setPagination] = useState({ page: 1, limit: 2 })
+  const [pagination, setPagination] = useState({ page: 1, limit: 20 })
 
 
   const { data, isLoading } = useGetContactsQuery(`page=${pagination?.page}&limit=${pagination?.limit}&${isParams}`);

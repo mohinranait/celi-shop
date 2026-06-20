@@ -21,7 +21,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button";
-import { TOrderStatus } from "@/redux/service/orders/type";
+import { TOrderStatus, TPaymentMethod } from "@/redux/service/orders/type";
 
 type Props = {
   setParams: Dispatch<SetStateAction<string>>;
@@ -29,6 +29,7 @@ type Props = {
 
 const Filters = ({ setParams }: Props) => {
   const [status, setStatus] = useState<"all" | "true" | "false">("all");
+  const [methods, setMethods] = useState<"all" | "COD" | "BKASH" | "NAGAD">("all");
   const [search, setSearch] = useState("");
  const [date, setDate] = React.useState<Date>()
 
@@ -47,13 +48,17 @@ const Filters = ({ setParams }: Props) => {
       params.append("status", status);
     }
 
+    if (methods !== "all") {
+      params.append("method", methods);
+    }
+
     
     if (date) {
       params.append("date", format(date, "yyyy-MM-dd"));
     }
 
     setParams(params.toString());
-  }, [status, debouncedSearch, setParams,date]);
+  }, [status,methods, debouncedSearch, setParams,date]);
 
   return (
     <div className="flex flex-wrap gap-4">
@@ -65,20 +70,36 @@ const Filters = ({ setParams }: Props) => {
         onChange={(e) => setSearch(e.target.value)}
       />
 
+
+
       <Select value={status} onValueChange={(value) => setStatus(value as  TOrderStatus & 'all')}>
-        <SelectTrigger className="w-60">
+        <SelectTrigger className="w-40">
           <SelectValue placeholder="Status" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
             <SelectItem value="all">All</SelectItem>
             <SelectItem value="PENDING">Pending</SelectItem>
-            <SelectItem value="CONFIRMED">Confirmed</SelectItem>
             <SelectItem value="PROCESSING">Processing</SelectItem>
             <SelectItem value="SHIPPED">Shipped</SelectItem>
             <SelectItem value="DELIVERED">Delivered</SelectItem>
             <SelectItem value="CANCELLED">Cancelled</SelectItem>
             <SelectItem value="RETURNED">Returned</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+
+
+      <Select value={methods} onValueChange={(value) => setMethods(value as  TPaymentMethod & 'all')}>
+        <SelectTrigger className="w-30">
+          <SelectValue placeholder="Status" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem value="all">All</SelectItem>
+            <SelectItem value="COD">COD</SelectItem>
+            <SelectItem value="BKASH">BKASH</SelectItem>
+            <SelectItem value="NAGAD">NAGAD</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>

@@ -9,87 +9,84 @@ import { CURRENCY } from "@/lib/envSecret";
 import { format } from "date-fns";
 
 
-const tableColumns = ({ type = 'active' }: { type: "active" | "deleted" }) => {
-  const columns: ColumnDef<IOrder>[] = [
-    {
-      accessorKey: "invoiceNumber",
-      header: "Invoice",
-      cell: ({ row }) => {
-        return <Badge
-          variant={'outline'}
-        >
-          #{row.original.invoiceNumber}
-        </Badge>
-      }
-    },
-    //  {
-    //   accessorKey: "trackingNumber",
-    //   header: "Tracking No",
-    //   cell: ({ row }) => {
-    //     return <Badge
-    //       variant={'outline'}
-    //     >
-    //       #{row.original.trackingNumber}
-    //     </Badge>
-    //   }
-    // },
-     {
-      accessorKey: "pricing.total",
-      header: "Total Price",
-      cell: ({ row }) => {
-        return <span>{CURRENCY} {row?.original?.pricing?.total}</span>
-      }
-    },
-     {
-      accessorKey: "payment.method",
-      header: "Method",
-      cell: ({ row }) => {
-        const method = row?.original?.payment.method;
-        return <div> 
-          <p>{method}</p>
-          {
-           ( method === 'BKASH' || method === 'NAGAD') && 
-          <Badge variant={"outline"}>T. ID: { row?.original?.payment?.transactionId || '--'}</Badge>
-          }
-        </div>
-      }
-    },
-     {
-      accessorKey: "totalItems",
-      header: "Quantity",
-      cell: ({ row }) => {
-        return <div className="flex flex-col">
-          <span> {row?.original?.totalItems} items</span>
-          <span> {row?.original?.totalQuantity} Qty</span>
-        </div>
-      }
-    },
-    {
-      accessorKey: "orderStatus",
-      header: "Status",
-      cell: ({ row }) => {
-        return <OrderStatusBadge status={row?.original?.orderStatus} />
-      }
-    },
 
-    {
-      header: "Date",
-      accessorKey: "createdAt",
-      cell: ({ row }) => {
-        return <div>
-          <GetDateFormate date={row.original.createdAt && row.original.createdAt } />
-          <p className="text-xs">{format(row.original?.createdAt, "hh:mm a")}</p>
-        </div>
-      }
-    },
-    {
-      id: "actions",
-      header: () => <div className="text-right">Actions</div>,
-      enableSorting: false,
-      cell: ({ row }) => <CellAction data={row.original} type={type} />,
-    },
-  ];
-  return columns;
-}
+export const columns: ColumnDef<IOrder>[] = [
+  {
+    accessorKey: "invoiceNumber",
+    header: "Invoice",
+    cell: ({ row }) => {
+      return <Badge
+        variant={'outline'}
+      >
+        #{row.original.invoiceNumber}
+      </Badge>
+    }
+  },
+  //  {
+  //   accessorKey: "trackingNumber",
+  //   header: "Tracking No",
+  //   cell: ({ row }) => {
+  //     return <Badge
+  //       variant={'outline'}
+  //     >
+  //       #{row.original.trackingNumber}
+  //     </Badge>
+  //   }
+  // },
+  {
+    accessorKey: "pricing.total",
+    header: "Total Price",
+    cell: ({ row }) => {
+      return <span>{CURRENCY} {row?.original?.pricing?.total}</span>
+    }
+  },
+  {
+    accessorKey: "payment.method",
+    header: "Method",
+    cell: ({ row }) => {
+      const method = row?.original?.payment.method;
+      return <div>
+        <p>{method}</p>
+        {
+          (method === 'BKASH' || method === 'NAGAD') &&
+          <Badge variant={"outline"}>T. ID: {row?.original?.payment?.transactionId || '--'}</Badge>
+        }
+      </div>
+    }
+  },
+  {
+    accessorKey: "totalItems",
+    header: "Quantity",
+    cell: ({ row }) => {
+      return <div className="flex flex-col">
+        <span> {row?.original?.totalItems} items</span>
+        <span> {row?.original?.totalQuantity} Qty</span>
+      </div>
+    }
+  },
+  {
+    accessorKey: "orderStatus",
+    header: "Status",
+    cell: ({ row }) => {
+      return <OrderStatusBadge status={row?.original?.orderStatus} />
+    }
+  },
 
-export default tableColumns;
+  {
+    header: "Date",
+    accessorKey: "createdAt",
+    cell: ({ row }) => {
+      return <div>
+        <GetDateFormate date={row.original.createdAt && row.original.createdAt} />
+        <p className="text-xs">{format(row.original?.createdAt, "hh:mm a")}</p>
+      </div>
+    }
+  },
+  {
+    id: "actions",
+    header: () => <div className="text-right">Actions</div>,
+    enableSorting: false,
+    cell: ({ row }) => <CellAction data={row.original} />,
+  },
+];
+

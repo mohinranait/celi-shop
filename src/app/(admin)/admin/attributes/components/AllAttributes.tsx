@@ -18,7 +18,7 @@ const AllAttributes = () => {
   const [isParams, setIsParams] = useState('')
   const [isOpen, setIsOpen] = useState(false);
 
-  const [pagination, setPagination] = useState({ page: 1, limit: 2 })
+  const [pagination, setPagination] = useState({ page: 1, limit: 20 })
 
   const columns = tableColumns({ type: filter });
 

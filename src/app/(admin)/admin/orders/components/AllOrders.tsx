@@ -1,19 +1,19 @@
 'use client';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { DataTable } from '@/components/ui/data-table/Table';
-import React, { useState } from 'react'
-import tableColumns from './columns';
+import  { useState } from 'react'
+
 import Pagination from '@/components/shared/Pagination';
 import { useGetAdminOrdersQuery } from '@/redux/service/orders';
 import Filters from './filters';
+import { columns } from './columns';
 
 const AllOrders = () => {
-  const [filter, setFilter] = useState<"active" | "deleted">("active");
+
   const [isParams, setIsParams] = useState('')
   const [pagination, setPagination] = useState({ page: 1, limit: 15 })
-  const columns = tableColumns({ type: filter });
-  const { data, isLoading } = useGetAdminOrdersQuery(`page=${pagination?.page}&limit=${pagination?.limit}&isDelete=${filter === 'active' ? 'false' : "true"}&${isParams}`)
+
+  const { data, isLoading } = useGetAdminOrdersQuery(`page=${pagination?.page}&limit=${pagination?.limit}&${isParams}`)
   const orders = data?.data || [];
   const meta = data?.meta;
 
@@ -37,26 +37,6 @@ const AllOrders = () => {
 
 
       <Filters setParams={setIsParams} />
-
-      <div className="flex gap-2">
-
-
-        <Button
-          variant={filter === "active" ? "default" : "outline"}
-          onClick={() => setFilter("active")}
-        >
-          Active
-        </Button>
-
-        <Button
-          variant={filter === "deleted" ? "default" : "outline"}
-          onClick={() => setFilter("deleted")}
-        >
-          Deleted
-        </Button>
-      </div>
-
-
 
 
       {/* TABLE CARD */}

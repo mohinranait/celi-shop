@@ -47,9 +47,6 @@ export async function PATCH(
     const { orderStatus, payment } = body
     const { status } = payment;
 
-    console.log({ status, orderStatus });
-
-
     //  update order
     // const updatedOrder = await Order.findByIdAndUpdate(
     //   id,
@@ -80,6 +77,54 @@ export async function PATCH(
     );
   } catch (error) {
     console.error("Update order Error:", error);
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Internal Server Error",
+      },
+      { status: 500 }
+    );
+  }
+}
+
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    await connectDB();
+
+
+    const { id } = await params;
+
+
+    //  check order exists
+    const order = await Order.findByIdAndDelete(id);
+
+    if (!order) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Order not found",
+        },
+        { status: 404 }
+      );
+    }
+
+
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Order delete successfully",
+        data: order,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Delete Order Error:", error);
 
     return NextResponse.json(
       {

@@ -137,13 +137,13 @@ export async function DELETE(
     return NextResponse.json(
       {
         success: true,
-        message: "Product updated successfully",
+        message: "Product delete successfully",
         data: product,
       },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Update Product Error:", error);
+    console.error("Delete Product Error:", error);
 
     return NextResponse.json(
       {

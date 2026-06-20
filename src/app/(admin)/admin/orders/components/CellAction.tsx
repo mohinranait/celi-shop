@@ -1,44 +1,35 @@
 "use client";
 
 import { Button } from '@/components/ui/button';
-import { Eye, Pen, RotateCcw, Trash2 } from 'lucide-react';
+import { Eye, Pen,  Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
 
 import { toast } from 'sonner';
 
 import DeleteAlert from '@/components/shared/DeleteAlert';
-import { useDeleteProductMutation, useSoftDeleteProductMutation } from '@/redux/service/products';
 import { useRouter } from 'next/navigation';
 import { IOrder } from '@/redux/service/orders/type';
 import Link from 'next/link';
+import { useDeleteOrderMutation } from '@/redux/service/orders';
 
 type Props = {
   data: IOrder;
-  type: "active" | "deleted";
 };
 
-const CellAction = ({ data, type }: Props) => {
+const CellAction = ({ data }: Props) => {
   const router = useRouter()
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-
-  const [softDeleteProduct, { isLoading }] = useSoftDeleteProductMutation();
-  const [deleteProduct, { isLoading: deleteLoading }] = useDeleteProductMutation();
+  const [deleteProduct, { isLoading: deleteLoading }] = useDeleteOrderMutation();
 
 
-  // Soft delete
-  const softDelete = async (action: "restore" | "soft" = 'restore') => {
-    try {
-      await softDeleteProduct({ id: data._id, payload: { isDelete: true } }).unwrap();
-      toast.success(action === 'restore' ? "Restore" : "Delete" + ` successfully`);
-      setIsDeleteOpen(false);
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to delete product");
-    }
-  };
+  const handleEditAndRestore = () => {
 
-  // hard delete
-  const hardDelete = async () => {
+    router.push(`/admin/order/${data?._id}?mode=edit`)
+
+  }
+
+
+  const handleDelete = async () => {
     try {
       await deleteProduct(data?._id).unwrap();
       toast.success("Deleted successfully");
@@ -47,25 +38,6 @@ const CellAction = ({ data, type }: Props) => {
       console.error(error);
       toast.error("Failed to delete product");
     }
-  };
-
-
-  const handleEditAndRestore = () => {
-    if (type === 'active') {
-      // setIsOpen(true)
-      router.push(`/admin/order/${data?._id}?mode=edit`)
-    } else {
-      softDelete("restore")
-    }
-  }
-
-
-  const handleDelete = () => {
-    if (type === 'active') {
-      softDelete()
-    } else {
-      hardDelete()
-    }
   }
 
   return (
@@ -73,14 +45,14 @@ const CellAction = ({ data, type }: Props) => {
       {/* <Switch checked={data.status} /> */}
 
 
-     <Link href={`/admin/order/${data?._id}`}>
-      <Button
-        size="icon"
-        variant="outline"
+      <Link href={`/admin/order/${data?._id}`}>
+        <Button
+          size="icon"
+          variant="outline"
 
-      >
-        <Eye />
-      </Button>
+        >
+          <Eye />
+        </Button>
       </Link>
 
       {/* EDIT */}
@@ -91,10 +63,7 @@ const CellAction = ({ data, type }: Props) => {
         onClick={() => handleEditAndRestore()}
 
       >
-        {
-          type === 'active' ? <Pen /> :
-            <RotateCcw />
-        }
+        <Pen />
       </Button>
 
       {/* DELETE BUTTON */}
@@ -107,8 +76,8 @@ const CellAction = ({ data, type }: Props) => {
       </Button>
 
       {/* DELETE CONFIRM MODAL (STATE CONTROLLED) */}
-      <DeleteAlert isDeleteOpen={isDeleteOpen} setIsDeleteOpen={setIsDeleteOpen} callBack={handleDelete} isLoading={isLoading}
-        text={"This order will be moved to trash. You can restore it later or undo this action anytime."}
+      <DeleteAlert isDeleteOpen={isDeleteOpen} setIsDeleteOpen={setIsDeleteOpen} callBack={handleDelete} isLoading={deleteLoading}
+        text={"This order will be moved to trash. You can not restore it later"}
         deleteType={data?.invoiceNumber}
       />
 

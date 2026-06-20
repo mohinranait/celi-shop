@@ -13,7 +13,7 @@ import { columns } from "./columns";
 const AllComments = () => {
   const [isParams, setIsParams] = useState('')
 
-  const [pagination, setPagination] = useState({ page: 1, limit: 2 })
+  const [pagination, setPagination] = useState({ page: 1, limit: 20 })
 
 
 
