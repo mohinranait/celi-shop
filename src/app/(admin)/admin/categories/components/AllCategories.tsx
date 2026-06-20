@@ -2,34 +2,34 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-
+import {  useMemo,  useState } from "react";
 import { Plus } from "lucide-react";
-
-import { DataTable } from "@/components/ui/data-table/Table";
-import tableColumns from "./columns";
 import CategoryForm from "./CategoryForm";
 import { useGetCategoriesQuery } from "@/redux/service/categories";
-import Pagination from "@/components/shared/Pagination";
 import Filters from "./Filters";
+import { buildCategoryTree,  } from "./BuildTree";
+import { CategoryTree } from "./CategoryTree";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const AllCategories = () => {
   const [filter, setFilter] = useState<"active" | "deleted">("active");
   const [isOpen, setIsOpen] = useState(false);
-   const [isParams, setIsParams] = useState('')
-  const [pagination, setPagination] = useState({ page: 1, limit: 20 })
-    const columns = tableColumns({ type: filter });
+  const [isParams, setIsParams] = useState("");
 
-  const { data, isLoading } = useGetCategoriesQuery(`page=${pagination?.page}&limit=${pagination?.limit}&isDelete=${filter === 'active' ? 'false' : "true"}&${isParams}`);
+  const { data, isLoading } = useGetCategoriesQuery(
+    `page=1&limit=2000&isDelete=${filter === "active" ? "false" : "true"
+    }&${isParams}`
+  );
 
-  const categories = data?.data || [];
-  const meta = data?.meta;
+  const categories = data?.data ?? []
 
 
+const tree = useMemo(() => {
+  return buildCategoryTree(categories);
+}, [categories]);
 
   return (
-    <div className="max-w-7xl mx-auto  space-y-6">
-
+    <div className="max-w-7xl mx-auto space-y-6">
       {/* HEADER */}
       <div className="flex flex-wrap justify-between items-center">
         <div>
@@ -44,13 +44,9 @@ const AllCategories = () => {
         </Button>
       </div>
 
-
-      <Filters setParams={setIsParams}  />
-
+      <Filters setParams={setIsParams} />
 
       <div className="flex gap-2">
-
-
         <Button
           variant={filter === "active" ? "default" : "outline"}
           onClick={() => setFilter("active")}
@@ -66,27 +62,28 @@ const AllCategories = () => {
         </Button>
       </div>
 
-
       {/* TABLE CARD */}
       <Card className="p-0 rounded-md">
         <CardContent className="p-0">
+          {
+            isLoading ? <div className="w-full p-4 space-y-2">
+              {[1, 2, 3, 4, 5].map(item => <div key={item} className="grid grid-cols-3 gap-2">
+                <Skeleton className="h-10 " />
+                <Skeleton className="h-10 " />
+                <Skeleton className="h-10 " />
+              </div>)}
+            </div> :
+              <CategoryTree
+                type={filter}
+                data={tree}
 
-          <DataTable columns={columns} data={categories} loading={isLoading} />
-
+              />
+          }
 
         </CardContent>
       </Card>
 
-      <Pagination
-        page={meta?.page || 1}
-        totalPages={meta?.totalPages || 1}
-        onPageChange={(page) =>
-          setPagination((prev) => ({
-            ...prev,
-            page,
-          }))
-        }
-      />
+
 
       {/* MODAL */}
       <CategoryForm isOpen={isOpen} setIsOpen={setIsOpen} />

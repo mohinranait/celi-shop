@@ -20,7 +20,6 @@ import { useCreateCategoryMutation, useGetCategoriesQuery, useUpdateCategoryMuta
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
