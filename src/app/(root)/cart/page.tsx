@@ -12,7 +12,7 @@ import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
 import { removeToCart, updateCartQuantity } from "@/redux/features/cartSlice";
 import { CURRENCY } from "@/lib/envSecret";
-
+// nothing
 
 
 export default function CartPage() {
