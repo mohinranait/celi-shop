@@ -7,6 +7,8 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
+.env
+text.env.txt
 
 docs.txt
 
@@ -32,7 +34,7 @@ pnpm-debug.log*
 
 # env files
 .env*.local
-.env
+
 
 # typescript
 *.tsbuildinfo
