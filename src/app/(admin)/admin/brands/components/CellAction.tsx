@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
 import { IBrand } from '@/redux/service/brand/type';
 import { Pen, RotateCcw, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
@@ -70,7 +69,6 @@ const CellAction = ({ data, type }: Props) => {
 
   return (
     <div className="flex justify-end items-center gap-2">
-      <Switch checked={data.status} />
 
       {/* EDIT */}
       <Button

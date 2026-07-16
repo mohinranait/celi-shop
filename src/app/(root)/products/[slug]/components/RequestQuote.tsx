@@ -16,7 +16,7 @@ import { useCreateQuoteMutation } from "@/redux/service/request-quote"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Repeat2 } from "lucide-react"
 import Image from "next/image"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -27,6 +27,7 @@ type Props = {
 }
 
 const RequestQuote = ({ image, title, productId }: Props) => {
+  const [open, setOpen] = useState(false);
   const [createQuoten] = useCreateQuoteMutation()
   const form = useForm<TRequestQuoteInput>({
     resolver: zodResolver(requestQuoteSchema),
@@ -63,6 +64,7 @@ const RequestQuote = ({ image, title, productId }: Props) => {
       );
 
       form.reset();
+      setOpen(false);
     } catch (error) {
       console.error(error);
 
@@ -72,9 +74,7 @@ const RequestQuote = ({ image, title, productId }: Props) => {
     }
   };
 
-  // console.log(form.formState.errors);
-  // console.log(form.getValues());
-  
+
 
 
   const nameError = form.formState.errors.request?.name;
@@ -84,7 +84,7 @@ const RequestQuote = ({ image, title, productId }: Props) => {
 
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="w-full">
         <Button
           variant="outline"

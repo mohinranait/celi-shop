@@ -45,7 +45,7 @@ const DeliveryTracker = ({ order }: Props) => {
     "MMM dd"
   );
   return (
-    <Card className="shadow-sm">
+    <Card className="shadow-sm py-5">
       <CardHeader className="pb-2">
         <CardTitle className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
           Delivery tracking

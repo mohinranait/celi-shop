@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from '@/components/ui/button';
-import {  Eye, Trash2 } from 'lucide-react';
+import { Eye, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -16,7 +16,7 @@ type Props = {
 };
 
 const CellAction = ({ data }: Props) => {
-const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const [deleteBrand, { isLoading: deleteLoading }] = useDeleteQuoteMutation();
@@ -44,7 +44,7 @@ const [isOpen, setIsOpen] = useState(false);
         variant="outline"
         type="button"
 
-      onClick={() => setIsOpen(true)}
+        onClick={() => setIsOpen(true)}
       >
 
         <Eye />
@@ -65,7 +65,7 @@ const [isOpen, setIsOpen] = useState(false);
         text={"This request will be moved to trash. You can restore it later or undo this action anytime."}
         deleteType={data?.productId?.name}
       />
-  <ViewQuotation
+      <ViewQuotation
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         previousData={data}

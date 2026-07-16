@@ -1,15 +1,11 @@
 'use client';
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useMemo } from "react";
-import { Search, Building2 } from "lucide-react";
+import {  Building2 } from "lucide-react";
 import { useGetBrandsQuery } from "@/redux/service/brand";
 
-// Assume you have this query (create if not exists)
 
 interface Brand {
   _id: string;
@@ -21,10 +17,8 @@ interface Brand {
 }
 
 export default function BrandsPage() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedLetter, setSelectedLetter] = useState<string>("All");
 
-  const { data, isLoading } = useGetBrandsQuery("page=1&limit=500&status=true&isDeleted=false");
+  const { data, isLoading } = useGetBrandsQuery("page=1&limit=500&status=true&isDelete=false");
 
   const brands = data?.data || [];
 
@@ -70,8 +64,8 @@ export default function BrandsPage() {
                     href={`/shop?brand=${brand._id}`}
                     className="group"
                   >
-                    <Card className="h-full transition-all p-0 duration-300 border border-gray-200 hover:border-primary ">
-                      <CardContent className="p-6 flex flex-col items-center justify-center text-center h-full">
+                    <Card className="h-full transition-all py-4 duration-300 border border-gray-200 hover:border-primary ">
+                      <CardContent className=" flex flex-col items-center justify-center text-center h-full">
                         <div className="relative w-28 h-28 mb-5 bg-white rounded-2xl flex items-center justify-center  overflow-hidden">
                           {brand.logo ? (
                             <Image
@@ -87,7 +81,7 @@ export default function BrandsPage() {
                           )}
                         </div>
 
-                        <h3 className="font-semibold text-xl text-gray-900 group-hover:text-primary transition-colors">
+                        <h3 className="font-semibold  text-gray-900 group-hover:text-primary transition-colors">
                           {brand.name}
                         </h3>
 

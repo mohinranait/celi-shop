@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { ColumnDef } from "@tanstack/react-table";
 import CellAction from "./CellAction";
 import { IOrder } from "@/redux/service/orders/type";
-import { OrderStatusBadge } from "@/components/shared/render-status";
+import { OrderStatusBadge, PaymentStatusBadge } from "@/components/shared/render-status";
 import { CURRENCY } from "@/lib/envSecret";
 import { format } from "date-fns";
 
@@ -65,8 +65,15 @@ export const columns: ColumnDef<IOrder>[] = [
     }
   },
   {
+    accessorKey: "payment",
+    header: "Payment Status",
+    cell: ({ row }) => {
+      return  <PaymentStatusBadge status={row?.original?.payment?.status} />
+    }
+  },
+  {
     accessorKey: "orderStatus",
-    header: "Status",
+    header: "O. Status",
     cell: ({ row }) => {
       return <OrderStatusBadge status={row?.original?.orderStatus} />
     }

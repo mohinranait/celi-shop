@@ -22,7 +22,7 @@ const Orders = () => {
   return (
      <div className="">
         {/* Recent Orders */}
-        <Card className="">
+        <Card className="py-5">
           <CardHeader>
             <CardTitle>Recent orders</CardTitle>
             <CardDescription>List of your recent orders</CardDescription>

@@ -86,13 +86,13 @@ export default function AddProductForm() {
 
 
   // RTK Query hooks
-  const { data: getBrands, isLoading: brandsLoading } = useGetBrandsQuery(``);
+  const { data: getBrands, isLoading: brandsLoading } = useGetBrandsQuery(`status=true&isDelete=false`);
   const brands = getBrands?.data
   const { data: getCategories, isLoading: categoriesLoading } =
-    useGetCategoriesQuery(``);
+    useGetCategoriesQuery(`status=true&isDelete=false`);
   const categories = getCategories?.data;
   const { data: getAttributes, isLoading: attributesLoading } =
-    useGetAttributesQuery(``);
+    useGetAttributesQuery(`status=true&isDelete=false`);
 
   const attributes = getAttributes?.data;
 
@@ -157,14 +157,41 @@ export default function AddProductForm() {
     setSelectedConfigs(newConfigs);
   };
 
+  // const toggleAttributeValue = (idx: number, value: string) => {
+  //   console.log({idx, value});
+    
+  //   const newConfigs = [...selectedConfigs];
+  //   console.log({newConfigs});
+    
+  //   const current = newConfigs[idx].selectedValues;
+  //   console.log({current});
+    
+  //   newConfigs[idx].selectedValues = current.includes(value)
+  //     ? current.filter((v) => v !== value)
+  //     : [...current, value];
+  //   const d = current.includes(value)
+  //     ? current.filter((v) => v !== value)
+  //     : [...current, value];
+  //   setSelectedConfigs(newConfigs);
+  // };
+
+
   const toggleAttributeValue = (idx: number, value: string) => {
-    const newConfigs = [...selectedConfigs];
-    const current = newConfigs[idx].selectedValues;
-    newConfigs[idx].selectedValues = current.includes(value)
-      ? current.filter((v) => v !== value)
-      : [...current, value];
-    setSelectedConfigs(newConfigs);
-  };
+  setSelectedConfigs((prev) =>
+    prev.map((config, index) => {
+      if (index !== idx) return config;
+
+      const selectedValues = config.selectedValues.includes(value)
+        ? config.selectedValues.filter((v) => v !== value)
+        : [...config.selectedValues, value];
+
+      return {
+        ...config,
+        selectedValues,
+      };
+    })
+  );
+};
 
   // ---------------------------------------------------------------------------
   // Generate variations (cartesian product)
@@ -230,7 +257,7 @@ export default function AddProductForm() {
       toast.success("Successfully!");
     } catch {
       toast.error("Something went wrong.");
-    } 
+    }
   };
 
 
@@ -251,7 +278,7 @@ export default function AddProductForm() {
   //       const calculatedPercent = ((price - fixed) / price) * 100;
 
   //       console.log({calculatedPercent});
-        
+
 
   //       setValue(
   //         `variations.${index}.offerPriceParcent`,
@@ -325,9 +352,9 @@ export default function AddProductForm() {
           <div>
             <h1 className="text-sm font-semibold text-accent-foreground leading-none">
               {
-                product ? "Update ": "Add New "
+                product ? "Update " : "Add New "
               }
-               Product
+              Product
             </h1>
             <p className="text-xs text-muted-foreground mt-0.5">
               Fill in the details to publish your product
@@ -339,7 +366,7 @@ export default function AddProductForm() {
 
           <Button
             onClick={handleSubmit(onSubmit)}
-            disabled={ createLoading || updateLoading }
+            disabled={createLoading || updateLoading}
             className="h-8 text-xs gap-1.5 "
           >
             {(createLoading || updateLoading) ? (
@@ -407,7 +434,7 @@ export default function AddProductForm() {
               >
                 <div className="flex items-center">
                   <Switch
-                    checked={form.watch("shipping.isFreeShipping") === true }
+                    checked={form.watch("shipping.isFreeShipping") === true}
                     onCheckedChange={(value) => form.setValue("shipping.isFreeShipping", value, { shouldValidate: true })}
                   />
                 </div>
@@ -418,7 +445,7 @@ export default function AddProductForm() {
               >
                 <div className="flex items-center">
                   <Switch
-                    checked={form.watch("status") === true }
+                    checked={form.watch("status") === true}
                     onCheckedChange={(value) => form.setValue("status", value, { shouldValidate: true })}
                   />
                 </div>
@@ -671,7 +698,7 @@ export default function AddProductForm() {
           >
 
             <FormField label="Description">
-              
+
               <div className="border border-gray-200 rounded-lg ">
                 <QuillEditor
                   value={form.watch("description") || ""}
@@ -690,7 +717,7 @@ export default function AddProductForm() {
           </SectionCard>
 
 
-            <SectionCard
+          <SectionCard
             icon={<Package size={15} />}
             title="SEO Section"
             description="Basic details for google search"
@@ -703,11 +730,11 @@ export default function AddProductForm() {
               />
             </FormField>
 
-           
 
 
 
-            
+
+
 
             <FormField label="Short Description">
               <Textarea
@@ -719,24 +746,24 @@ export default function AddProductForm() {
 
 
             <FormField label="Tags">
-               <div className="flex gap-1 flex-wrap">
-              {currentTags.map((val, index) => (
-                <Badge key={index} variant="secondary" className="flex items-center gap-1 px-2 py-1">
-                  {val}
-                  <span onClick={() => removeValue(val)}>
-                    <X className="w-3 h-3 cursor-pointer hover:text-red-500" />
-                  </span>
-                </Badge>
-              ))}
-            </div>
-            <Input
-              value={tags}
-              onChange={(e) => setTags(e.target.value)}
-              onKeyDown={handleValueTags}
-              placeholder="Seperate with comma"
-              className="h-9 text-sm"
-            />
-            <p className="text-[10px] text-slate-400">Separate tags with commas</p>
+              <div className="flex gap-1 flex-wrap">
+                {currentTags.map((val, index) => (
+                  <Badge key={index} variant="secondary" className="flex items-center gap-1 px-2 py-1">
+                    {val}
+                    <span onClick={() => removeValue(val)}>
+                      <X className="w-3 h-3 cursor-pointer hover:text-red-500" />
+                    </span>
+                  </Badge>
+                ))}
+              </div>
+              <Input
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+                onKeyDown={handleValueTags}
+                placeholder="Seperate with comma"
+                className="h-9 text-sm"
+              />
+              <p className="text-[10px] text-slate-400">Separate tags with commas</p>
             </FormField>
 
 
@@ -784,7 +811,7 @@ export default function AddProductForm() {
 
 
 
-            <FormField label="Category">
+            {/* <FormField label="Category">
               <Controller
                 control={control}
                 name="category"
@@ -814,10 +841,10 @@ export default function AddProductForm() {
                   </div>
                 )}
               />
-            </FormField>
+            </FormField> */}
           </SectionCard>
 
-         
+
 
           {/* Quick Summary */}
           <Card className="rounded-xl border border-border p-4 space-y-3">
@@ -854,7 +881,7 @@ export default function AddProductForm() {
               variant="outline"
               className="w-full text-xs"
               type="button"
-              
+
               onClick={() => {
                 // setValue("status", "draft");
                 handleSubmit(onSubmit)();

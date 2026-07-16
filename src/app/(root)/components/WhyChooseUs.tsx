@@ -48,7 +48,7 @@ export default async function WhyChooseUs() {
               <div
                 key={idx}
                 className="
-                  bg-background
+                  bg-white
                   rounded-xl
                   p-6
                   border

@@ -26,7 +26,7 @@ function buildTree(categories:ICategory[], parentId: null | string = null): ICat
 
 const NavigationMenus = () => {
   const [openMega, setOpenMega] = useState(false);
-  const {data:getData} = useGetCategoriesQuery(``);
+  const {data:getData} = useGetCategoriesQuery(`status=true&isDelete=false`);
   const categoriess = getData?.data;
   const categoriesTree:ICategoryTree[] =  buildTree(categoriess || [])
   // console.log(categoriesTree);
@@ -83,7 +83,7 @@ const NavigationMenus = () => {
                       {/* Parent */}
                       <Link
                         href={`/shop?category=${category._id}`}
-                        className="text-base font-semibold text-gray-900 hover:text-primary transition flex gap-1 items-center"
+                        className="text-sm font-semibold text-gray-900 hover:text-primary transition flex gap-1 items-center"
                       >
                         <Image src={category?.thumbnail || `/${PRODUCT_IMG}`} width={20} height={20} alt={category?.name} className="w-5 h-5 rounded-md" />
                         {category.name}

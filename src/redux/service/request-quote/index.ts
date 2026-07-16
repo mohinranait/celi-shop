@@ -6,6 +6,7 @@ export const requestQuoteApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getRequestQuotes: builder.query<IRequestQuoteListResponse, string>({
       query: (params) => `/admin/request-quote?${params}`,
+      providesTags:['quote']
     }),
 
 
@@ -15,6 +16,7 @@ export const requestQuoteApi = baseApi.injectEndpoints({
         method: 'POST',
         body: payload,
       }),
+       invalidatesTags:['quote']
     }),
 
 
@@ -33,6 +35,7 @@ export const requestQuoteApi = baseApi.injectEndpoints({
         url: `/admin/request-quote/${id}`,
         method: 'DELETE',
       }),
+      invalidatesTags:['quote']
     }),
   })
 })

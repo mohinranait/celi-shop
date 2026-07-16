@@ -76,7 +76,7 @@ export default function CartPage() {
                   <div className="flex-1">
                     <div className="flex justify-between">
                       <div>
-                        <h3 className="font-semibold text-lg">{item.productName}</h3>
+                        <h3 className="font-semibold text-base">{item.productName}</h3>
                         {
                           item?.selectedVariants &&
                           <p className="mt-1 text-xs text-muted-foreground">
@@ -158,7 +158,7 @@ export default function CartPage() {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <Card className="sticky top-6">
+            <Card className="sticky py-5 top-6">
               <CardHeader>
                 <CardTitle>Order Summary</CardTitle>
               </CardHeader>
@@ -183,7 +183,7 @@ export default function CartPage() {
                 </div>
 
                 {/* Coupon Code */}
-                <div>
+                {/* <div>
                   <Label htmlFor="coupon">Have a coupon code?</Label>
                   <div className="flex gap-2 mt-2">
                     <Input
@@ -194,7 +194,7 @@ export default function CartPage() {
                     />
                     <Button variant="outline">Apply</Button>
                   </div>
-                </div>
+                </div> */}
 
                 <Button asChild size="lg" className="w-full text-base h-14">
                   <Link href="/checkout">

@@ -36,7 +36,7 @@ const ContactUsComponent = async () => {
 
           {/* Contact Form */}
 
-          <Card>
+          <Card className="py-5">
 
             <CardHeader>
               <CardTitle className="text-2xl">
@@ -61,7 +61,7 @@ const ContactUsComponent = async () => {
 
           <div className="space-y-6">
 
-            <Card>
+            <Card className="py-5">
 
               <CardHeader>
                 <CardTitle>
@@ -119,7 +119,7 @@ const ContactUsComponent = async () => {
             </Card>
 
 
-            <Card>
+            <Card className="py-5">
 
               <CardHeader>
                 <CardTitle>

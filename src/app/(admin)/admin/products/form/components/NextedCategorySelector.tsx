@@ -22,7 +22,7 @@ type InternalCategory = {
 
 // ==================== Props ====================
 type Props = {
-  categories: ICategory[];         
+  categories: ICategory[];
   value: string;
   onChange: (categoryId: string) => void;
   error?: string;
@@ -50,14 +50,33 @@ export default function NestedCategorySelector({
       map.set(cat._id, node);
     });
 
-    // Second pass: Build children tree
-    categories.forEach(cat => {
+    // // Second pass: Build children tree
+    // categories.forEach(cat => {
+    //   const node = map.get(cat._id)!;
+    //   if (cat.parentId && map.has(cat.parentId)) {
+    //     map.get(cat.parentId)!.children!.push(node);
+    //   } else {
+    //     roots.push(node);
+    //   }
+    // });
+
+    categories.forEach((cat) => {
       const node = map.get(cat._id)!;
-      if (cat.parentId && map.has(cat.parentId)) {
-        map.get(cat.parentId)!.children!.push(node);
-      } else {
+
+      // Root category
+      if (!cat.parentId) {
         roots.push(node);
+        return;
       }
+
+      // Parent exists → add as child
+      const parent = map.get(cat.parentId);
+
+      if (parent) {
+        parent.children!.push(node);
+      }
+
+      // Parent doesn't exist → ignore
     });
 
     return roots;
@@ -178,9 +197,8 @@ export default function NestedCategorySelector({
                         setHoveredLevel2(null);
                       }}
                       onClick={() => handleSelect(cat._id)}
-                      className={`px-4 py-3.5 flex items-center justify-between rounded-xl cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-all ${
-                        hoveredLevel1 === cat._id ? 'bg-slate-100 dark:bg-slate-800' : ''
-                      } ${value === cat._id ? 'text-primary font-medium bg-primary/5' : ''}`}
+                      className={`px-4 py-3.5 flex items-center justify-between rounded-xl cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-all ${hoveredLevel1 === cat._id ? 'bg-slate-100 dark:bg-slate-800' : ''
+                        } ${value === cat._id ? 'text-primary font-medium bg-primary/5' : ''}`}
                     >
                       <span>{cat.name}</span>
                       {cat.children?.length ? <ChevronRight size={18} /> : null}
@@ -203,9 +221,8 @@ export default function NestedCategorySelector({
                         key={cat._id}
                         onMouseEnter={() => setHoveredLevel2(cat._id)}
                         onClick={() => handleSelect(cat._id)}
-                        className={`px-4 py-3.5 flex items-center justify-between rounded-xl cursor-pointer hover:bg-white dark:hover:bg-slate-800 transition-all ${
-                          hoveredLevel2 === cat._id ? 'bg-white dark:bg-slate-800' : ''
-                        } ${value === cat._id ? 'text-primary font-medium bg-primary/5' : ''}`}
+                        className={`px-4 py-3.5 flex items-center justify-between rounded-xl cursor-pointer hover:bg-white dark:hover:bg-slate-800 transition-all ${hoveredLevel2 === cat._id ? 'bg-white dark:bg-slate-800' : ''
+                          } ${value === cat._id ? 'text-primary font-medium bg-primary/5' : ''}`}
                       >
                         <span>{cat.name}</span>
                         {cat.children?.length ? <ChevronRight size={18} /> : null}

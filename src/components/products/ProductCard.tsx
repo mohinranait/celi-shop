@@ -202,7 +202,7 @@ const ProductCard = ({ product }: Props) => {
       {/* Content */}
       <div className=" flex flex-col flex-1">
         <Link href={`/products/${slug}`}>
-          <h4 className="text-xs md:text-sm xl:text-lg  font-semibold text-foreground mb-1 md:mb-2 line-clamp-2 lg:line-clamp-1 hover:text-primary transition">
+          <h4 className="text-xs md:text-sm xl:text-base  font-semibold text-foreground mb-1 md:mb-2 line-clamp-2 lg:line-clamp-1 hover:text-primary transition">
             {name}
           </h4>
         </Link>

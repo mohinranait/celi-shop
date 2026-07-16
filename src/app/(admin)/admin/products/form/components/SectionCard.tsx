@@ -16,7 +16,7 @@ export default function SectionCard({
 }) {
   const [open, setOpen] = useState(true);
   return (
-    <Card className=" shadow-none">
+    <Card className="py-5 shadow-none">
       <CardHeader
         className={`pb-3 ${collapsible ? "cursor-pointer select-none" : ""}`}
         onClick={collapsible ? () => setOpen(!open) : undefined}

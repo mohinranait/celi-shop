@@ -177,7 +177,7 @@ export default function CheckoutPage() {
             {/* Left Side - Form */}
             <div className="lg:col-span-3 space-y-6">
               {/* Delivery Information */}
-              <Card>
+              <Card className="py-5">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <MapPin className="w-5 h-5" />

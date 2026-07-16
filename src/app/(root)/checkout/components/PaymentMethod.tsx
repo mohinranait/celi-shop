@@ -15,7 +15,7 @@ const PaymentMethod = ({ paymentMethod, callBack,paymentMethodss }: Props) => {
 
 
   return (
-    <Card>
+    <Card className='py-5'>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <CreditCard className="w-5 h-5" />

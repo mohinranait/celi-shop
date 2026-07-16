@@ -35,11 +35,12 @@ export function ShopContent() {
   const [sort, setSort] = useState('default');
   const [page, setPage] = useState(1);
 
-  const { data: catData } = useGetCategoriesQuery('');
+  const { data: catData } = useGetCategoriesQuery('status=true&isDelete=false');
   const categories = catData?.data || [];
 
   const { data: brandData } = useGetBrandsByCategoryQuery(activeCat || undefined);
-  const brands = brandData?.data || [];
+  const getAllBrands = brandData?.data || [];
+  const brands = getAllBrands.filter(brand => !brand.isDelete)
   const router = useRouter();
   const queryParams = useMemo((): IProductFilterParams => {
     const p: IProductFilterParams = { sort, page, limit: 20 };

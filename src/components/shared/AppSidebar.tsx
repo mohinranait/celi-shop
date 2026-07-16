@@ -80,7 +80,7 @@ const AppSidebar = ({ setOpen, state }: PropTypes) => {
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
                   <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage src={"/seller-logo.jpg"} alt={"user name"} />
+                    {/* <AvatarImage src={"/seller-logo.jpg"} alt={"user name"} /> */}
                     <AvatarFallback className="rounded-lg uppercase">{user?.name[0] || 'N'}</AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
@@ -99,7 +99,7 @@ const AppSidebar = ({ setOpen, state }: PropTypes) => {
                 <DropdownMenuLabel className="p-0 font-normal">
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                     <Avatar className="h-8 w-8 rounded-lg">
-                      <AvatarImage src={"/seller-logo.jpg"} alt={"Name"} />
+                      {/* <AvatarImage src={"/seller-logo.jpg"} alt={"Name"} /> */}
                       <AvatarFallback className="rounded-lg">{user?.name[0] || 'N'}</AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">

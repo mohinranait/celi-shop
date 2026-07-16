@@ -1,22 +1,10 @@
 "use client";
 
 import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
 import { Pen, RotateCcw, Trash2 } from 'lucide-react';
 import React, { useState } from 'react';
 
 import { toast } from 'sonner';
-
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import { IAttribute } from '@/redux/service/attributes/type';
 import AttributeForm from './AttributeForm';
 import { useDeleteAttributeMutation, useSoftDeleteAttributeMutation } from '@/redux/service/attributes';
@@ -80,7 +68,7 @@ const CellAction = ({ data, type }: Props) => {
 
   return (
     <div className="flex justify-end items-center gap-2">
-      <Switch checked={data.status} />
+     
 
       {/* EDIT */}
       <Button

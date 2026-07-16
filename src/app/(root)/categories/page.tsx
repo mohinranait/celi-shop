@@ -40,7 +40,7 @@ function buildCategoryTree(categories: ICategory[] = []): ITreeCategory[] {
 
 export default function CategoriesPage() {
   const { data, isLoading } = useGetCategoriesQuery(
-    `page=1&limit=1000&status=true&isDeleted=false`
+    `page=1&limit=1000&status=true&isDelete=false`
   );
 
   const categories = data?.data || [];
@@ -55,7 +55,7 @@ export default function CategoriesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-10">
+    <div className="min-h-screen  py-10">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-12">
@@ -74,26 +74,26 @@ export default function CategoriesPage() {
             {categoryTree.map((category) => (
               <Card
                 key={category._id}
-                className="overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-200 hover:border-primary group"
+                className="overflow-hidden  transition-all duration-300 border border-gray-200 hover:border-primary group"
               >
                 {/* Top Level Header */}
-                <CardHeader className="p-6 pb-4 bg-linear-to-br from-white via-gray-50 to-gray-100">
+                <CardHeader className="p-6 pb-4">
                   <div className="flex items-start gap-4">
                     {category.thumbnail && (
-                     <Link   href={`/shop?category=${category._id}`}>
-                      <div className="relative w-20 h-20 rounded-2xl overflow-hidden border shadow-sm shrink-0">
-                        <Image
-                          src={category.thumbnail}
-                          alt={category.name}
-                          fill
-                          className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                      </div>
+                      <Link href={`/shop?category=${category._id}`}>
+                        <div className="relative w-20 h-20 rounded-2xl overflow-hidden border shadow-sm shrink-0">
+                          <Image
+                            src={category.thumbnail}
+                            alt={category.name}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                          />
+                        </div>
                       </Link>
                     )}
 
                     <div className="pt-1">
-                      <h2 className="text-2xl font-bold text-gray-900 leading-tight">
+                      <h2 className="text-base font-bold text-gray-900 leading-tight">
                         {category.name}
                       </h2>
                       <Badge variant="secondary" className="mt-2 font-medium">
@@ -103,18 +103,18 @@ export default function CategoriesPage() {
                   </div>
                 </CardHeader>
 
-                <CardContent className="p-6 pt-2">
-                  {category.children && category.children.length > 0 && (
+                {category.children && category.children.length > 0 && (
+                  <CardContent className="p-6 pt-2">
                     <div className="space-y-8">
                       {category.children.map((level1) => (
                         <div key={level1._id} className="border-l-2 border-primary/30 pl-4">
                           {/* Level 1 */}
                           <div className="flex items-center gap-2 mb-3">
                             <div className="w-2 h-2 bg-primary rounded-full shrink-0 mt-1.5" />
-                           <Link  href={`/shop?category=${level1._id}`}>
-                            <h3 className="font-semibold text-lg text-gray-800">
-                              {level1.name}
-                            </h3>
+                            <Link href={`/shop?category=${level1._id}`}>
+                              <h3 className="font-semibold text-sm text-gray-800">
+                                {level1.name}
+                              </h3>
                             </Link>
                           </div>
 
@@ -136,8 +136,8 @@ export default function CategoriesPage() {
                         </div>
                       ))}
                     </div>
-                  )}
-                </CardContent>
+                  </CardContent>
+                )}
               </Card>
             ))}
           </div>

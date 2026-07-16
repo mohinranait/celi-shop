@@ -74,7 +74,7 @@ const ProfileForm = ({ findUser }: Props) => {
 
 
   return (
-    <Card className="md:col-span-2">
+    <Card className="md:col-span-2 py-5">
       <CardHeader className="flex items-center justify-between flex-row">
         <div>
           <CardTitle>Personal information</CardTitle>

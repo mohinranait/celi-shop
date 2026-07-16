@@ -175,7 +175,7 @@ const ProductView = ({ product }: Props) => {
                   </div>
                 }
               </div>
-              <button
+              {/* <button
                 disabled
                 onClick={() => setIsWishlisted(!isWishlisted)}
                 className="p-3 rounded-full bg-background border border-border  transition-colors"
@@ -184,7 +184,7 @@ const ProductView = ({ product }: Props) => {
                   className={`w-6 h-6 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-muted-foreground'
                     }`}
                 />
-              </button>
+              </button> */}
             </div>
 
             {product.tags.length > 0 && (
@@ -298,7 +298,7 @@ const ProductView = ({ product }: Props) => {
                     <Plus className="w-4 h-4 text-accent-foreground" />
                   </Button>
                 </div>
-                <span className="text-xs text-muted">Max: {stock}</span>
+                {/* <span className="text-xs text-muted">Max: {stock}</span> */}
               </div>
             )}
           </div>

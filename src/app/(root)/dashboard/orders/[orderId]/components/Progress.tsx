@@ -52,7 +52,7 @@ type Props = {
 
 const Progress = ({ orderStatus }: Props) => {
   return (
-    <Card className="">
+    <Card className="py-5">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Truck className="h-5 w-5" />

@@ -42,51 +42,55 @@ export default function ViewQuotation({
       {!previousData ? null : (
         <div className="space-y-6">
           {/* Product Information */}
-          <div className="border rounded-xl p-5">
-            <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
-              <Package className="w-5 h-5" />
-              Product Information
-            </h3>
+          {
+            previousData.productId &&
+            <div className="border rounded-xl p-5">
+              <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                <Package className="w-5 h-5" />
+                Product Information
+              </h3>
 
-            <div className="flex flex-col lg:flex-row gap-4">
-              <div className="relative w-28 h-28 rounded-lg overflow-hidden border">
-                <Image
-                  src={previousData.productId.gallery?.[0]}
-                  alt={previousData.productId.name}
-                  fill
-                  className="object-cover"
-                />
-              </div>
 
-              <div className="flex-1">
-                <h4 className="font-semibold text-lg">
-                  {previousData.productId.name}
-                </h4>
+              <div className="flex flex-col lg:flex-row gap-4">
+                <div className="relative w-28 h-28 rounded-lg overflow-hidden border">
+                  <Image
+                    src={previousData.productId.gallery?.[0]}
+                    alt={previousData.productId.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
 
-                <p className="text-sm text-muted-foreground">
-                  Slug: {previousData.productId.slug}
-                </p>
+                <div className="flex-1">
+                  <h4 className="font-semibold text-lg">
+                    {previousData.productId.name}
+                  </h4>
 
-                <p className="font-semibold text-primary mt-2">
-                  ৳ {previousData.productId.price}
-                </p>
+                  <p className="text-sm text-muted-foreground">
+                    Slug: {previousData.productId.slug}
+                  </p>
 
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {previousData.productId.selectedAttributes?.map((attr) => (
-                    <div
-                      key={attr._id}
-                      className="px-3 py-1 rounded-full bg-muted text-xs"
-                    >
-                      <span className="font-medium">
-                        {attr.name}:
-                      </span>{" "}
-                      {attr.selectedValues.join(", ")}
-                    </div>
-                  ))}
+                  {/* <p className="font-semibold text-primary mt-2">
+                    ৳ {previousData.productId.price}
+                  </p> */}
+
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {previousData.productId.selectedAttributes?.map((attr) => (
+                      <div
+                        key={attr._id}
+                        className="px-3 py-1 rounded-full bg-muted text-xs"
+                      >
+                        <span className="font-medium">
+                          {attr.name}:
+                        </span>{" "}
+                        {attr.selectedValues.join(", ")}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          }
 
           {/* Customer Information */}
           <div className="border rounded-xl p-5">

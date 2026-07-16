@@ -1,5 +1,5 @@
 "use client";
-import {  Home, Undo2, User } from "lucide-react";
+import {  Home, Pen, Undo2, User } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
@@ -55,22 +55,23 @@ const OrderComponent = ({ orderId }: Props) => {
           </div>
         </div>
         <div className="flex gap-3 justify-end">
-          <Button
+          {/* <Button
             size={"sm"}
             variant={"outline"}
             className="bg-red-50 hover:bg-red-50 border border-red-500 text-red-500 hover:text-red-500"
           >
             Delete Order
-          </Button>
-          <Button
+          </Button> */}
+          {/* <Button
             size={"sm"}
             variant={"outline"}
             className="bg-gray-50 hover:bg-gray-50 border border-black text-black hover:text-black"
           >
             Track Order
-          </Button>
+          </Button> */}
           <Link href={`/admin/order/${id}?mode=edit`}>
             <Button type="button" size={"sm"}>
+              <Pen />
               Edit Order
             </Button>
           </Link>
@@ -222,7 +223,7 @@ const OrderComponent = ({ orderId }: Props) => {
                   </ul>
                 </div>
               </div>
-              <div className="flex p-3 rounded bg-white items-start gap-2">
+              {/* <div className="flex p-3 rounded bg-white items-start gap-2">
                 <div>
                   <User size={16} />
                 </div>
@@ -235,7 +236,7 @@ const OrderComponent = ({ orderId }: Props) => {
                     <li>+54215411</li>
                   </ul>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

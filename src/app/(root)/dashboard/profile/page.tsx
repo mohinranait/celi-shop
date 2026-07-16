@@ -57,14 +57,14 @@ export default function UpdateProfile() {
       <Tabs defaultValue="personal" className="space-y-4">
         <TabsList>
           <TabsTrigger value="personal">Personal Information</TabsTrigger>
-          <TabsTrigger value="security">Security</TabsTrigger>
-          <TabsTrigger value="preferences">preferences</TabsTrigger>
+          {/* <TabsTrigger value="security">Security</TabsTrigger> */}
+          {/* <TabsTrigger value="preferences">preferences</TabsTrigger> */}
         </TabsList>
 
         <TabsContent value="personal" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-3">
             {/* Profile Picture & Basic Info */}
-            <Card>
+            <Card className="py-5">
               <CardHeader>
                 <CardTitle>Profile picture</CardTitle>
                 <CardDescription>Update your profile picture.</CardDescription>

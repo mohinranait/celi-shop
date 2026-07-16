@@ -24,7 +24,7 @@ const RightBar = ({ deliveryCharge, selectedMethod, form, isLoading }: Props) =>
   const discount = 0;
   const total = subtotal + deliveryCharge - discount;
   return (
-    <Card className="sticky top-24">
+    <Card className="sticky py-5 top-24">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           Your Cart

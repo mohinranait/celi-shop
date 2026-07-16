@@ -70,7 +70,6 @@ const CellAction = ({ data, type }: Props) => {
 
   return (
     <div className="flex justify-end items-center gap-2">
-      <Switch checked={data.status} />
 
       {/* EDIT */}
       <Button

@@ -13,7 +13,7 @@ export const columns: ColumnDef<IRequestQuote>[] = [
     header: "Product",
     cell: ({ row }) => {
       const { productId } = row.original;
-      return <div className="flex items-center gap-1">
+      return productId ? <div className="flex items-center gap-1">
         <div>
           {
             productId?.gallery[0] ?
@@ -22,7 +22,7 @@ export const columns: ColumnDef<IRequestQuote>[] = [
           }
         </div>
         <p>{productId?.name}</p>
-      </div>
+      </div> : <div>No Product Selected</div>
     }
   },
   {

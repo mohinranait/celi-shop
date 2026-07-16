@@ -10,6 +10,16 @@ const tableColumns = ({ type = 'active' }: { type: "active" | "deleted" }) => {
   const columns: ColumnDef<IAttribute>[] = [
     {
       accessorKey: "displayName",
+      header: "D. Name",
+      cell: ({ row }) => {
+        const brandData = row.original;
+        return <div className="flex items-center gap-1">
+          <p>{brandData?.displayName}</p>
+        </div>
+      }
+    },
+    {
+      accessorKey: "name",
       header: "Name",
       cell: ({ row }) => {
         const brandData = row.original;
@@ -18,6 +28,7 @@ const tableColumns = ({ type = 'active' }: { type: "active" | "deleted" }) => {
         </div>
       }
     },
+    
     {
       accessorKey: "status",
       header: "Status",

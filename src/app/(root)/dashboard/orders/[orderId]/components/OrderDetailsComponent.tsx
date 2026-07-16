@@ -107,7 +107,7 @@ export default function OrderDetailsComponent({ orderId }: Props) {
             </div>
           </div>
         </div>
-        <Card>
+        <Card className="py-5">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <FileText className="h-5 w-5" />
@@ -148,7 +148,7 @@ export default function OrderDetailsComponent({ orderId }: Props) {
             {/* Order Progress */}
             <Progress orderStatus={order?.orderStatus} />
             {/* Order Items */}
-            <Card>
+            <Card className="py-5">
               <CardHeader>
                 <CardTitle>Order Items</CardTitle>
               </CardHeader>
@@ -164,7 +164,7 @@ export default function OrderDetailsComponent({ orderId }: Props) {
           {/* Sidebar */}
           <div className="grid sm:grid-cols-2 gap-4 xl:grid-cols-1 ">
             {/* Order Summary */}
-            <Card>
+            <Card className="py-5">
               <CardHeader>
                 <CardTitle>Order Summary</CardTitle>
               </CardHeader>
@@ -191,7 +191,7 @@ export default function OrderDetailsComponent({ orderId }: Props) {
               </CardContent>
             </Card>
             {/* Shipping Address */}
-            <Card>
+            <Card className="py-5">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <MapPin className="h-5 w-5" />

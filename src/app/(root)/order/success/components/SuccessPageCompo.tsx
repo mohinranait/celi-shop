@@ -64,10 +64,10 @@ const SuccessPageCompo = () => {
         </Card>
 
         {/* Delivery Tracker */}
-        <DeliveryTracker order={order} />
+        {/* <DeliveryTracker order={order} /> */}
 
         {/* Order Items + Summary */}
-        <Card className="shadow-sm">
+        <Card className="shadow-sm py-5">
           <CardHeader className="pb-2">
             <CardTitle className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
               Order items
@@ -77,15 +77,22 @@ const SuccessPageCompo = () => {
             <div className="divide-y">
               {items?.map((item) => (
                 <div key={item._id}>
-                  <div className="flex items-center gap-3 py-3">
+                  <div className="flex items-center  gap-3 py-3">
+
                     {
-                      item?.productImage ?   <div className="w-11 h-11 rounded-lg bg-muted border border-border flex items-center justify-center text-xl shrink-0">
-                      <Image src={item?.productImage || PRODUCT_IMG} width={60} height={60} alt={item?.productName || ''} className="rounded-lg" />
-                    </div> :   <div className="w-11 h-11 rounded-lg bg-muted border border-border flex items-center justify-center text-xl shrink-0">
-                    
-                    </div>
+                      item?.productImage ? <div className="w-11 h-11 relative rounded-lg bg-muted border border-border flex items-center justify-center text-xl shrink-0">
+                        <Image src={item?.productImage || PRODUCT_IMG} width={60} height={60} alt={item?.productName || ''} className="rounded-lg" />
+                        <Badge
+                          className="absolute -top-2 -right-2 bg-white text-xs px-2 py-1 rounded-full"
+                          variant="outline"
+                        >
+                          Qty: {item.quantity}
+                        </Badge>
+                      </div> : <div className="w-11 h-11 rounded-lg bg-muted border border-border flex items-center justify-center text-xl shrink-0">
+
+                      </div>
                     }
-                  
+
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-accent-foreground truncate">{item?.productName}</p>
                       {item?.selectedVariants && (
@@ -166,7 +173,7 @@ const SuccessPageCompo = () => {
         </Card>
 
         {/* Delivery Address */}
-        <Card className="shadow-sm">
+        <Card className="shadow-sm py-5">
           <CardHeader className="pb-2">
             <CardTitle className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
               Delivery address
@@ -187,7 +194,7 @@ const SuccessPageCompo = () => {
         </Card>
 
         {/* Order Info Grid */}
-        <Card className="shadow-sm">
+        <Card className="shadow-sm py-5">
           <CardHeader className="pb-2">
             <CardTitle className="text-xs uppercase tracking-widest text-gray-400 font-medium">
               Order info
@@ -219,10 +226,10 @@ const SuccessPageCompo = () => {
             Track my order
           </Button> */}
           <Link href={'/shop'}>
-          <Button variant="outline" className="w-full gap-2" size="lg">
-            <ShoppingBag className="w-4 h-4" />
-            Continue shopping
-          </Button></Link>
+            <Button variant="outline" className="w-full gap-2" size="lg">
+              <ShoppingBag className="w-4 h-4" />
+              Continue shopping
+            </Button></Link>
         </div>
 
       </div>
