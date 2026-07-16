@@ -21,12 +21,12 @@ type FeatureKey =
 
 
 const featureList: { key: FeatureKey; label: string }[] = [
-  { key: "wishlist", label: "Wishlist System" },
-  { key: "productReview", label: "Product Reviews" },
-  { key: "couponSystem", label: "Coupon System" },
-  { key: "flashSale", label: "Flash Sale" },
+  // { key: "wishlist", label: "Wishlist System" },
+  // { key: "productReview", label: "Product Reviews" },
+  // { key: "couponSystem", label: "Coupon System" },
+  // { key: "flashSale", label: "Flash Sale" },
   { key: "bannerSlider", label: "Banner Slider" },
-  { key: "guestOrder", label: "Guest Order" },
+  // { key: "guestOrder", label: "Guest Order" },
   { key: "latestSection", label: "Latest Section" },
   { key: "offerSection", label: "Offer Section" },
   { key: "featureSection", label: "Feature Section" },
@@ -45,7 +45,7 @@ type Props = {
 }
 const FeaturesTab = ({ settings, callBack }: Props) => {
   return (
-    <Card>
+    <Card className='py-5'>
       <CardHeader>
         <CardTitle>Feature Management</CardTitle>
         <CardDescription>Enable or disable website features</CardDescription>

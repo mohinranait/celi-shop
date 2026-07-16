@@ -20,7 +20,7 @@ const GeneralTab = ({ callBack, settings }: Props) => {
   const [activeField, setActiveField] = useState<"logo" | "footerLogo" | null>(null);
   return (
     <>
-      <Card>
+      <Card className='py-5'>
         <CardHeader>
           <CardTitle>Site Identity</CardTitle>
           <CardDescription>Basic information about your store</CardDescription>
@@ -138,7 +138,7 @@ const GeneralTab = ({ callBack, settings }: Props) => {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className='py-5'>
         <CardHeader><CardTitle>Maintenance Mode</CardTitle></CardHeader>
         <CardContent>
           <div className="flex items-center justify-between">

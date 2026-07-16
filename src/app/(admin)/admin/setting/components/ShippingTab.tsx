@@ -24,7 +24,7 @@ const ShippingTab = ({ shipping, onChange }: Props) => {
 
   return (
     <>
-      <Card>
+      <Card className='py-5'>
         <CardHeader>
           <CardTitle>Default Shipping Rates</CardTitle>
         </CardHeader>
@@ -48,14 +48,14 @@ const ShippingTab = ({ shipping, onChange }: Props) => {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className='py-5'>
         <CardHeader>
           <CardTitle>Shipping Zones</CardTitle>
           <CardDescription>Define different areas with custom shipping fees</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           {shipping.shippingZones.map((zone, index) => (
-            <Card key={index} className="border-dashed">
+            <Card key={index} className="border-dashed py-4">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="text-base">Zone {index + 1}</CardTitle>
                 <Button

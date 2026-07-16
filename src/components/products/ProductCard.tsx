@@ -233,7 +233,7 @@ const ProductCard = ({ product }: Props) => {
               </span>
               {
                 (singleProductPrice?.price || 0) - (singleProductPrice?.finalPrice || 0) > 0 &&
-                <del className="text-sm md:text-base lg:text-lg text-muted-foreground">{CURRENCY}{showTwoDecimals((singleProductPrice?.price || 0) - (singleProductPrice?.finalPrice || 0))}</del>
+                <del className="text-sm md:text-base lg:text-lg text-muted-foreground">{CURRENCY}{showTwoDecimals((singleProductPrice?.price || 0))}</del>
               }
             </div> :
               <span className="text-sm md:text-base lg:text-lg font-bold text-primary">

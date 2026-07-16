@@ -154,7 +154,7 @@ export default function SettingsComponent() {
 
             {/* ==================== CONTACT ==================== */}
             {activeTab === 'contact' && (
-              <Card>
+              <Card className='py-5'>
                 <CardHeader>
                   <CardTitle>Contact & Social</CardTitle>
                   <CardDescription>Customer support and social media</CardDescription>
@@ -206,7 +206,7 @@ export default function SettingsComponent() {
 
             {/* ==================== PAYMENT ==================== */}
             {activeTab === 'payment' && (
-              <Card>
+              <Card className='py-5'>
                 <CardHeader>
                   <CardTitle>Payment Methods</CardTitle>
                   <CardDescription>Enable and configure payment gateways</CardDescription>
@@ -258,10 +258,10 @@ export default function SettingsComponent() {
                   </div>
 
 
-                  <Separator />
+                  {/* <Separator /> */}
 
                   {/* SSLCommerz */}
-                  <div className="space-y-4">
+                  {/* <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <div><p className="font-medium">SSLCommerz</p></div>
                       <Switch checked={settings.paymentMethods?.sslcommerz?.enabled} onCheckedChange={v => setValue('paymentMethods.sslcommerz.enabled', v)} />
@@ -273,12 +273,12 @@ export default function SettingsComponent() {
                         placeholder="Store ID"
                       />
                     )}
-                  </div>
+                  </div> */}
 
-                  <Separator />
+                  {/* <Separator /> */}
 
                   {/* Stripe */}
-                  <div className="space-y-4">
+                  {/* <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <div><p className="font-medium">Stripe</p></div>
                       <Switch checked={settings.paymentMethods?.stripe?.enabled} onCheckedChange={v => setValue('paymentMethods.stripe.enabled', v)} />
@@ -290,7 +290,7 @@ export default function SettingsComponent() {
                         placeholder="pk_live_..."
                       />
                     )}
-                  </div>
+                  </div> */}
                 </CardContent>
               </Card>
             )}
@@ -300,7 +300,7 @@ export default function SettingsComponent() {
 
             {/* ==================== SEO ==================== */}
             {activeTab === 'seo' && (
-              <Card>
+              <Card className='py-5'>
                 <CardHeader>
                   <CardTitle>SEO Settings</CardTitle>
                   <CardDescription>Search Engine Optimization</CardDescription>

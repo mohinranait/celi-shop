@@ -16,7 +16,7 @@ type Props = {
 
 const LayoutTab = ({ callBack, settings }: Props) => {
   return (
-    <Card>
+    <Card className='py-5'>
       <CardHeader>
         <CardTitle>Manage Layout</CardTitle>
         <CardDescription>Enable or disable website layout</CardDescription>

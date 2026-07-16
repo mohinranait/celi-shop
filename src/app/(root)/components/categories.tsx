@@ -35,7 +35,7 @@ const CategoryCard = ({ category }: { category: ICategory }) => {
       </div>
       <div className="text-center">
         <Link href={`/shop?category=${category?._id}`}>
-          <p className="text-xl font-semibold text-foreground line-clamp-2">
+          <p className="text-base font-semibold text-foreground line-clamp-2">
             {category.name}
           </p>
         </Link>
