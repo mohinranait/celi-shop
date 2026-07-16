@@ -6,7 +6,7 @@ export const getAppSetting = cache(async () => {
   return await fetchData<IAppSettings>(
     {
       api: "admin/setting",
-      revalidate: 3600,
+      revalidate: 0,
     },
     1
   );
