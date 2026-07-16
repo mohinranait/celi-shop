@@ -24,7 +24,7 @@ const LayoutTab = ({ callBack, settings }: Props) => {
       <CardContent className=" space-y-3">
 
 
-        <div className="flex items-center bg-muted justify-between py-3 rounded px-3  ">
+        {/* <div className="flex items-center bg-muted justify-between py-3 rounded px-3  ">
           <p className="font-medium">Header</p>
           <div>
             <Select
@@ -46,7 +46,7 @@ const LayoutTab = ({ callBack, settings }: Props) => {
               </SelectContent>
             </Select>
           </div>
-        </div>
+        </div> */}
 
         <div className="flex items-center bg-muted justify-between py-3 rounded px-3  ">
           <p className="font-medium">Category Section</p>

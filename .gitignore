@@ -11,6 +11,7 @@
 text.env.txt
 
 docs.txt
+nginx.conf
 
 # testing
 /coverage

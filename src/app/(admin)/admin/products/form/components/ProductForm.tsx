@@ -32,7 +32,6 @@ import {
   ImagePlus,
   X,
   Package,
-  Tag,
   Layers,
   Settings2,
   Loader2,
@@ -138,6 +137,27 @@ export default function AddProductForm() {
       setValue("slug", watchedName.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, ""));
     }
   }, [watchedName, setValue]);
+
+
+  useEffect(() => {
+    if(!productId){
+      form.reset({
+      name: "",
+      slug: "",
+      description: "",
+      status: true,
+      category: "",
+      productType: "single",
+      variations: [],
+      brand:'',
+      gallery:[],
+      videoUrl:'',
+      shortDescription:'',
+      selectedAttributes:[],
+      thumbnail:'',
+    })
+    }
+  },[productId,form])
 
   // ---------------------------------------------------------------------------
   // Attribute config handlers
@@ -261,42 +281,6 @@ export default function AddProductForm() {
   };
 
 
-  // console.log({ errors });
-
-
-
-  // const variations = watch("variations");
-
-  // useEffect(() => {
-  //   variations?.forEach((item, index: number) => {
-  //     const price = Number(item.price) || 0;
-  //     const fixed = Number(item.offerPriceFixed);
-  //     const percent = Number(item.offerPriceParcent);
-
-  //     // FIXED → PERCENT
-  //     if (fixed >= 0 && price > 0 && fixed <= price) {
-  //       const calculatedPercent = ((price - fixed) / price) * 100;
-
-  //       console.log({calculatedPercent});
-
-
-  //       setValue(
-  //         `variations.${index}.offerPriceParcent`,
-  //         Number(calculatedPercent.toFixed(2))
-  //       );
-  //     }
-
-  //     // PERCENT → FIXED
-  //     if (percent >= 0 && price > 0 && percent <= 100) {
-  //       const calculatedFixed = price - (price * percent) / 100;
-
-  //       setValue(
-  //         `variations.${index}.offerPriceFixed`,
-  //         Number(calculatedFixed.toFixed(2))
-  //       );
-  //     }
-  //   });
-  // }, [variations, setValue]);
 
   const currentTags = watch("tags") || [];
 
@@ -471,7 +455,7 @@ export default function AddProductForm() {
             <Label>Select Category</Label>
 
             {
-              categories?.length &&
+             categoriesLoading ? <div>Load Category</div>:  categories?.length &&
               <NestedCategorySelector
                 categories={categories || []}
                 value={watch("category")}
@@ -568,6 +552,9 @@ export default function AddProductForm() {
           >
             {/* Attribute rows */}
             <div className="space-y-3">
+              {
+                attributesLoading && <div>Loading...</div>
+              }
               {selectedConfigs.map((config, idx) => {
                 const attr = attributes?.find((a) => a._id === config.attributeId);
                 return (

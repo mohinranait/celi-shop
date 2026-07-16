@@ -138,7 +138,7 @@ const GeneralTab = ({ callBack, settings }: Props) => {
         </CardContent>
       </Card>
 
-      <Card className='py-5'>
+      {/* <Card className='py-5'>
         <CardHeader><CardTitle>Maintenance Mode</CardTitle></CardHeader>
         <CardContent>
           <div className="flex items-center justify-between">
@@ -149,7 +149,7 @@ const GeneralTab = ({ callBack, settings }: Props) => {
             <Switch checked={settings.maintenanceMode} onCheckedChange={v => callBack('maintenanceMode', v)} />
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
 
 
       <MediaModal

@@ -137,7 +137,7 @@ export default function WhyChooseUsForm() {
 
   if (isLoading) {
     return (
-      <Card>
+      <Card className="py-5">
         <CardContent className="p-6">
           Loading...
         </CardContent>
@@ -148,7 +148,7 @@ export default function WhyChooseUsForm() {
 
   return (
 
-    <Card>
+    <Card className="py-5">
 
       <CardHeader>
         <CardTitle>

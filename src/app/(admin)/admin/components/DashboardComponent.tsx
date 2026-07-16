@@ -1,4 +1,3 @@
-'use client'
 "use client";
 
 import { useState } from "react";
@@ -22,11 +21,13 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import React from 'react'
-import { useDashboardAnalyticsQuery, useDashboardRevenueQuery } from "@/redux/service/dashboard";
+import {  useDashboardRevenueQuery } from "@/redux/service/dashboard";
 import { useGetClientProductsQuery } from "@/redux/client/products";
 import { DataTable } from "@/components/ui/data-table/Table";
 import tableColumns from './../products/components/columns';
+import {columns as orderColumns}  from './../orders/components/columns';
 import Analytics from "./Analytics";
+import { useGetAdminOrdersQuery } from "@/redux/service/orders";
 
 const DashboardComponent = () => {
   const columns = tableColumns({ type: 'active' });
@@ -37,10 +38,11 @@ const DashboardComponent = () => {
   const { data: besSell, isLoading: bestSellLading } = useGetClientProductsQuery(`page=1&limit=6&type=bestselling`);
   const products = besSell?.data;
 
-  const {data:dashboard} = useDashboardAnalyticsQuery(``)
-  const analytics = dashboard?.data;
+
 
   
+   const { data:getOrders, isLoading:orderLoading } = useGetAdminOrdersQuery(`page=1&limit=6`)
+    const orders = getOrders?.data || [];
 
 
   const chartData =
@@ -54,9 +56,9 @@ const DashboardComponent = () => {
 
   return (
     <div>
-      <div className="space-y-5">
+      <div className="space-y-5 pb-5">
         <Analytics />
-        <Card>
+        <Card className="py-5 ">
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Revenue Analytics</CardTitle>
 
@@ -84,7 +86,7 @@ const DashboardComponent = () => {
                     color: "#2563eb",
                   },
                 }}
-                className="h-[350px] w-full"
+                className="h-87.5 w-full"
               >
                 <AreaChart data={chartData}>
                   <CartesianGrid vertical={false} />
@@ -112,13 +114,15 @@ const DashboardComponent = () => {
           </CardContent>
         </Card>
 
+        <div className="grid grid-cols-2 gap-5">
+
         {
           products?.length &&
-          <Card className="p-0 rounded-md">
+          <Card className="py-5 rounded-md">
             <CardHeader className="flex pb-2 pt-3 flex-row items-center justify-between">
               <CardTitle>Best selling Products</CardTitle>
             </CardHeader>
-            <CardContent className="p-0">
+            <CardContent className="">
 
               <DataTable
                 columns={columns}
@@ -130,6 +134,26 @@ const DashboardComponent = () => {
             </CardContent>
           </Card>
         }
+        {
+          orders?.length &&
+          <Card className="py-5 rounded-md">
+            <CardHeader className="flex pb-2 pt-3 flex-row items-center justify-between">
+              <CardTitle>Recent Orders</CardTitle>
+            </CardHeader>
+            <CardContent className="">
+
+              <DataTable
+                columns={orderColumns}
+                data={orders}
+              />
+
+
+
+            </CardContent>
+          </Card>
+        }
+        </div>
+
       </div>
     </div>
   )

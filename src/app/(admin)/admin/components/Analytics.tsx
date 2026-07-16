@@ -4,6 +4,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { CURRENCY } from "@/lib/envSecret";
+import { useDashboardAnalyticsQuery } from "@/redux/service/dashboard";
 
 import {
   ShoppingCart,
@@ -13,29 +15,32 @@ import {
 } from "lucide-react";
 
 const Analytics = () => {
+    const {data:dashboard} = useDashboardAnalyticsQuery(``)
+  const analytics = dashboard?.data;
+
   const stats = [
     {
-      title: "Total Revenue",
-      value: "৳125,000",
-      change: "+12.5%",
+      title: "Total Sales",
+      value: `${analytics?.totalSales || 0} ${CURRENCY} `,
+      change: "",
       icon: DollarSign,
     },
     {
       title: "Total Orders",
-      value: "1,245",
-      change: "+8.2%",
+      value: analytics?.totalOrders || 0,
+      change: "",
       icon: ShoppingCart,
     },
     {
-      title: "Products Sold",
-      value: "3,421",
-      change: "+15.1%",
+      title: "Avg Order",
+      value: `${analytics.averageOrderValue || 0} ${CURRENCY}`,
+      change: "",
       icon: Package,
     },
     {
-      title: "Avg Order Value",
-      value: "৳1,850",
-      change: "+4.3%",
+      title: "Total Products",
+      value: analytics.totalProducts || 0,
+      change: "",
       icon: TrendingUp,
     },
   ];
@@ -45,7 +50,7 @@ const Analytics = () => {
         const Icon = stat.icon;
 
         return (
-          <Card key={stat.title}>
+          <Card key={stat.title} className="py-5">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
                 {stat.title}
@@ -59,9 +64,9 @@ const Analytics = () => {
                 {stat.value}
               </div>
 
-              <p className="text-xs text-green-600 mt-1">
+              {/* <p className="text-xs text-green-600 mt-1">
                 {stat.change} from last month
-              </p>
+              </p> */}
             </CardContent>
           </Card>
         );

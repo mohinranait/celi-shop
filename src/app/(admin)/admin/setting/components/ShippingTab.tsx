@@ -24,7 +24,7 @@ const ShippingTab = ({ shipping, onChange }: Props) => {
 
   return (
     <>
-      <Card className='py-5'>
+      {/* <Card className='py-5'>
         <CardHeader>
           <CardTitle>Default Shipping Rates</CardTitle>
         </CardHeader>
@@ -46,7 +46,7 @@ const ShippingTab = ({ shipping, onChange }: Props) => {
             />
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
 
       <Card className='py-5'>
         <CardHeader>

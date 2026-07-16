@@ -4,7 +4,6 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { ProfileDropdown } from "./ProfileDropdown";
-import NotificationDropdown from "./NotificationDropdown";
 
 interface HeaderProps {
   fixed?: boolean;
@@ -53,7 +52,7 @@ export const Navbar = ({
         <div className=" justify-between items-center space-x-4">
           <div className="flex items-center space-x-4">
             {/* <ThemeButton /> */}
-            <NotificationDropdown />
+            {/* <NotificationDropdown /> */}
             <ProfileDropdown />
           </div>
         </div>

@@ -125,7 +125,7 @@ export default function CompanyForm() {
 
   if (isLoading) {
     return (
-      <Card>
+      <Card className="py-5">
         <CardContent className="p-6">
           Loading...
         </CardContent>
@@ -136,7 +136,7 @@ export default function CompanyForm() {
 
   return (
 
-    <Card>
+    <Card className="py-5">
 
       <CardHeader>
         <CardTitle>

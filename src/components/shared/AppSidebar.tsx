@@ -15,18 +15,16 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
-  BadgeCheck,
-  Bell,
+
   ChevronsUpDown,
-  CreditCard,
-  LogOut,
-  Sparkles,
+
+  Settings,
+  User,
 } from "lucide-react";
 import { NavGroup } from "./NavGroup";
 import { sidebarData } from "../constants/nav-bar";
@@ -36,7 +34,7 @@ type PropTypes = {
   state: "expanded" | "collapsed";
 };
 
-const AppSidebar = ({ setOpen, state }: PropTypes) => {
+const AppSidebar = ({  state }: PropTypes) => {
   const { isMobile } = useSidebar();
   const {user} = useAppSelector(state => state.auth)
 
@@ -110,39 +108,23 @@ const AppSidebar = ({ setOpen, state }: PropTypes) => {
                     </div>
                   </div>
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <Sparkles />
-                    Upgrade to Pro
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
+              
                 <DropdownMenuGroup>
                   <DropdownMenuItem asChild>
-                    <Link href="/settings/account">
-                      <BadgeCheck />
-                      Account
+                    <Link href={`/admin/users/${user?._id}`}>
+                      <User />
+                      Profile
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/settings">
-                      <CreditCard />
-                      Billing
+                    <Link href="/admin/setting">
+                    <Settings />
+                      Setting
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/settings/notifications">
-                      <Bell />
-                      Notifications
-                    </Link>
-                  </DropdownMenuItem>
+                  
                 </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <LogOut />
-                  Log out
-                </DropdownMenuItem>
+             
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>

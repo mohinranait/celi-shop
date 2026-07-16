@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Camera, Phone, Calendar, Save } from 'lucide-react';
+import {  Phone, Calendar, Save } from 'lucide-react';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
@@ -132,13 +132,13 @@ function UpdateComponent({ userId }: Props) {
                     {user?.name?.slice(0, 2)?.toUpperCase() || 'ME'}
                   </AvatarFallback>
                 </Avatar>
-
+{/* 
                 <button
                   type="button"
                   className="absolute bottom-2 right-2 rounded-full bg-primary p-2 text-white shadow-lg transition hover:bg-primary/90"
                 >
                   <Camera size={18} />
-                </button>
+                </button> */}
               </div>
 
               {/* USER INFO */}
