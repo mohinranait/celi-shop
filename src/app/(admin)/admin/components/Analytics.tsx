@@ -33,13 +33,13 @@ const Analytics = () => {
     },
     {
       title: "Avg Order",
-      value: `${analytics.averageOrderValue || 0} ${CURRENCY}`,
+      value: `${analytics?.averageOrderValue || 0} ${CURRENCY}`,
       change: "",
       icon: Package,
     },
     {
       title: "Total Products",
-      value: analytics.totalProducts || 0,
+      value: analytics?.totalProducts || 0,
       change: "",
       icon: TrendingUp,
     },
