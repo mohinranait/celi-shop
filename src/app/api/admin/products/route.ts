@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     const product = await Product.create({...body, stock: productStock });
     return NextResponse.json({ success: true, data: product }, { status: 201 });
   } catch (error: any) {
-    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+    // const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
 
     // Handle duplicate slug error
     if (error.code === 11000) {  // MongoDB duplicate key error

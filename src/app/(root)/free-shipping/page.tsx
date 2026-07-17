@@ -2,14 +2,12 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 
-import { useState } from "react";
 import ProductCard from "@/components/products/ProductCard";
 import { useGetClientProductsQuery } from "@/redux/client/products";
 
 
 
 export default function FreeShipping() {
-  const [sort, setSort] = useState("discount-desc");
 
   // Fetch only products that have free shipping
   const { data, isLoading } = useGetClientProductsQuery(

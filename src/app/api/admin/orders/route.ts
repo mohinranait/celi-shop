@@ -76,7 +76,7 @@ export async function POST(req: Request) {
           { $inc: { stock: -requestedQty, totalSold: requestedQty } },
           { session }
         );
-      } 
+      }
       else {
         // Variant Product
         if (!variationId) {
@@ -100,9 +100,9 @@ export async function POST(req: Request) {
 
         // Update Variant stock + Root product stock
         await Product.updateOne(
-          { 
-            _id: product._id, 
-            "variations._id": variationId 
+          {
+            _id: product._id,
+            "variations._id": variationId
           },
           {
             $inc: {
@@ -125,6 +125,7 @@ export async function POST(req: Request) {
 
       orderItems.push({
         productId: product._id,
+        variationId: cartItem.variationId || null,
         productName: cartItem.productName,
         productImage: cartItem.productImage,
         productSlug: cartItem.productSlug,
@@ -279,7 +280,7 @@ export async function GET(req: Request) {
       },
     });
   } catch (error: unknown) {
-    const err= error instanceof Error ? error : new Error("An unknown error occurred");
+    const err = error instanceof Error ? error : new Error("An unknown error occurred");
     return NextResponse.json(
       {
         success: false,

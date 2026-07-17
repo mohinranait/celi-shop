@@ -47,6 +47,15 @@ const tableColumns = ({ type = 'active' }: { type: "active" | "deleted" }) => {
       }
     },
 
+
+     {
+      accessorKey: "stock",
+      header: "Stock",
+      cell: ({ row }) => {
+        return <div>{row.original?.stock || 0} items</div>
+      }
+    },
+
     {
       accessorKey: "status",
       header: "Status",

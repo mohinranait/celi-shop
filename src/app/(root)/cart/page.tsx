@@ -1,10 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Trash2, Plus, Minus, ShoppingCart, ArrowRight } from "lucide-react";
@@ -18,7 +15,6 @@ import { CURRENCY } from "@/lib/envSecret";
 export default function CartPage() {
   const { carts, subtotal, totalItems } = useAppSelector(state => state.cart)
   const dispatch = useAppDispatch()
-  const [coupon, setCoupon] = useState("");
 
 
   const discount = 0;

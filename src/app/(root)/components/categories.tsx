@@ -1,5 +1,4 @@
 'use client'
-import { Card } from '@/components/ui/card'
 import { PRODUCT_IMG } from '@/lib/default-import';
 import { useGetCategoriesQuery } from '@/redux/service/categories';
 import { ICategory } from '@/redux/service/categories/type';

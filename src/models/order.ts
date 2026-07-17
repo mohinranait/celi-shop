@@ -11,7 +11,10 @@ const orderItemSchema = new Schema(
       ref: "Product",
       required: true,
     },
-
+    variationId: {
+        type: Types.ObjectId,
+        default: null,
+    },
     productName: {
       type: String,
       required: true,

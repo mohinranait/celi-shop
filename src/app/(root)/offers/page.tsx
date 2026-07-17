@@ -2,14 +2,12 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 
-import { useState } from "react";
 import ProductCard from "@/components/products/ProductCard";
 import { useGetClientProductsQuery } from "@/redux/client/products";
 
 
 
 export default function OffersPage() {
-  const [sort, setSort] = useState("discount-desc");
 
   // Fetch only products that have offers
   const { data, isLoading } = useGetClientProductsQuery(
@@ -17,9 +15,6 @@ export default function OffersPage() {
   );
 
   const products = data?.data || [];
-
- 
-
 
 
   return (

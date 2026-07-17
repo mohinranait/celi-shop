@@ -21,11 +21,11 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import React from 'react'
-import {  useDashboardRevenueQuery } from "@/redux/service/dashboard";
+import { useDashboardRevenueQuery } from "@/redux/service/dashboard";
 import { useGetClientProductsQuery } from "@/redux/client/products";
 import { DataTable } from "@/components/ui/data-table/Table";
 import tableColumns from './../products/components/columns';
-import {columns as orderColumns}  from './../orders/components/columns';
+import { columns as orderColumns } from './../orders/components/columns';
 import Analytics from "./Analytics";
 import { useGetAdminOrdersQuery } from "@/redux/service/orders";
 
@@ -35,14 +35,14 @@ const DashboardComponent = () => {
   const { data, isLoading } = useDashboardRevenueQuery(`period=${period}`);
 
 
-  const { data: besSell, isLoading: bestSellLading } = useGetClientProductsQuery(`page=1&limit=6&type=bestselling`);
+  const { data: besSell, isLoading: bestSellLading } = useGetClientProductsQuery(`page=1&limit=5&type=bestselling`);
   const products = besSell?.data;
 
 
 
-  
-   const { data:getOrders, isLoading:orderLoading } = useGetAdminOrdersQuery(`page=1&limit=6`)
-    const orders = getOrders?.data || [];
+
+  const { data: getOrders, isLoading: orderLoading } = useGetAdminOrdersQuery(`page=1&limit=5`)
+  const orders = getOrders?.data || [];
 
 
   const chartData =
@@ -56,7 +56,19 @@ const DashboardComponent = () => {
 
   return (
     <div>
-      <div className="space-y-5 pb-5">
+      <div className="space-y-5 max-w-7xl mx-auto pb-5">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-2xl font-bold">Dashboard</h1>
+            <p className="text-muted-foreground text-sm">
+              You can see Website overview 
+            </p>
+          </div>
+
+
+        </div>
+
+
         <Analytics />
         <Card className="py-5 ">
           <CardHeader className="flex flex-row items-center justify-between">
@@ -116,42 +128,42 @@ const DashboardComponent = () => {
 
         <div className="grid grid-cols-2 gap-5">
 
-        {
-          products?.length &&
-          <Card className="py-5 rounded-md">
-            <CardHeader className="flex pb-2 pt-3 flex-row items-center justify-between">
-              <CardTitle>Best selling Products</CardTitle>
-            </CardHeader>
-            <CardContent className="">
+          {
+            products?.length &&
+            <Card className="py-5 rounded-md">
+              <CardHeader className="flex pb-2 pt-3 flex-row items-center justify-between">
+                <CardTitle>Best selling Products</CardTitle>
+              </CardHeader>
+              <CardContent className="">
 
-              <DataTable
-                columns={columns}
-                data={products}
-              />
-
-
-
-            </CardContent>
-          </Card>
-        }
-        {
-          orders?.length &&
-          <Card className="py-5 rounded-md">
-            <CardHeader className="flex pb-2 pt-3 flex-row items-center justify-between">
-              <CardTitle>Recent Orders</CardTitle>
-            </CardHeader>
-            <CardContent className="">
-
-              <DataTable
-                columns={orderColumns}
-                data={orders}
-              />
+                <DataTable
+                  columns={columns}
+                  data={products}
+                />
 
 
 
-            </CardContent>
-          </Card>
-        }
+              </CardContent>
+            </Card>
+          }
+          {
+            orders?.length &&
+            <Card className="py-5 rounded-md">
+              <CardHeader className="flex pb-2 pt-3 flex-row items-center justify-between">
+                <CardTitle>Recent Orders</CardTitle>
+              </CardHeader>
+              <CardContent className="">
+
+                <DataTable
+                  columns={orderColumns}
+                  data={orders}
+                />
+
+
+
+              </CardContent>
+            </Card>
+          }
         </div>
 
       </div>
