@@ -37,14 +37,27 @@ const LoginForm = () => {
       dispatch(setUser({ user: response.payload }));
       dispatch(setLoginModalOpen({ isOpen: false }));
 
-      if(response.payload.role === 'Admin'){
+      if (response.payload.role === 'Admin') {
         router.push('/admin')
-      }else{
+      } else {
         router.push('/dashboard')
       }
 
-    } catch (err) {
+    } catch (err:any) {
       console.error("Failed to login:", err);
+
+      
+      let errorMessage = "Something went wrong.";
+
+      if (err?.data?.error) {
+        errorMessage = err.data.error;
+      } else if (err?.error) {
+        errorMessage = err.error;
+      } else if (err?.message) {
+        errorMessage = err.message;
+      }
+
+       toast.error(errorMessage);
     }
   };
 
@@ -55,7 +68,7 @@ const LoginForm = () => {
     <React.Fragment>
       {/* Header */}
       <div className="mb-8">
-       
+
         <h1 className="text-2xl font-bold text-foreground tracking-tight">
           Welcome back
         </h1>
@@ -91,7 +104,7 @@ const LoginForm = () => {
                 "pl-10 h-11 transition-all duration-200",
                 "border-border/60 focus:border-primary focus-visible:ring-1 focus-visible:ring-primary/30",
                 phoneError &&
-                  "border-destructive focus:border-destructive focus-visible:ring-destructive/30"
+                "border-destructive focus:border-destructive focus-visible:ring-destructive/30"
               )}
             />
           </div>
@@ -129,7 +142,7 @@ const LoginForm = () => {
                 "pl-10 pr-10 h-11 transition-all duration-200",
                 "border-border/60 focus:border-primary focus-visible:ring-1 focus-visible:ring-primary/30",
                 passwordError &&
-                  "border-destructive focus:border-destructive focus-visible:ring-destructive/30"
+                "border-destructive focus:border-destructive focus-visible:ring-destructive/30"
               )}
             />
 

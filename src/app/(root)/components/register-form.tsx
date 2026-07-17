@@ -33,10 +33,21 @@ const RegisterForm = () => {
         description: "Monday, January 3rd at 6:00pm",
       });
       dispatch(setLoginModalTab({ tabValue: "login" }));
-    } catch (err) {
+    } catch (err: any) {
       console.error("Failed to login:", err);
       const fetchError = err as { data?: { error?: string } };
-      const errorMessage = fetchError.data?.error || "Something went wrong";
+      let errorMessage = fetchError.data?.error || "Something went wrong";
+
+      // let errorMessage = "Something went wrong.";
+
+      if (err?.data?.error) {
+        errorMessage = err.data.error;
+      } else if (err?.error) {
+        errorMessage = err.error;
+      } else if (err?.message) {
+        errorMessage = err.message;
+      }
+
       toast.error(errorMessage);
     }
   };

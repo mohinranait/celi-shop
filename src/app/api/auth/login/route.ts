@@ -33,6 +33,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if(userDoc.status === 'Banned'){
+       return NextResponse.json(
+        { success: false, error: "Your account has banned. Please contact Admin" },
+        { status: 404 }
+      );
+    }
+
     const isMatch = await bcrypt.compare(password, userDoc.password);
     if (!isMatch) {
       return NextResponse.json(
