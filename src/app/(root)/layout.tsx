@@ -22,6 +22,11 @@ export async function generateMetadata(): Promise<Metadata> {
     title: settings?.metaTitle || settings?.siteName || "My ecommerce Website",
     description: settings?.metaDescription || settings?.siteDescription || "description",
     keywords: settings?.metaKeyword || '',
+    icons: {
+      icon: settings?.favicon || "/favicon.ico",
+      shortcut: settings?.favicon || "/favicon.ico",
+      apple: settings?.favicon || "/favicon.ico",
+    },
     openGraph: {
       url: `${BASE_URL}`,
       images: [

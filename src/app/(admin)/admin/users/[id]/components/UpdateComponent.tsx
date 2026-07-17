@@ -307,9 +307,9 @@ function UpdateComponent({ userId }: Props) {
                               Active
                             </SelectItem>
 
-                            <SelectItem value="Pending">
+                            {/* <SelectItem value="Pending">
                               Pending
-                            </SelectItem>
+                            </SelectItem> */}
 
                             <SelectItem value="Banned">
                               Banned

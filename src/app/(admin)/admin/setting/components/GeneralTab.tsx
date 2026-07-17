@@ -17,7 +17,7 @@ type Props = {
 }
 const GeneralTab = ({ callBack, settings }: Props) => {
   const [mediaOpen, setMediaOpen] = useState(false);
-  const [activeField, setActiveField] = useState<"logo" | "footerLogo" | null>(null);
+  const [activeField, setActiveField] = useState<"logo" | "footerLogo" | "favicon" | null>(null);
   return (
     <>
       <Card className='py-5'>
@@ -106,6 +106,43 @@ const GeneralTab = ({ callBack, settings }: Props) => {
             </div>
           </div>
 
+          {/* Favicon */}
+          <div>
+            <div className="space-y-1">
+              <Label>Favicon</Label>
+              <div className="flex gap-3">
+
+                {
+                  settings.favicon && <span
+                    className="w-24 h-24 rounded-md border-2 border-dashed  
+                         flex flex-col items-center justify-center gap-1 
+                          transition-all relative"
+                  >
+                    <Image width={100} height={100} alt="Image" src={settings?.favicon} />
+                    <button className="text-[10px] w-5 h-5 rounded-full flex items-center justify-center border text-gray-500 absolute top-1 right-1"><X size={14} /></button>
+                  </span>
+                }
+
+
+                <Button
+                  type="button"
+                  variant={'outline'}
+                  onClick={() => {
+                    setMediaOpen(true);
+                    setActiveField('favicon')
+                  }}
+                  className="w-24 h-24 rounded-md border-2 border-dashed  
+                         flex flex-col items-center justify-center gap-1 
+                          transition-all"
+                >
+                  <Plus className="w-5 h-5 text-gray-500" />
+                  <span className="text-[10px] text-gray-500">Upload</span>
+                </Button>
+
+              </div>
+            </div>
+          </div>
+
           <div className="space-y-2">
             <Label>Site Description</Label>
             <Textarea value={settings.siteDescription} onChange={e => callBack('siteDescription', e.target.value)} />
@@ -161,6 +198,10 @@ const GeneralTab = ({ callBack, settings }: Props) => {
           };
           if (activeField === "footerLogo") {
             callBack('footerLogo', url[0])
+          };
+
+           if (activeField === "favicon") {
+            callBack('favicon', url[0])
           };
 
         }}

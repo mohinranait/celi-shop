@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import {  Geist_Mono, Roboto } from "next/font/google"
 import "./globals.css";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "sonner";
 import ReduxProvider from "@/providers/ReduxProvider";
 import { cn } from "@/lib/utils";
