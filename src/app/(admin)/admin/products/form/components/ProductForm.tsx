@@ -100,7 +100,7 @@ export default function AddProductForm() {
   const [selectedConfigs, setSelectedConfigs] = useState<IAttributeConfig[]>([]);
   const [productImages, setProductImages] = useState<string[]>([]);
   const [tags, setTags] = useState<string>('')
-
+const isEdit = Boolean(productId);
   // React Hook Form
   const form = useForm<TProductFormType>({
     resolver: zodResolver(productSchema),
@@ -139,9 +139,12 @@ export default function AddProductForm() {
   }, [watchedName, setValue]);
 
 
-  useEffect(() => {
-    if(!productId){
-      form.reset({
+// Replace your existing two useEffects with these:
+
+// 1. Reset for NEW product
+useEffect(() => {
+  if (!productId) {
+    form.reset({
       name: "",
       slug: "",
       description: "",
@@ -149,15 +152,46 @@ export default function AddProductForm() {
       category: "",
       productType: "single",
       variations: [],
-      brand:'',
-      gallery:[],
-      videoUrl:'',
-      shortDescription:'',
-      selectedAttributes:[],
-      thumbnail:'',
-    })
-    }
-  },[productId,form])
+      brand: "",
+      gallery: [],
+      videoUrl: "",
+      shortDescription: "",
+      selectedAttributes: [],
+      thumbnail: "",
+      tags: [],
+      seo: { title: "", description: "" },
+      isFeatured: false,
+      shipping: { isFreeShipping: false },
+    });
+
+    // Reset local states
+    setSelectedConfigs([]);
+    setProductImages([]);
+    setTags("");
+    replace([]);           // important
+    setValue("tags", []);  // extra safety
+
+    // Clear any previous product data from RTK cache if needed
+    // (optional but recommended)
+  }
+}, [productId, form, replace, setValue]);
+
+// 2. Load data only for EDIT mode
+useEffect(() => {
+  if (!productId || !product) return;
+
+  form.reset({
+    ...product,
+    // Ensure some fields are properly typed
+    shipping: product.shipping || { isFreeShipping: false },
+    seo: product.seo || { title: "", description: "" },
+  });
+
+  setSelectedConfigs(product.selectedAttributes || []);
+  setProductImages(product.gallery || []);
+  setTags("");
+  setValue("tags", product.tags || []);
+}, [product, productId, form, setValue]);
 
   // ---------------------------------------------------------------------------
   // Attribute config handlers
@@ -178,21 +212,21 @@ export default function AddProductForm() {
   };
 
   const toggleAttributeValue = (idx: number, value: string) => {
-  setSelectedConfigs((prev) =>
-    prev.map((config, index) => {
-      if (index !== idx) return config;
+    setSelectedConfigs((prev) =>
+      prev.map((config, index) => {
+        if (index !== idx) return config;
 
-      const selectedValues = config.selectedValues.includes(value)
-        ? config.selectedValues.filter((v) => v !== value)
-        : [...config.selectedValues, value];
+        const selectedValues = config.selectedValues.includes(value)
+          ? config.selectedValues.filter((v) => v !== value)
+          : [...config.selectedValues, value];
 
-      return {
-        ...config,
-        selectedValues,
-      };
-    })
-  );
-};
+        return {
+          ...config,
+          selectedValues,
+        };
+      })
+    );
+  };
 
   // ---------------------------------------------------------------------------
   // Generate variations (cartesian product)
@@ -234,17 +268,30 @@ export default function AddProductForm() {
   const onSubmit = async (data: TProductFormType) => {
 
     try {
-      const payload = {
-        ...data,
-        gallery: productImages,
-        selectedAttributes: selectedConfigs,
-      };
+     const payload: any = {
+      ...data,
+      gallery: productImages,
+      selectedAttributes: selectedConfigs,
+    };
+
+    // ==================== BRAND FIX ====================
+    if (isEdit) {
+      // Edit mode-এ brand খালি থাকলে payload থেকে brand সরিয়ে দাও
+      if (!data.brand || data.brand.trim() === "" || data.brand === "undefined") {
+        delete payload.brand;
+      }
+      // অন্যথায় brand রাখবে (যদি select করা হয়)
+    } else {
+      // Create mode-এ খালি থাকলে null পাঠাও
+      payload.brand = data.brand && data.brand.trim() !== "" ? data.brand : null;
+    }
 
       // console.log({ payload });
 
       let url = '';
 
-      if (product) {
+      if (isEdit) {
+        if(!product) return;
         const { data } = await updateProduct({ id: product?._id, payload })
         url = data?.data?._id as string;
       } else {
@@ -317,7 +364,7 @@ export default function AddProductForm() {
           <div>
             <h1 className="text-sm font-semibold text-accent-foreground leading-none">
               {
-                product ? "Update " : "Add New "
+                isEdit ? "Update " : "Add New "
               }
               Product
             </h1>
@@ -436,13 +483,13 @@ export default function AddProductForm() {
             <Label>Select Category</Label>
 
             {
-             categoriesLoading ? <div>Load Category</div>:  categories?.length &&
-              <NestedCategorySelector
-                categories={categories || []}
-                value={watch("category")}
-                onChange={(id) => setValue("category", id, { shouldValidate: true })}
-                error={errors.category?.message}
-              />
+              categoriesLoading ? <div>Load Category</div> : categories?.length &&
+                <NestedCategorySelector
+                  categories={categories || []}
+                  value={watch("category")}
+                  onChange={(id) => setValue("category", id, { shouldValidate: true })}
+                  error={errors.category?.message}
+                />
             }
           </div>
 

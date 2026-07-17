@@ -287,7 +287,7 @@ const VariantTable = ({
             }
           />
 
-          <Input
+          {/* <Input
             className="col-span-2 h-9"
             placeholder="Alert"
             type="number"
@@ -296,7 +296,7 @@ const VariantTable = ({
             onChange={(e) =>
               setBulk({ ...bulk, alert: e.target.value })
             }
-          />
+          /> */}
 
           <div className="col-span-1 flex justify-end">
             <Button
@@ -569,7 +569,7 @@ const VariantTable = ({
                     </TableCell>
 
                     {/* Alert */}
-                    <TableCell>
+                    {/* <TableCell>
                       <Input
                         type="number"
                         min={0}
@@ -579,7 +579,7 @@ const VariantTable = ({
                         )}
                         className="h-8 text-sm text-center"
                       />
-                    </TableCell>
+                    </TableCell> */}
 
                     {/* Actions */}
                     <TableCell className="text-right">
