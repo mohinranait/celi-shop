@@ -236,7 +236,7 @@ const VariantTable = ({
   return (
     <div>
       <div className="border rounded-lg overflow-hidden ">
-        <div className="grid grid-cols-12 gap-2 p-3 border-b bg-muted/30">
+        <div className="grid grid-cols-10 gap-2 p-3 border-b bg-muted/30">
 
           <div className="col-span-1 flex items-center text-xs font-medium text-muted-foreground">
             Apply All
@@ -336,9 +336,9 @@ const VariantTable = ({
                 Stock
               </TableHead>
 
-              <TableHead className="w-[10%] font-semibold text-center">
+              {/* <TableHead className="w-[10%] font-semibold text-center">
                 Alert
-              </TableHead>
+              </TableHead> */}
 
               <TableHead className="w-[5%] text-right font-semibold">
                 Actions

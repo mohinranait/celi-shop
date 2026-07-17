@@ -689,7 +689,7 @@ const isEdit = Boolean(productId);
                     Variations ({fields.length})
                   </p>
                   <p className="text-[10px] text-muted-foreground">
-                    Set price, SKU, and stock for each
+                    Set price, SKU, Stock
                   </p>
                 </div>
 
