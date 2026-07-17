@@ -139,59 +139,41 @@ const isEdit = Boolean(productId);
   }, [watchedName, setValue]);
 
 
-// Replace your existing two useEffects with these:
+  useEffect(() => {
+    if (!productId) {
+      form.reset({
+        name: "",
+        slug: "",
+        description: "",
+        status: true,
+        category: "",
+        productType: "single",
+        variations: [],
+        brand: "",
+        gallery: [],
+        videoUrl: "",
+        shortDescription: "",
+        selectedAttributes: [],
+        thumbnail: "",
+        tags: [],
+        seo: {
+          title: "",
+          description: "",
+        },
+      });
 
-// 1. Reset for NEW product
-useEffect(() => {
-  if (!productId) {
-    form.reset({
-      name: "",
-      slug: "",
-      description: "",
-      status: true,
-      category: "",
-      productType: "single",
-      variations: [],
-      brand: "",
-      gallery: [],
-      videoUrl: "",
-      shortDescription: "",
-      selectedAttributes: [],
-      thumbnail: "",
-      tags: [],
-      seo: { title: "", description: "" },
-      isFeatured: false,
-      shipping: { isFreeShipping: false },
-    });
+      // Reset local state
+      setSelectedConfigs([]);
+      setProductImages([]);
+      setTags("");
+      replace([]); // useFieldArray reset
+    }
+  }, [productId, form, replace]);
 
-    // Reset local states
-    setSelectedConfigs([]);
-    setProductImages([]);
-    setTags("");
-    replace([]);           // important
-    setValue("tags", []);  // extra safety
 
-    // Clear any previous product data from RTK cache if needed
-    // (optional but recommended)
-  }
-}, [productId, form, replace, setValue]);
-
-// 2. Load data only for EDIT mode
-useEffect(() => {
-  if (!productId || !product) return;
-
-  form.reset({
-    ...product,
-    // Ensure some fields are properly typed
-    shipping: product.shipping || { isFreeShipping: false },
-    seo: product.seo || { title: "", description: "" },
-  });
-
-  setSelectedConfigs(product.selectedAttributes || []);
-  setProductImages(product.gallery || []);
-  setTags("");
-  setValue("tags", product.tags || []);
-}, [product, productId, form, setValue]);
+  const err = form.formState.errors;
+  console.log({err});
+  
 
   // ---------------------------------------------------------------------------
   // Attribute config handlers
@@ -268,34 +250,31 @@ useEffect(() => {
   const onSubmit = async (data: TProductFormType) => {
 
     try {
-     const payload: any = {
-      ...data,
-      gallery: productImages,
-      selectedAttributes: selectedConfigs,
-    };
-
-    // ==================== BRAND FIX ====================
-    if (isEdit) {
-      // Edit mode-এ brand খালি থাকলে payload থেকে brand সরিয়ে দাও
-      if (!data.brand || data.brand.trim() === "" || data.brand === "undefined") {
-        delete payload.brand;
-      }
-      // অন্যথায় brand রাখবে (যদি select করা হয়)
-    } else {
-      // Create mode-এ খালি থাকলে null পাঠাও
-      payload.brand = data.brand && data.brand.trim() !== "" ? data.brand : null;
-    }
+      const payload = {
+        ...data,
+        gallery: productImages,
+        selectedAttributes: selectedConfigs,
+      };
 
       // console.log({ payload });
+
+      const brandValue = data.brand?.trim();
+
+      if (brandValue && brandValue !== "" && brandValue !== "undefined") {
+        payload.brand = brandValue;       
+      } else {
+        delete payload.brand;              
+      }
+
 
       let url = '';
 
       if (isEdit) {
         if(!product) return;
-        const { data } = await updateProduct({ id: product?._id, payload })
+        const  data  = await updateProduct({ id: product?._id, payload }).unwrap()
         url = data?.data?._id as string;
       } else {
-        const { data } = await createProduct(payload);
+        const data = await createProduct(payload).unwrap();
         url = data?.data?._id as string;
       }
 
@@ -303,10 +282,26 @@ useEffect(() => {
 
       router.push(`/admin/products/form?pid=${url}`);
       toast.success("Successfully!");
-    } catch {
-      toast.error("Something went wrong.");
+    } catch (err:any) {
+      console.log({err});
+      
+     
+
+      let errorMessage = "Something went wrong.";
+
+      if (err?.data?.error) {
+        errorMessage = err.data.error;
+      } else if (err?.error) {
+        errorMessage = err.error;
+      } else if (err?.message) {
+        errorMessage = err.message;
+      }
+
+       toast.error(errorMessage);
     }
   };
+
+ 
 
 
 

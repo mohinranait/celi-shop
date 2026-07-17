@@ -14,9 +14,43 @@ export async function POST(req: Request) {
     }
     const product = await Product.create({...body, stock: productStock });
     return NextResponse.json({ success: true, data: product }, { status: 201 });
-  } catch (error: unknown) {
+  } catch (error: any) {
     const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
-    return NextResponse.json({ success: false, error: errorMessage }, { status: 400 });
+
+    // Handle duplicate slug error
+    if (error.code === 11000) {  // MongoDB duplicate key error
+      const field = Object.keys(error.keyPattern || {})[0];
+      
+      if (field === 'slug') {
+        return NextResponse.json({ 
+          success: false, 
+          error: "Slug already exists. Please choose a different slug." 
+        }, { status: 409 });
+      }
+
+      if (field === 'sku' && error.keyValue?.sku) {
+        return NextResponse.json({ 
+          success: false, 
+          error: `SKU "${error.keyValue.sku}" already exists.` 
+        }, { status: 409 });
+      }
+    }
+
+    // Other validation errors
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error?.errors).map((err: any) => err.message);
+      return NextResponse.json({ 
+        success: false, 
+        error: messages.join(", ") 
+      }, { status: 400 });
+    }
+
+    return NextResponse.json({ 
+      success: false, 
+      error: error.message || "Failed to create product" 
+    }, { status: 400 });
+
+    // return NextResponse.json({ success: false, error: errorMessage }, { status: 400 });
   }
 }
 
