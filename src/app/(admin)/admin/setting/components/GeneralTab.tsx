@@ -116,7 +116,7 @@ const GeneralTab = ({ callBack, settings }: Props) => {
             <Textarea value={settings.marque} onChange={e => callBack('marque', e.target.value)} />
           </div>
 
-          <div className="grid grid-cols-2 gap-6">
+          {/* <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label>Language</Label>
               <Select value={settings.language} onValueChange={v => callBack('language', v)}>
@@ -134,7 +134,7 @@ const GeneralTab = ({ callBack, settings }: Props) => {
                 <Input value={settings.currency?.code} onChange={e => callBack('currency.code', e.target.value)} />
               </div>
             </div>
-          </div>
+          </div> */}
         </CardContent>
       </Card>
 

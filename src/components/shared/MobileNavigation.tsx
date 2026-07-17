@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { useAppSelector } from "@/hooks/hooks";
 import WhatsAppIcon from "../svg/WhatsApp";
 import { useGetAppSettingQuery } from "@/redux/service/setting";
+import { formatWhatsappNumber } from "./WhatsAppButton";
 
 
 
@@ -27,7 +28,7 @@ export default function BottomNav() {
     icon: ShoppingBag,
   },
    {
-    href: `https://wa.me/+88${appSetting?.contactPhone}`,
+    href:`https://wa.me/${formatWhatsappNumber(appSetting?.contactPhone || "")}`,
     label: "WhatsApp",
     icon: WhatsAppIcon,
   },

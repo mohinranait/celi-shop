@@ -40,6 +40,8 @@ export interface IProductBase {
   discountPrice?:number,
   discountParcent?: number;
   seo: {
+     title: string,
+    description: string,
     keywords: string[]
   },
   ratings: {

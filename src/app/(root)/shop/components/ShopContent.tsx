@@ -142,7 +142,7 @@ export function ShopContent() {
                       <SlidersHorizontal className="w-3.5 h-3.5" /> Filters
                     </Button>
                   </SheetTrigger>
-                  <SheetContent side="left" className="w-64 pt-10 overflow-y-auto">
+                  <SheetContent side="left" className="w-64 px-4 pt-10 overflow-y-auto">
                     <FilterSidebar {...filterProps} />
                   </SheetContent>
                 </Sheet>

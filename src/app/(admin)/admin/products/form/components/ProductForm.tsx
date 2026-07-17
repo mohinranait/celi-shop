@@ -177,25 +177,6 @@ export default function AddProductForm() {
     setSelectedConfigs(newConfigs);
   };
 
-  // const toggleAttributeValue = (idx: number, value: string) => {
-  //   console.log({idx, value});
-    
-  //   const newConfigs = [...selectedConfigs];
-  //   console.log({newConfigs});
-    
-  //   const current = newConfigs[idx].selectedValues;
-  //   console.log({current});
-    
-  //   newConfigs[idx].selectedValues = current.includes(value)
-  //     ? current.filter((v) => v !== value)
-  //     : [...current, value];
-  //   const d = current.includes(value)
-  //     ? current.filter((v) => v !== value)
-  //     : [...current, value];
-  //   setSelectedConfigs(newConfigs);
-  // };
-
-
   const toggleAttributeValue = (idx: number, value: string) => {
   setSelectedConfigs((prev) =>
     prev.map((config, index) => {
@@ -864,7 +845,7 @@ export default function AddProductForm() {
               )}
               {(createLoading || updateLoading) ? "Publishing..." : "Publish Product"}
             </Button>
-            <Button
+            {/* <Button
               variant="outline"
               className="w-full text-xs"
               type="button"
@@ -876,7 +857,7 @@ export default function AddProductForm() {
               disabled={createLoading || updateLoading}
             >
               Save as Draft
-            </Button>
+            </Button> */}
           </Card>
         </div>
       </div>

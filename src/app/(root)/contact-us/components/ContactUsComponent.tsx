@@ -97,7 +97,7 @@ const ContactUsComponent = async () => {
                 </div>
 
 
-                <div className="flex gap-3">
+                {/* <div className="flex gap-3">
                   <Clock />
                   <div>
                     <p className="font-medium">
@@ -111,7 +111,7 @@ const ContactUsComponent = async () => {
                     </p>
 
                   </div>
-                </div>
+                </div> */}
 
 
               </CardContent>

@@ -29,8 +29,8 @@ export async function generateMetadata({
 
   const image = product?.gallery[0] ||'';
 
-  const title = product?.name;
-  const description = product?.shortDescription ||"";
+  const title = product?.seo?.title || product?.name;
+  const description = product?.seo?.description || product?.shortDescription ||"";
 
   return {
     title,
