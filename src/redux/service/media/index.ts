@@ -30,15 +30,15 @@ export const mediaApi = baseApi.injectEndpoints({
     // }),
 
 
-    // deleteBrand: builder.mutation({
-    //   query: (id) => ({
-    //     url: `/admin/brands/${id}`,
-    //     method: 'DELETE',
-    //   }),
-    //   invalidatesTags: ['Brands'],
-    // }),
+    deleteMedia: builder.mutation({
+      query: (id) => ({
+        url: `/admin/media/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['media'],
+    }),
   })
 })
 
 
-export const { useGetMediasQuery , useCreateMediaMutation,  } = mediaApi;
+export const { useGetMediasQuery , useCreateMediaMutation, useDeleteMediaMutation  } = mediaApi;

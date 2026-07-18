@@ -22,7 +22,7 @@ const tableColumns = ({ type = 'active' }: { type: "active" | "deleted" }) => {
         const productData = row.original;
         const prodImage = findProductImage({ product: productData });
         return <div className="flex items-center gap-1">
-          <div>
+          <div className="min-w-10">
             {
               prodImage ?
                 <Image width={64} height={64} alt="Product" src={prodImage} className="rounded-md w-10 h-10 " /> :

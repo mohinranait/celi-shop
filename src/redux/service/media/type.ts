@@ -1,3 +1,4 @@
+import { IMetaPagination } from "@/types/common.type";
 
 export interface IMedia {
   _id: string;
@@ -12,4 +13,5 @@ export interface IMedia {
 
 export interface IMediaListResponse  {
   data: {medias: IMedia[] } 
+  meta: IMetaPagination
 }

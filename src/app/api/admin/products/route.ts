@@ -122,18 +122,21 @@ export async function GET(req: NextRequest) {
       };
     }
 
-    const products = await Product.find(query).sort({ createdAt: -1 }).sort({ createdAt: -1 })
+    const products = await Product.find(query).sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
-    const total = await Product.countDocuments(query);;
-    return NextResponse.json({ success: true, data: products,
+    const total = await Product.countDocuments(query);
+    return NextResponse.json({ 
+      success: true, 
+      data: products,
       meta: {
         total,
         page,
         limit,
         totalPages: Math.ceil(total / limit),
-      }, });
+      },
+    });
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
     return NextResponse.json({ success: false, error: errorMessage }, { status: 500 });

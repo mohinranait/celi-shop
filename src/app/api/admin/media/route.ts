@@ -77,14 +77,30 @@ export async function GET(request: NextRequest) {
       );
     }
 
+
+     const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "10");
+    const skip = (page - 1) * limit;
+
     // Fetch media data
-    const medias = await Media.find({});
+    const medias = await Media.find({})
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+     const total = await Media.countDocuments();
 
     return NextResponse.json({
       success: true,
       statusCode: 200,
       data: {
         medias,
+      },
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
       },
     });
   } catch (error) {

@@ -134,7 +134,7 @@ function AdminPanel() {
           {/* Configuration Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Email Configuration */}
-            <ConfigCard
+            {/* <ConfigCard
               title="Email Configuration"
               icon={<Mail className="w-8 h-8" />}
               fields={[
@@ -155,7 +155,7 @@ function AdminPanel() {
               onStatusChange={handleEmailStatusChange}
               onSave={handleEmailSave}
               isSaving={isLoading}
-            />
+            /> */}
 
             {/* Cloudinary Configuration */}
             <ConfigCard
