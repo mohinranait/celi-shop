@@ -15,6 +15,7 @@ import { Check } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import UploadMedia from "./UploadMedia";
+import Pagination from "@/components/shared/Pagination";
 
 type Props = {
   open: boolean;
@@ -29,8 +30,10 @@ export default function MediaModal({
   onSelect,
   imageLimit = "single",
 }: Props) {
-  const { data, isLoading } = useGetMediasQuery("");
-  const medias = data?.data?.medias || [];
+  const [pagination, setPagination] = useState({ page: 1, limit: 25 })
+  const { data, isLoading } = useGetMediasQuery(`page=${pagination?.page}&limit=${pagination?.limit}`);
+  const medias = data?.data?.medias || []
+  const meta = data?.meta;
 
   const [selectedImages, setSelectedImages] = useState<IMedia[]>([]);
   const [activeTab, setActiveTab] = useState<"library" | "upload">("library");
@@ -57,7 +60,7 @@ export default function MediaModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="lg:min-w-275 max-w-7xl h-[85vh] gap-0 flex flex-col p-0 overflow-hidden">
-        
+
         {/* Header */}
         <DialogHeader className="px-6 py-4 border-b">
           <DialogTitle>Media Library</DialogTitle>
@@ -66,7 +69,7 @@ export default function MediaModal({
         <Tabs
           value={activeTab}
           onValueChange={(v) => setActiveTab(v as "library" | "upload")}
-          className="flex flex-col flex-1 min-h-0"   
+          className="flex flex-col flex-1 min-h-0"
         >
           <TabsList className="flex  mx-6 mt-2">
             <TabsTrigger value="library" className="cursor-pointer">Media Library</TabsTrigger>
@@ -74,8 +77,8 @@ export default function MediaModal({
           </TabsList>
 
           {/* ==================== LIBRARY TAB ==================== */}
-          <TabsContent 
-            value="library" 
+          <TabsContent
+            value="library"
             className="flex-1 flex flex-col min-h-0 overflow-hidden "
           >
             <div className="flex-1 overflow-y-auto px-2 lg:p-6 pt-2 custom-scroll">
@@ -94,11 +97,10 @@ export default function MediaModal({
                       <div
                         key={item._id}
                         onClick={() => onSelected(item)}
-                        className={`relative rounded-xl bg-gray-100 dark:bg-gray-800 border transition-all cursor-pointer overflow-hidden group ${
-                          isActive
+                        className={`relative rounded-xl bg-gray-100 dark:bg-gray-800 border transition-all cursor-pointer overflow-hidden group ${isActive
                             ? "ring-2 ring-primary border-primary"
                             : "hover:shadow-lg border-gray-200 dark:border-gray-700"
-                        }`}
+                          }`}
                       >
                         <div className="aspect-square relative">
                           <Image
@@ -111,11 +113,10 @@ export default function MediaModal({
 
                         {/* Check Icon */}
                         <div
-                          className={`absolute top-3 right-3 z-20 w-7 h-7 rounded-full border flex items-center justify-center transition-all ${
-                            isActive
+                          className={`absolute top-3 right-3 z-20 w-7 h-7 rounded-full border flex items-center justify-center transition-all ${isActive
                               ? "bg-primary text-white border-primary"
                               : "bg-white/80 border-white group-hover:opacity-100 opacity-0"
-                          }`}
+                            }`}
                         >
                           <Check size={16} />
                         </div>
@@ -136,8 +137,8 @@ export default function MediaModal({
           </TabsContent>
 
           {/* ==================== UPLOAD TAB ==================== */}
-          <TabsContent 
-            value="upload" 
+          <TabsContent
+            value="upload"
             className="flex-1 overflow-auto p-6 pt-2"
           >
             <UploadMedia />
@@ -147,9 +148,19 @@ export default function MediaModal({
         {/* Footer */}
         {activeTab === "library" && (
           <div className="px-6  py-3 border-t flex justify-between items-center">
-            <p className="text-sm text-gray-500">
-              {selectedImages.length} image{selectedImages.length !== 1 ? "s" : ""} selected
-            </p>
+           <div>
+             <Pagination
+              hidePageInfo={true}
+              page={meta?.page || 1}
+              totalPages={meta?.totalPages || 1}
+              onPageChange={(page) =>
+                setPagination((prev) => ({
+                  ...prev,
+                  page,
+                }))
+              }
+            />
+           </div>
 
             <div className="flex gap-3">
               <button

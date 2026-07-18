@@ -6,12 +6,14 @@ interface Props {
   page: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+  hidePageInfo?: boolean;
 }
 
 export default function Pagination({
   page,
   totalPages,
   onPageChange,
+  hidePageInfo = false
 }: Props) {
   if (totalPages <= 1) return null;
 
@@ -28,12 +30,15 @@ export default function Pagination({
 
   return (
     <div className="flex items-center justify-between px-4 ">
-      
+
       {/* LEFT INFO */}
-      <p className="text-sm text-muted-foreground">
-        Page <span className="font-medium">{page}</span> of{" "}
-        <span className="font-medium">{totalPages}</span>
-      </p>
+      {
+        !hidePageInfo &&
+        <p className="text-sm text-muted-foreground">
+          Page <span className="font-medium">{page}</span> of{" "}
+          <span className="font-medium">{totalPages}</span>
+        </p>
+      }
 
       {/* MIDDLE PAGES */}
       <div className="flex gap-1">
