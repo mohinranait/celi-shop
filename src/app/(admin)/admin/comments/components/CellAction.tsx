@@ -3,13 +3,13 @@
 import { Button } from '@/components/ui/button';
 import { Pen,  Trash2 } from 'lucide-react';
 import  { useState } from 'react';
-import { useDeleteBrandMutation,  } from '@/redux/service/brand';
 import { toast } from 'sonner';
 
 
 import DeleteAlert from '@/components/shared/DeleteAlert';
 import { IComment } from '@/redux/service/comments/type';
 import CommentForm from './CommentForm';
+import { useDeleteCommentMutation } from '@/redux/service/comments';
 
 type Props = {
   data: IComment;
@@ -19,7 +19,7 @@ const CellAction = ({ data }: Props) => {
 
   const [isOpen, setIsOpen] = useState(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-  const [deleteBrand, { isLoading: deleteLoading }] = useDeleteBrandMutation();
+  const [deleteBrand, { isLoading: deleteLoading }] = useDeleteCommentMutation();
 
 
   const handleDelete = async () => {
@@ -29,7 +29,7 @@ const CellAction = ({ data }: Props) => {
       setIsDeleteOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete brand");
+      toast.error("Failed to delete");
     }
   }
 

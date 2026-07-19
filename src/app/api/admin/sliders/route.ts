@@ -77,7 +77,10 @@ export async function GET(req: NextRequest) {
     // DB QUERY
     // =========================
     const sliders = await Slider.find(query)
-      .sort({ createdAt: -1 })
+      .sort({
+        order: 1,       
+        createdAt: -1,
+       })
       .skip(skip)
       .limit(limit);
 

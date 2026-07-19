@@ -164,3 +164,51 @@ export async function PATCH(
     );
   }
 }
+
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    await connectDB();
+
+   
+     const { id } = await  params;
+  
+
+    //  check comment exists
+    const comment = await Comment.findByIdAndDelete(id);
+
+    if (!comment) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Comment not found",
+        },
+        { status: 404 }
+      );
+    }
+
+  
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: "comment updated successfully",
+        data: comment,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Update comment Error:", error);
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Internal Server Error",
+      },
+      { status: 500 }
+    );
+  }
+}
