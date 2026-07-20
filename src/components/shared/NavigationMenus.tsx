@@ -37,14 +37,14 @@ const NavigationMenus = () => {
         <nav className="hidden md:flex items-center justify-center gap-8 relative">
           <Link
             href="/"
-            className="text-secondary text-sm font-medium hover:opacity-80 transition"
+            className="text-secondary font-medium hover:opacity-80 transition"
           >
             Home
           </Link>
 
           <Link
             href="/shop"
-            className="text-secondary text-sm font-medium hover:opacity-80 transition"
+            className="text-secondary  font-medium hover:opacity-80 transition"
           >
             Shop
           </Link>
@@ -57,7 +57,7 @@ const NavigationMenus = () => {
           >
             <Link
               href="/categories"
-              className="text-secondary text-sm font-medium inline-flex items-center gap-1 hover:opacity-80 transition"
+              className="text-secondary  font-medium inline-flex items-center gap-1 hover:opacity-80 transition"
             >
               Categories
               <ChevronDown
@@ -131,14 +131,14 @@ const NavigationMenus = () => {
 
           <Link
             href="/offers"
-            className="text-secondary text-sm font-medium hover:opacity-80 transition"
+            className="text-secondary font-medium hover:opacity-80 transition"
           >
             Offers
           </Link>
 
           <Link
             href="/free-shipping"
-            className="text-secondary text-sm font-medium hover:opacity-80 transition"
+            className="text-secondary font-medium hover:opacity-80 transition"
           >
             Free Shipping
           </Link>
@@ -146,14 +146,14 @@ const NavigationMenus = () => {
         
            <Link
             href="/brands"
-            className="text-secondary text-sm font-medium hover:opacity-80 transition"
+            className="text-secondary font-medium hover:opacity-80 transition"
           >
             All Brands
           </Link>
         
            <Link
             href="/contact-us"
-            className="text-secondary text-sm font-medium hover:opacity-80 transition"
+            className="text-secondary font-medium hover:opacity-80 transition"
           >
             Contact Us
           </Link>

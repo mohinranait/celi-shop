@@ -12,10 +12,7 @@ const fontMono = Geist_Mono({
   variable: "--font-mono",
 })
 
-export const metadata: Metadata = {
-  title: "Ecommerce App",
-  description: "Ecommerce application using next js",
-};
+
 
 export default async function RootLayout({
   children,

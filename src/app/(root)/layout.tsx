@@ -17,8 +17,30 @@ import React from 'react'
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getAppSetting();
+  
+  // আপনার ডোমেইন বা BASE_URL ভ্যালিড তা নিশ্চিত করুন
+  const siteUrl = BASE_URL || "https://banglababa.com"; 
+
+   const imageUrl = settings?.ogImage || settings?.logo || '';
+
+  // ইউআরএল এর শেষ অংশ থেকে এক্সটেনশন (যেমন: jpg, png, webp) বের করার লজিক
+  const extension = imageUrl ? imageUrl.split('.').pop()?.split(/[?#]/)[0]?.toLowerCase() : '';
+
+  // এক্সটেনশন অনুযায়ী সঠিক MIME Type সেট করা
+  let imageType = "image/jpeg"; // ডিফল্ট টাইপ
+  if (extension === "png") {
+    imageType = "image/png";
+  } else if (extension === "webp") {
+    imageType = "image/webp";
+  } else if (extension === "gif") {
+    imageType = "image/gif";
+  }
+
 
   return {
+    // ১. এটি অবশ্যই যোগ করতে হবে
+    metadataBase: new URL(siteUrl), 
+
     title: settings?.metaTitle || settings?.siteName || "My ecommerce Website",
     description: settings?.metaDescription || settings?.siteDescription || "description",
     keywords: settings?.metaKeyword || '',
@@ -28,13 +50,25 @@ export async function generateMetadata(): Promise<Metadata> {
       apple: settings?.favicon || "/favicon.ico",
     },
     openGraph: {
-      url: `${BASE_URL}`,
+      type: "website",
+      url: siteUrl, // BASE_URL এর জায়গায় ভেরিয়েবলটি ব্যবহার করুন
+      siteName: settings?.siteName,
+      title: settings?.metaTitle,
+      description: settings?.metaDescription,
       images: [
-        { url: settings?.ogImage || settings?.logo || '' }
-      ]
+         {
+          url: imageUrl || '',
+          secureUrl: imageUrl || '', // HTTPS লিংকের জন্য এটি সাহায্য করে
+          type: imageType,
+          width: 1200,
+          height: 630,
+          alt: settings?.siteName || "Poultry Equipment",
+        },
+      ],
     },
   };
 }
+
 
 type Props = {
   children: React.ReactNode
