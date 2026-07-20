@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { IOrder } from '@/redux/service/orders/type';
 import Link from 'next/link';
 import { useDeleteOrderMutation } from '@/redux/service/orders';
+import handleErrors, { ErrorResponse } from '@/lib/handle-error';
 
 type Props = {
   data: IOrder;
@@ -36,7 +37,7 @@ const CellAction = ({ data }: Props) => {
       setIsDeleteOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete product");
+       handleErrors( error as ErrorResponse)
     }
   }
 

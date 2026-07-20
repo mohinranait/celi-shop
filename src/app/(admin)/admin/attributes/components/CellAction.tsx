@@ -9,6 +9,7 @@ import { IAttribute } from '@/redux/service/attributes/type';
 import AttributeForm from './AttributeForm';
 import { useDeleteAttributeMutation, useSoftDeleteAttributeMutation } from '@/redux/service/attributes';
 import DeleteAlert from '@/components/shared/DeleteAlert';
+import handleErrors, { ErrorResponse } from '@/lib/handle-error';
 
 type Props = {
   data: IAttribute;
@@ -32,7 +33,7 @@ const CellAction = ({ data, type }: Props) => {
       setIsDeleteOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete brand");
+        handleErrors( error as ErrorResponse)
     }
   };
 
@@ -44,7 +45,7 @@ const CellAction = ({ data, type }: Props) => {
       setIsDeleteOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete brand");
+       handleErrors( error as ErrorResponse)
     }
   };
 

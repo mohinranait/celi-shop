@@ -16,6 +16,7 @@ import { Bandage, Loader, } from "lucide-react";
 import { IComment } from "@/redux/service/comments/type";
 import { commentSchema, TCommentFormData } from "@/components/validations/comment";
 import { useUpdateCommentMutation } from "@/redux/service/comments";
+import handleErrors, { ErrorResponse } from "@/lib/handle-error";
 
 type Props = {
   isOpen: boolean;
@@ -54,7 +55,7 @@ export default function CommentForm({
       setIsOpen(false);
     } catch (error) {
       console.error("Failed to create brand:", error);
-      toast.error("Failed to create brand.");
+       handleErrors( error as ErrorResponse)
     }
   };
 

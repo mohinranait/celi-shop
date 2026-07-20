@@ -6,13 +6,13 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: Promise< { id: string }> }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
 
     const body = await req.json();
-     const { id } = await  params;
+    const { id } = await params;
 
     //  validate input
     const parsed = attributeSchema.safeParse(body);
@@ -28,7 +28,43 @@ export async function PATCH(
       );
     }
 
-  
+    const name = parsed.data.name;
+
+
+
+    //  check product exists
+    const existingAttr = await Attribute.findById(id);
+
+    if (!existingAttr) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Attribute not found",
+        },
+        { status: 404 }
+      );
+    }
+
+    //  check duplicate slug (exclude current id)
+    if (name && name !== existingAttr.name) {
+      const duplicate = await Attribute.findOne({
+        name,
+        _id: { $ne: id },
+      });
+
+      if (duplicate) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "Name already exists",
+          },
+          { status: 409 }
+        );
+      }
+    }
+
+
+
     //  update attribute
     const attribute = await Attribute.findByIdAndUpdate(
       id,
@@ -65,9 +101,9 @@ export async function DELETE(
   try {
     await connectDB();
 
-   
-     const { id } = await params;
-  
+
+    const { id } = await params;
+
 
     //  check attribute exists
     const attribute = await Attribute.findByIdAndDelete(id);
@@ -82,7 +118,7 @@ export async function DELETE(
       );
     }
 
-  
+
 
     return NextResponse.json(
       {

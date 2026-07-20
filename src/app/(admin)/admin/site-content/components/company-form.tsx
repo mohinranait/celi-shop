@@ -21,6 +21,7 @@ import MediaModal from "../../media/components/MediaModal";
 import { Plus, X } from "lucide-react";
 import Image from "next/image";
 import { Label } from "@/components/ui/label";
+import handleErrors, { ErrorResponse } from "@/lib/handle-error";
 
 
 export default function CompanyForm() {
@@ -117,6 +118,7 @@ export default function CompanyForm() {
     } catch (error) {
 
       console.error(error);
+        handleErrors( error as ErrorResponse)
 
     }
 

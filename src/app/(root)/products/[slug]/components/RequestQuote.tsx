@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { requestQuoteSchema, TRequestQuoteInput } from "@/components/validations/request-quote"
 import { PRODUCT_IMG } from "@/lib/default-import"
+import handleErrors, { ErrorResponse } from "@/lib/handle-error"
 import { useCreateQuoteMutation } from "@/redux/service/request-quote"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Repeat2 } from "lucide-react"
@@ -68,9 +69,7 @@ const RequestQuote = ({ image, title, productId }: Props) => {
     } catch (error) {
       console.error(error);
 
-      toast.error(
-        "Failed to submit request"
-      );
+       handleErrors( error as ErrorResponse)
     }
   };
 

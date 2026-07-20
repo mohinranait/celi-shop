@@ -15,7 +15,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     if (!Types.ObjectId.isValid(id)) {
       return NextResponse.json(
-        { success: false, error: 'Invalid FAQ ID' },
+        { success: false, message:"ID is required", error: 'Invalid FAQ ID' },
         { status: 400 }
       );
     }
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     if (!faq) {
       return NextResponse.json(
-        { success: false, error: 'FAQ not found' },
+        { success: false, message:"FAQ not found", error: 'FAQ not found' },
         { status: 404 }
       );
     }
@@ -38,7 +38,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
     return NextResponse.json(
-      { success: false, error: errorMessage },
+      { success: false, message: errorMessage , error: errorMessage },
       { status: 500 }
     );
   }
@@ -51,7 +51,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
     if (!Types.ObjectId.isValid(id)) {
       return NextResponse.json(
-        { success: false, error: 'Invalid FAQ ID' },
+        { success: false, message:"ID is required", error: 'Invalid FAQ ID' },
         { status: 400 }
       );
     }
@@ -74,7 +74,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
 
     if (!faq) {
       return NextResponse.json(
-        { success: false, error: 'FAQ not found' },
+        { success: false,message: "FAQ Not found", error: 'FAQ not found' },
         { status: 404 }
       );
     }
@@ -99,7 +99,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
     if (!Types.ObjectId.isValid(id)) {
       return NextResponse.json(
-        { success: false, error: 'Invalid FAQ ID' },
+        { success: false, message:"Id is required", error: 'Invalid FAQ ID' },
         { status: 400 }
       );
     }
@@ -110,7 +110,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
     if (!faq) {
       return NextResponse.json(
-        { success: false, error: 'FAQ not found' },
+        { success: false, message: 'FAQ not found' },
         { status: 404 }
       );
     }

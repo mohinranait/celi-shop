@@ -16,6 +16,7 @@ import { Bandage, Loader, X } from "lucide-react";
 import { IAttribute } from "@/redux/service/attributes/type";
 import { attributeSchema, TAttributeInput } from "@/components/validations/attributes";
 import { useCreateAttributeMutation, useUpdateAttributeMutation } from "@/redux/service/attributes";
+import handleErrors, { ErrorResponse } from "@/lib/handle-error";
 
 type Props = {
   isOpen: boolean;
@@ -72,7 +73,8 @@ export default function AttributeForm({ isOpen, setIsOpen, previousData }: Props
       form.reset();
       setIsOpen(false);
     } catch (error) {
-      toast.error("Failed to save attribute.");
+        handleErrors( error as ErrorResponse)
+      // toast.error(  "Failed to save attribute. asdfaf");
     }
   };
 

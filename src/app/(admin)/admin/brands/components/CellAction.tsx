@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 
 
 import DeleteAlert from '@/components/shared/DeleteAlert';
+import handleErrors, { ErrorResponse } from '@/lib/handle-error';
 
 type Props = {
   data: IBrand;
@@ -33,7 +34,7 @@ const CellAction = ({ data, type }: Props) => {
       setIsDeleteOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete brand");
+       handleErrors( error as ErrorResponse)
     }
   };
 
@@ -45,7 +46,7 @@ const CellAction = ({ data, type }: Props) => {
       setIsDeleteOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete brand");
+       handleErrors( error as ErrorResponse)
     }
   };
 

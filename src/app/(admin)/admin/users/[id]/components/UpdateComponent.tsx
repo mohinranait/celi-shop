@@ -30,6 +30,7 @@ import {
 } from '@/components/ui/select';
 import { TUserInput, userSchema } from '@/components/validations/user.schema';
 import { toast } from 'sonner';
+import handleErrors, { ErrorResponse } from '@/lib/handle-error';
 
 type Props = {
   userId: string;
@@ -91,7 +92,7 @@ function UpdateComponent({ userId }: Props) {
       toast.success("Successfully updated")
     } catch (error) {
       console.log({error});
-      toast.error("Faild update")
+      handleErrors( error as ErrorResponse)
       
     }
   };

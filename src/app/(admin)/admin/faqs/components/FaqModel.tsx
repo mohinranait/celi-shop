@@ -19,6 +19,7 @@ import {
   useCreateFaqMutation,
   useUpdateFaqMutation,
 } from '@/redux/service/faqs';
+import handleErrors, { ErrorResponse } from '@/lib/handle-error';
 
 interface FAQ {
   _id?: string;
@@ -129,7 +130,7 @@ export function FaqModal({
       onOpenChange(false);
     } catch (error) {
       console.error(error);
-      toast.error('Something went wrong');
+      handleErrors( error as ErrorResponse)
     }
   };
 

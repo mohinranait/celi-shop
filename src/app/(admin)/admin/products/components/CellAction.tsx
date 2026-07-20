@@ -10,6 +10,7 @@ import { IProduct } from '@/redux/service/products/type';
 import DeleteAlert from '@/components/shared/DeleteAlert';
 import { useDeleteProductMutation, useSoftDeleteProductMutation } from '@/redux/service/products';
 import { useRouter } from 'next/navigation';
+import handleErrors, { ErrorResponse } from '@/lib/handle-error';
 
 type Props = {
   data: IProduct;
@@ -33,7 +34,7 @@ const CellAction = ({ data, type }: Props) => {
       setIsDeleteOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete product");
+      handleErrors( error as ErrorResponse)
     }
   };
 
@@ -45,7 +46,7 @@ const CellAction = ({ data, type }: Props) => {
       setIsDeleteOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete product");
+        handleErrors( error as ErrorResponse)
     }
   };
 

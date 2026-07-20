@@ -69,6 +69,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
+      message: "Successfull",
       data: categoriesWithCount,
       meta: {
         total,
@@ -102,7 +103,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          message: "Validation failed",
+          message: "All field are required",
           errors: parsed.error.flatten().fieldErrors,
         },
         { status: 400 }
@@ -110,6 +111,9 @@ export async function POST(req: NextRequest) {
     }
 
     const { slug } = parsed.data;
+
+
+
 
     // check duplicate slug
     const existing = await Category.findOne({ slug });

@@ -12,6 +12,7 @@ import { AlertCircle,  Send } from "lucide-react";
 import { toast } from "sonner";
 import { ContactFormData, contactFormSchema } from "@/components/validations/contact";
 import { useCreateContactMutation } from "@/redux/service/contacts";
+import handleErrors, { ErrorResponse } from "@/lib/handle-error";
 
 
 
@@ -40,7 +41,7 @@ const ContactForm = () => {
 
     } catch (error) {
       console.error(error);
-      toast.error("Failed to send message");
+       handleErrors( error as ErrorResponse)
     } 
   };
 

@@ -11,6 +11,7 @@ import DeleteAlert from '@/components/shared/DeleteAlert';
 import { ISlider } from '@/redux/service/sliders/type';
 import SliderForm from './SliderForm';
 import { useDeleteSliderMutation, useSoftDeleteSliderMutation } from '@/redux/service/sliders';
+import handleErrors, { ErrorResponse } from '@/lib/handle-error';
 
 type Props = {
   data: ISlider;
@@ -34,7 +35,7 @@ const CellAction = ({ data, type }: Props) => {
       setIsDeleteOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete slider");
+       handleErrors( error as ErrorResponse)
     }
   };
 
@@ -46,7 +47,7 @@ const CellAction = ({ data, type }: Props) => {
       setIsDeleteOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete slier");
+      handleErrors( error as ErrorResponse)
     }
   };
 

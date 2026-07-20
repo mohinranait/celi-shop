@@ -17,6 +17,7 @@ import { useUpdateUserMutation } from "@/redux/service/users";
 import { IUser } from "@/redux/service/users/type";
 import { TUserInput } from "@/components/validations/user.schema";
 import { toast } from "sonner";
+import handleErrors, { ErrorResponse } from "@/lib/handle-error";
 
 type Props = {
   findUser: IUser
@@ -62,7 +63,7 @@ const ProfileForm = ({ findUser }: Props) => {
       setIsEditing(false)
     } catch (error) {
       console.log({ error });
-      toast.error("Faild update")
+      handleErrors( error as ErrorResponse)
 
     }
 

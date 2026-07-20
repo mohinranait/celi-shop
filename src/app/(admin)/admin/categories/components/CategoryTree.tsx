@@ -22,6 +22,7 @@ import {
 } from "@/redux/service/categories";
 import DeleteAlert from "@/components/shared/DeleteAlert";
 import CategoryForm from "./CategoryForm";
+import handleErrors, { ErrorResponse } from "@/lib/handle-error";
 
 interface CategoryTreeProps {
   data: ICategoryTreeNode[];
@@ -72,7 +73,7 @@ function CategoryNode({
       setIsDeleteOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete category");
+       handleErrors( error as ErrorResponse)
     }
   };
 
@@ -84,7 +85,7 @@ function CategoryNode({
       setIsDeleteOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete category");
+       handleErrors( error as ErrorResponse)
     }
   };
 

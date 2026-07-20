@@ -20,6 +20,7 @@ import {
   useUpdateSiteContentMutation,
 } from "@/redux/service/site-content";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import handleErrors, { ErrorResponse } from "@/lib/handle-error";
 
 
 const emptyObj = {
@@ -129,7 +130,7 @@ export default function WhyChooseUsForm() {
     } catch (error) {
 
       console.error(error);
-
+  handleErrors( error as ErrorResponse)
     }
 
   };

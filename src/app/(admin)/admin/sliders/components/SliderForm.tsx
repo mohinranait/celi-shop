@@ -18,6 +18,7 @@ import { ISlider, TSliderType } from "@/redux/service/sliders/type";
 import { sliderSchema, TSliderInput } from "@/components/validations/slider";
 import { useCreateSliderMutation, useUpdateSliderMutation } from "@/redux/service/sliders";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import handleErrors, { ErrorResponse } from "@/lib/handle-error";
 
 type Props = {
   isOpen: boolean;
@@ -62,7 +63,7 @@ export default function SliderForm({
       setIsOpen(false);
     } catch (error) {
       console.error("Failed to create slider:", error);
-      toast.error("Failed to create slider.");
+       handleErrors( error as ErrorResponse)
     }
   };
 

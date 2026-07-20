@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import handleErrors, { ErrorResponse } from "@/lib/handle-error";
 import { useUpdateOrderByIdAdminMutation } from "@/redux/service/orders";
 
 import { IOrder, TOrderStatus, TPaymentStatus } from "@/redux/service/orders/type";
@@ -57,6 +58,7 @@ const OrderUpdateForm = ({ order }: TOrderUpdateFormProps) => {
 
     } catch (error) {
       console.log(error);
+        handleErrors( error as ErrorResponse)
     }
   };
 

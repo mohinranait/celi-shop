@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import handleErrors, { ErrorResponse } from "@/lib/handle-error";
 
 type Props = {
   isOpen: boolean;
@@ -78,7 +79,7 @@ export default function CategoryForm({
       setIsOpen(false);
     } catch (error) {
       console.error("Failed to create category:", error);
-      toast.error("Failed to create category.");
+       handleErrors( error as ErrorResponse)
     }
   };
 

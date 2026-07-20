@@ -1,6 +1,7 @@
 import { fetchData } from "@/lib/fetch-data";
 import { iconMap } from "@/lib/iconMap";
 import { ISiteContentResponse } from "@/redux/service/site-content/type";
+import { Award } from "lucide-react";
 
 export default async function WhyChooseUs() {
 
@@ -13,7 +14,6 @@ export default async function WhyChooseUs() {
   const data = siteContent?.whyChooseUs;
 
   const features = data?.items || [];
-
 
   
 
@@ -40,7 +40,7 @@ export default async function WhyChooseUs() {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
 
           {features.map((item,idx) => {
-            const Icon = iconMap[item.icon];
+            const Icon = iconMap[item?.icon] ;
 
             
 
@@ -63,17 +63,20 @@ export default async function WhyChooseUs() {
                     flex items-center justify-center 
                     mb-5
                 ">
-                  <Icon className="text-primary" />
+                  {
+                    item?.icon ? 
+                    <Icon className="text-primary" />: <Award className="text-primary" />
+                  }
                 </div>
 
 
                 <h3 className="font-bold text-lg mb-3">
-                  {item.title}
+                  {item?.title}
                 </h3>
 
 
                 <p className="text-muted-foreground">
-                  {item.description}
+                  {item?.description}
                 </p>
 
 

@@ -17,6 +17,7 @@ import MediaModal from "../../media/components/MediaModal";
 import { Bandage, Loader, Plus, X } from "lucide-react";
 import Image from "next/image";
 import { IBrand } from "@/redux/service/brand/type";
+import handleErrors, { ErrorResponse } from "@/lib/handle-error";
 
 type Props = {
   isOpen: boolean;
@@ -70,7 +71,7 @@ export default function BrandForm({
       setIsOpen(false);
     } catch (error) {
       console.error("Failed to create brand:", error);
-      toast.error("Failed to create brand.");
+      handleErrors( error as ErrorResponse)
     }
   };
 

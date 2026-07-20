@@ -23,16 +23,16 @@ export async function GET(req: NextRequest) {
     // =========================
     // BUILD QUERY
     // =========================
-    const query:  {
+    const query: {
       name?: string;
       slug?: string;
-       createdAt?: {
+      createdAt?: {
         $gte?: Date;
         $lte?: Date;
       };
       status?: boolean;
       isDelete?: boolean;
-       $or?: {
+      $or?: {
         name?: { $regex: string; $options: string };
         slug?: { $regex: string; $options: string };
       }[];
@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
     if (isDelete === "true") query.isDelete = true;
     if (isDelete === "false") query.isDelete = false;
 
-    
+
     // date filter
     if (date) {
       const start = new Date(date);
@@ -67,7 +67,7 @@ export async function GET(req: NextRequest) {
         $lte: end,
       };
     }
-    
+
 
     // =========================
     // DB QUERY
@@ -123,10 +123,21 @@ export async function POST(req: NextRequest) {
     }
 
 
+    const isExists = await Attribute.findOne({ name: parsed.data.name })
+    if (isExists) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Name already exists",
+        },
+        { status: 409 }
+      );
+    }
+
 
     // create attribute
     const attribute = await Attribute.create({
-     ...body
+      ...body
     });
 
     return NextResponse.json(

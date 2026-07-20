@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { useLogoutMutation } from "@/redux/service/auth";
 import { userLogout } from "@/redux/features/authSlice";
 import { useAppDispatch, useAppSelector } from "@/hooks/hooks";
+import handleErrors, { ErrorResponse } from "@/lib/handle-error";
 
 const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
   const path = usePathname();
@@ -28,6 +29,7 @@ const ProfileLayout = ({ children }: { children: React.ReactNode }) => {
       dispatch(userLogout());
     } catch (error) {
       console.log({ error });
+        handleErrors( error as ErrorResponse)
     }
   };
 

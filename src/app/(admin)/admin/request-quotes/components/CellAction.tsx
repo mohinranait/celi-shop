@@ -10,6 +10,7 @@ import DeleteAlert from '@/components/shared/DeleteAlert';
 import { IRequestQuote } from '@/redux/service/request-quote/type';
 import { useDeleteQuoteMutation } from '@/redux/service/request-quote';
 import ViewQuotation from './ViewQuotation';
+import handleErrors, { ErrorResponse } from '@/lib/handle-error';
 
 type Props = {
   data: IRequestQuote;
@@ -31,7 +32,7 @@ const CellAction = ({ data }: Props) => {
       setIsDeleteOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete brand");
+       handleErrors( error as ErrorResponse)
     }
   }
 

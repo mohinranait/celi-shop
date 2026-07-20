@@ -11,6 +11,7 @@ import { ICategory } from '@/redux/service/categories/type';
 import CategoryForm from './CategoryForm';
 import { useDeleteCategoryMutation, useSoftDeleteCategoryMutation } from '@/redux/service/categories';
 import DeleteAlert from '@/components/shared/DeleteAlert';
+import handleErrors, { ErrorResponse } from '@/lib/handle-error';
 
 type Props = {
   data: ICategory;
@@ -34,7 +35,7 @@ const CellAction = ({ data, type }: Props) => {
       setIsDeleteOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete category");
+        handleErrors( error as ErrorResponse)
     }
   };
 
@@ -46,7 +47,7 @@ const CellAction = ({ data, type }: Props) => {
       setIsDeleteOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete category");
+       handleErrors( error as ErrorResponse)
     }
   };
 

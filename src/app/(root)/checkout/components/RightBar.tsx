@@ -108,7 +108,7 @@ const RightBar = ({ deliveryCharge, selectedMethod, form, isLoading }: Props) =>
         {(selectedMethod?.value === "BKASH" || selectedMethod?.value === "NAGAD") && selectedMethod?.number && (
           <div className="mt-6 p-4 bg-muted/50 rounded-xl border">
             <p className="text-sm font-medium mb-2">
-              {selectedMethod?.label} Number: <span className="font-semibold text-primary">{selectedMethod.number}</span>
+              {selectedMethod?.label} Number: <span className="font-semibold text-primary">{selectedMethod?.number}</span>
             </p>
             <p className="text-xs text-muted-foreground mb-3">
               এই নাম্বারে টাকা পাঠিয়ে Transaction ID টি নিচে দিন

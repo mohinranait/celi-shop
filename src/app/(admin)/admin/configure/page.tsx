@@ -6,6 +6,7 @@ import { Main } from "@/components/ui/main";
 import { Navbar } from "@/components/shared/NavBar";
 import { ConfigCard } from "./components/ConfigCard";
 import { useCreateConfigMutation, useGetConfigsQuery } from "@/redux/service/config";
+import handleErrors, { ErrorResponse } from "@/lib/handle-error";
 
 interface AppConfig {
   email: {
@@ -73,6 +74,7 @@ function AdminPanel() {
       // }
     } catch (error) {
       console.error("Failed to update config:", error);
+        handleErrors( error as ErrorResponse)
     } finally {
       // setIsSaving(false);
     }

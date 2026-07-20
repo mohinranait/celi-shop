@@ -21,6 +21,7 @@ import RightBar from "./components/RightBar";
 import PaymentMethod from "./components/PaymentMethod";
 import { TPaymentMethod } from "@/redux/service/orders/type";
 import { clearShoppingCarts } from "@/redux/features/cartSlice";
+import handleErrors, { ErrorResponse } from "@/lib/handle-error";
 type TPaymentMethodType = {
   cod: boolean;
   bKash: {
@@ -145,7 +146,7 @@ export default function CheckoutPage() {
       router.push(`/order/success?oid=${data?.trackingNumber}`)
     } catch (error) {
       console.log(error);
-
+        handleErrors( error as ErrorResponse)
     }
   };
 

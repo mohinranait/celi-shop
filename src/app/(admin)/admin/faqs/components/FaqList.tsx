@@ -24,6 +24,7 @@ import { Edit, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { FaqModal } from './FaqModel';
 import { useDeleteFaqMutation, useGetFaqsQuery } from '@/redux/service/faqs';
+import handleErrors, { ErrorResponse } from '@/lib/handle-error';
 
 interface FAQ {
   _id: string;
@@ -70,7 +71,7 @@ export function FaqList() {
     } catch (error) {
       console.log({error});
       
-      toast.error('Failed to delete FAQ');
+      handleErrors( error as ErrorResponse)
     }
   };
 

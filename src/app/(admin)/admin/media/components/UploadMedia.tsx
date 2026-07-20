@@ -1,12 +1,13 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { UploadCloud } from "lucide-react";
 import { toast } from "sonner";
 import { useCreateMediaMutation } from "@/redux/service/media";
+import handleErrors, { ErrorResponse } from "@/lib/handle-error";
 
 const UploadMedia = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [createMedia] = useCreateMediaMutation();
+  // const [isLoading, setIsLoading] = useState(false);
+  const [createMedia, {isLoading}] = useCreateMediaMutation();
 
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>
@@ -25,19 +26,16 @@ const UploadMedia = () => {
     formData.append("file", file);
 
     try {
-      setIsLoading(true);
       await createMedia(formData).unwrap();
       toast.success("Uploaded successfully");
     } catch (error) {
-      toast.error("Upload failed");
-    } finally {
-      setIsLoading(false);
-    }
+      handleErrors( error as ErrorResponse)
+    } 
   };
 
   return (
     <label className="group relative w-full cursor-pointer">
-      <div className="w-full h-[150px] rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 flex items-center justify-center transition-all duration-300 group-hover:border-blue-500 group-hover:bg-blue-50">
+      <div className="w-full h-37.5 rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 flex items-center justify-center transition-all duration-300 group-hover:border-blue-500 group-hover:bg-blue-50">
 
         <div className="flex flex-col items-center gap-2 text-slate-500 group-hover:text-blue-600 transition">
           {isLoading ? (

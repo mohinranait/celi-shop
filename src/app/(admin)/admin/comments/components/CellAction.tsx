@@ -10,6 +10,7 @@ import DeleteAlert from '@/components/shared/DeleteAlert';
 import { IComment } from '@/redux/service/comments/type';
 import CommentForm from './CommentForm';
 import { useDeleteCommentMutation } from '@/redux/service/comments';
+import handleErrors, { ErrorResponse } from '@/lib/handle-error';
 
 type Props = {
   data: IComment;
@@ -29,7 +30,7 @@ const CellAction = ({ data }: Props) => {
       setIsDeleteOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete");
+       handleErrors( error as ErrorResponse)
     }
   }
 

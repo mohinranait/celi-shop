@@ -10,6 +10,7 @@ import DeleteAlert from '@/components/shared/DeleteAlert';
 import { IUser } from '@/redux/service/users/type';
 import { useDeleteUserMutation } from '@/redux/service/users';
 import Link from 'next/link';
+import handleErrors, { ErrorResponse } from '@/lib/handle-error';
 
 type Props = {
   data: IUser;
@@ -30,7 +31,7 @@ const CellAction = ({ data,  }: Props) => {
       setIsDeleteOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete brand");
+      handleErrors( error as ErrorResponse)
     }
   };
 
