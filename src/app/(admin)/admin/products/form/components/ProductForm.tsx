@@ -85,13 +85,13 @@ export default function AddProductForm() {
 
 
   // RTK Query hooks
-  const { data: getBrands, isLoading: brandsLoading } = useGetBrandsQuery(`status=true&isDelete=false`);
+  const { data: getBrands, isLoading: brandsLoading } = useGetBrandsQuery(`page=1&limit=1000&status=true&isDelete=false`);
   const brands = getBrands?.data
   const { data: getCategories, isLoading: categoriesLoading } =
-    useGetCategoriesQuery(`status=true&isDelete=false`);
+    useGetCategoriesQuery(`page=1&limit=20000&status=true&isDelete=false`);
   const categories = getCategories?.data;
   const { data: getAttributes, isLoading: attributesLoading } =
-    useGetAttributesQuery(`status=true&isDelete=false`);
+    useGetAttributesQuery(`page=1&limit=1000&status=true&isDelete=false`);
 
   const attributes = getAttributes?.data;
 

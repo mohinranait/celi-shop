@@ -186,8 +186,8 @@ export default function NestedCategorySelector({
           <div className="flex h-125">
             {/* Column 1 */}
             <div className="w-1/3 border-r border-border">
-              <div className="p-4 font-semibold border-b bg-muted/50">Main Categories</div>
-              <ScrollArea className="h-full">
+              <div className="p-4 font-semibold border-b text-sm bg-muted/50">Main Categories</div>
+              <ScrollArea className="h-[calc(100%-50px)]">
                 <div className="p-2">
                   {level1.map((cat) => (
                     <div
