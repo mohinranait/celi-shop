@@ -11,12 +11,12 @@ import FloatingCartButton from '@/components/shared/PriceCartButton'
 import ScrollToTop from '@/components/shared/ScrollToTop'
 import WhatsAppButton from '@/components/shared/WhatsAppButton'
 import { BASE_URL } from '@/lib/envSecret'
-import { getAppSetting } from '@/lib/get-app-setting'
+import {  getAppSettingForMeta } from '@/lib/get-app-setting'
 import { Metadata } from 'next'
 import React from 'react'
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getAppSetting();
+  const settings = await getAppSettingForMeta();
   
   // আপনার ডোমেইন বা BASE_URL ভ্যালিড তা নিশ্চিত করুন
   const siteUrl = BASE_URL || "https://banglababa.com"; 

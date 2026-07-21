@@ -16,6 +16,7 @@ export async function generateMetadata({
 
   const data = await fetchData<IProductDetailsResponse>({
     api: `client/products/${slug}`,
+    // revalidate: 60 * 60,
   });
 
   const product = data?.data as IProduct;
@@ -44,11 +45,12 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      url: `${BASE_URL}/${slug}`,
+      url: `${BASE_URL}/products/${slug}`,
       type: "website",
 
       images: [
         {
+          secureUrl: image || '',
           url: image,
           width: 1200,
           height: 630,
